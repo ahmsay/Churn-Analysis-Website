@@ -3,7 +3,7 @@
     <v-toolbar app>
       <v-toolbar-title class="headline">
         <span>Churn</span>
-        <span class="font-weight-light"> | The senate will decide your fate</span>
+        <span class="font-weight-light"> | General Kenobi</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn @click="test">Test {{ val }}</v-btn>
