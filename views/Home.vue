@@ -51,14 +51,14 @@
           accuracy: '84.38'
         },
         {
-          name: 'bankmodel2',
+          name: 'telcoModel',
           catCols: [
 
           ],
           numCols: ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard', 'IsActiveMember', 'EstimatedSalary'],
-          targetCol: 'Exited',
-          algorithm: 'Neural Networks',
-          accuracy: '84.38'
+          targetCol: 'Churn',
+          algorithm: 'KNN',
+          accuracy: '81.53'
         }
       ]
     },

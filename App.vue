@@ -3,11 +3,11 @@
     <v-toolbar app>
       <v-toolbar-title class="headline">
         <span>Churn</span>
-        <span class="font-weight-light"> | General Kenobi</span>
+        <span class="font-weight-light"> | Building the Environment</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn @click="test">Test {{ val }}</v-btn>
-      <v-dialog persistent v-model="dialog" width="500">
+      <v-btn v-if="false" @click="test">Test {{ val }}</v-btn>
+      <v-dialog v-if="false" persistent v-model="dialog" width="500">
         <v-btn slot="activator">Click Me</v-btn>
         <v-card>
           <v-card-title class="headline grey lighten-2" primary-title>Info</v-card-title>
