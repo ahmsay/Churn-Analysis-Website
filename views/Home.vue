@@ -28,39 +28,39 @@
 
   export default {
     created() {
-      EventBus.$on('train', num => {
-        this.bottomNav = num;
-      });
-      EventBus.$on('predict', name => {
-        this.bottomNav = 1;
-        this.passedModel = name;
-      });
-      EventBus.$on('reset', val => {
-        this.passedModel = val;
-      });
-      this.models = [
-        {
-          name: 'bankmodel',
-          catCols: [
-            { name: 'Geography', values: ['France', 'Germany', 'Spain'] },
-            { name: 'Gender', values: ['Female', 'Male']}
-          ],
-          numCols: ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard', 'IsActiveMember', 'EstimatedSalary'],
-          targetCol: 'Exited',
-          algorithm: 'Neural Networks',
-          accuracy: '84.38'
-        },
-        {
-          name: 'telcoModel',
-          catCols: [
+      if (this.$session.has("user")) {
+        EventBus.$on('train', num => { this.bottomNav = num; });
+        EventBus.$on('reset', val => { this.passedModel = val; });
+        EventBus.$on('predict', name => {
+          this.bottomNav = 1;
+          this.passedModel = name;
+        });
+        this.models = [
+          {
+            name: 'bankmodel',
+            catCols: [
+              { name: 'Geography', values: ['France', 'Germany', 'Spain'] },
+              { name: 'Gender', values: ['Female', 'Male']}
+            ],
+            numCols: ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard', 'IsActiveMember', 'EstimatedSalary'],
+            targetCol: 'Exited',
+            algorithm: 'Neural Networks',
+            accuracy: '84.38'
+          },
+          {
+            name: 'telcoModel',
+            catCols: [
 
-          ],
-          numCols: ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard', 'IsActiveMember', 'EstimatedSalary'],
-          targetCol: 'Churn',
-          algorithm: 'KNN',
-          accuracy: '81.53'
-        }
-      ]
+            ],
+            numCols: ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard', 'IsActiveMember', 'EstimatedSalary'],
+            targetCol: 'Churn',
+            algorithm: 'KNN',
+            accuracy: '81.53'
+          }
+        ]
+      } else {
+        this.$router.push('/');
+      }
     },
   	data:() => ({
       bottomNav: 0,

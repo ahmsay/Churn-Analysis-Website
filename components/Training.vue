@@ -105,7 +105,6 @@
 </template>
 
 <script>
-
   export default {
     data:() => ({
       allInfos: {

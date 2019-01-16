@@ -29,9 +29,11 @@
 </template>
 
 <script>
-import {EventBus} from "../plugins/event-bus.js";
-
   export default {
+    created() {
+      if (this.$session.has("user"))
+        this.$router.push('/home');
+    },
     data:() => ({
       dialog: false,
       emailL: '',
@@ -52,7 +54,7 @@ import {EventBus} from "../plugins/event-bus.js";
         email = 'zorkov';
         passw = 'asdzxc';
         console.log("logged in: " + email + ", " + passw);
-        EventBus.$emit('logged', email);
+        this.$session.set("user", email);
         this.$router.push('/home');
       },
       register(email, passw) {

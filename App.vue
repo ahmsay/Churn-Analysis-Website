@@ -19,8 +19,8 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <div v-if="loggedIn">
-        <span>Welcome <b>{{ email }}</b></span>
+      <div v-if="this.$session.has('user')">
+        <span>Welcome <b>{{ this.$session.get('user') }}</b></span>
         <v-btn @click="logout">Logout</v-btn>
       </div>
     </v-toolbar>
@@ -33,20 +33,11 @@
 </template>
 
 <script>
-import {EventBus} from "./plugins/event-bus.js";
-
   export default {
     name: 'App',
-    created() {
-      EventBus.$on('logged', email => {
-        this.email = email;
-        this.loggedIn = true;
-      });
-    },
     data:() => ({
       val: '',
       email: null,
-      loggedIn: false,
       dialog: false
     }),
     methods: {
@@ -56,8 +47,8 @@ import {EventBus} from "./plugins/event-bus.js";
         })*/
       },
       logout() {
-        this.loggedIn = false;
         this.email = null;
+        this.$session.remove("user");
         this.$router.push('/');
       }
     } 
