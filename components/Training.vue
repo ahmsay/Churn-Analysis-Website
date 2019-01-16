@@ -101,11 +101,19 @@
 
       </v-stepper-items>
     </v-stepper>
+
+    <datatable :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
+
 	</div>
 </template>
 
 <script>
+  import DataTable from './DataTable'
+
   export default {
+    components: {
+      'datatable': DataTable
+    },
     data:() => ({
       allInfos: {
         error: '',
