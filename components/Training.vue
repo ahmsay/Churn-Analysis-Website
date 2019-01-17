@@ -101,18 +101,22 @@
 
       </v-stepper-items>
     </v-stepper>
-
     <datatable v-if="allInfos.dataset.length != 0" :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
-
+    <charts v-if="allInfos.dataset.length != 0"></charts>
 	</div>
 </template>
 
 <script>
   import DataTable from './DataTable'
+  import Charts from './Charts'
 
   export default {
     components: {
-      'datatable': DataTable
+      'datatable': DataTable,
+      'charts': Charts
+    },
+    created() {
+
     },
     data:() => ({
       allInfos: {
