@@ -1,7 +1,11 @@
 <template>
 	<div>
-    <v-btn @click="dewit">create</v-btn>
-    <canvas id="myChart"></canvas>
+    <br>
+    <v-layout row wrap>
+      <v-flex class="px-2" xs12 sm12 md6 :key="chart.name" v-for="chart in chartInfos">
+        <canvas :id="chart.name"></canvas>
+      </v-flex>
+    </v-layout>
 	</div>
 </template>
 
@@ -13,7 +17,10 @@
       this.dewit();
     },
     data:() => ({
-
+      chartInfos: [
+        { name: 'Geography', type: 'pie', labels: ['France', 'Germany', 'Spain'], data: [5014, 2509, 2477], backgroundColor: ['rgba(255, 99, 132, 0.9)', 'rgba(54, 162, 235, 0.9)', 'rgba(255, 206, 86, 0.9)'], borderColor: ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'] },
+        { name: 'Gender', type: 'bar', labels: ['Female', 'Male'], data: [4543, 5457], backgroundColor: ['rgba(54, 162, 235, 1)', 'rgba(54, 162, 235, 0.9)'], borderColor: ['rgba(54, 162, 235, 1)', 'rgba(54, 162, 235, 1)'] }
+      ]
     }),
     props: {
 
@@ -23,44 +30,32 @@
     },
     methods: {
       dewit() {
-        var ctx = document.getElementById("myChart");
-        // eslint-disable-next-line
-        var myChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.9)',
-                        'rgba(54, 162, 235, 0.9)',
-                        'rgba(255, 206, 86, 0.9)',
-                        'rgba(75, 192, 192, 0.9)',
-                        'rgba(153, 102, 255, 0.9)',
-                        'rgba(255, 159, 64, 0.9)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        });
+        for (let i=0; i<this.chartInfos.length; i++) {
+          let ctx = document.getElementById(this.chartInfos[i].name);
+          // eslint-disable-next-line
+          let chart = new Chart(ctx, {
+              type: this.chartInfos[i].type,
+              data: {
+                  labels: this.chartInfos[i].labels,
+                  datasets: [{
+                      label: this.chartInfos[i].name,
+                      data: this.chartInfos[i].data,
+                      backgroundColor: this.chartInfos[i].backgroundColor,
+                      borderColor: this.chartInfos[i].borderColor,
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                              beginAtZero: true
+                          }
+                      }]
+                  }
+              }
+          });
+        }
       }
     }
   }
