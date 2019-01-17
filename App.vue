@@ -6,7 +6,6 @@
         <span class="font-weight-light"> | Building the Environment</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn v-if="false" @click="test">Test {{ val }}</v-btn>
       <v-dialog v-if="false" persistent v-model="dialog" width="500">
         <v-btn slot="activator">Click Me</v-btn>
         <v-card>
@@ -20,8 +19,17 @@
         </v-card>
       </v-dialog>
       <div v-if="this.$session.has('user')">
-        <span>Welcome <b>{{ this.$session.get('user') }}</b></span>
-        <v-btn @click="logout">Logout</v-btn>
+        <v-menu offset-y>
+          <v-btn slot="activator">{{ this.$session.get('user') }}</v-btn>
+          <v-list>
+            <v-list-tile @click="showSettings">
+              <v-list-tile-title>Settings</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile @click="logout">
+              <v-list-tile-title>Logout</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
       </div>
     </v-toolbar>
 
@@ -36,15 +44,12 @@
   export default {
     name: 'App',
     data:() => ({
-      val: '',
       email: null,
       dialog: false
     }),
     methods: {
-      test() {
-        /*this.$get('/').then(data => {
-          this.val = data['message'];
-        })*/
+      showSettings() {
+
       },
       logout() {
         this.email = null;
