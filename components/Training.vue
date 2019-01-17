@@ -102,7 +102,7 @@
       </v-stepper-items>
     </v-stepper>
 
-    <datatable :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
+    <datatable v-if="allInfos.dataset.length != 0" :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
 
 	</div>
 </template>
