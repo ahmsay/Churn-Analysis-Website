@@ -55,10 +55,7 @@
               <p>The following columns are automatically detected as categoric:</p>
               <span :key="col.name" v-for="col in catList">{{ col.name }} </span><br><br>
               <p>If there are more categoric columns, please select.</p>
-              <div :key="col.name" v-for="col in numList">
-                <input :disabled="col.number>30" type="checkbox" :id="col.name+'1'" :value="col" v-model="moreCatCols">
-                <label :for="col.name+'1'">{{ col.name }}</label>
-              </div>
+              <v-select v-model="moreCatCols" :items="catable" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
             </v-card-text>
           </v-card>
           <v-btn color="primary" @click="step++">Next</v-btn>
@@ -148,7 +145,7 @@
       allTrainCols() {
         let col = this.targetCol;
         return this.allInfos.colInfos.filter(c => {
-          return c.name != col && (c.cat == 0 || c.number < 30)
+          return c.name != col && (c.cat == 0 || c.number <= 30)
         })
       },
       colsSelected() {
@@ -159,6 +156,9 @@
       },
       numList() {
         return this.selectedTrainCols.filter(c => { return c.cat == 0 })
+      },
+      catable() {
+        return this.numList.filter(c => { return c.number <= 30 })
       }
     },
     methods: {
