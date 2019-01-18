@@ -2,8 +2,9 @@
 	<div>
     <br>
     <v-layout row wrap>
-      <v-flex class="px-2" xs12 sm12 md6 :key="chart.name" v-for="chart in chartInfos">
-        <canvas :id="chart.name"></canvas>
+      <v-flex class="px-2" xs12 sm12 md6 :key="chart.name" v-for="(chart, idx) in chartInfos">
+        <canvas :id="chart.name+'Chart'"></canvas>
+        <v-btn @click="createChart(idx, 'pie')">test</v-btn>
       </v-flex>
     </v-layout>
 	</div>
@@ -14,13 +15,18 @@
 
   export default {
     mounted() {
-      this.dewit();
+      for (let i=0; i<this.chartInfos.length; i++) {
+        this.createChart(i, 'bar');
+      }
     },
     data:() => ({
+      backgroundColors: ['rgba(244, 83, 66, 1.0)', 'rgba(66, 158, 244, 1.0)', 'rgba(66, 244, 75, 1.0)', 'rgba(235, 244, 66, 1.0)', 'rgba(173, 66, 244, 1.0)', 'rgba(244, 137, 66, 1.0)', 'rgba(65, 244, 196, 1.0)', 'rgba(244, 65, 208, 1.0)'],
+      borderColors: ['rgba(244, 83, 66, 1.0)', 'rgba(66, 158, 244, 1.0)', 'rgba(66, 244, 75, 1.0)', 'rgba(235, 244, 66, 1.0)', 'rgba(173, 66, 244, 1.0)', 'rgba(244, 137, 66, 1.0)', 'rgba(65, 244, 196, 1.0)', 'rgba(244, 65, 208, 1.0)'],
       chartInfos: [
-        { name: 'Geography', type: 'pie', labels: ['France', 'Germany', 'Spain'], data: [5014, 2509, 2477], backgroundColor: ['rgba(255, 99, 132, 0.9)', 'rgba(54, 162, 235, 0.9)', 'rgba(255, 206, 86, 0.9)'], borderColor: ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'] },
-        { name: 'Gender', type: 'bar', labels: ['Female', 'Male'], data: [4543, 5457], backgroundColor: ['rgba(54, 162, 235, 1)', 'rgba(54, 162, 235, 0.9)'], borderColor: ['rgba(54, 162, 235, 1)', 'rgba(54, 162, 235, 1)'] }
-      ]
+        { name: 'Geography', labels: ['France', 'Germany', 'Spain'], data: [5014, 2509, 2477] },
+        { name: 'Gender', labels: ['Female', 'Male'], data: [4543, 5457] }
+      ],
+      createdCharts: []
     }),
     props: {
 
@@ -29,33 +35,36 @@
 
     },
     methods: {
-      dewit() {
-        for (let i=0; i<this.chartInfos.length; i++) {
-          let ctx = document.getElementById(this.chartInfos[i].name);
-          // eslint-disable-next-line
-          let chart = new Chart(ctx, {
-              type: this.chartInfos[i].type,
-              data: {
-                  labels: this.chartInfos[i].labels,
-                  datasets: [{
-                      label: this.chartInfos[i].name,
-                      data: this.chartInfos[i].data,
-                      backgroundColor: this.chartInfos[i].backgroundColor,
-                      borderColor: this.chartInfos[i].borderColor,
-                      borderWidth: 1
-                  }]
+      createChart(idx, type) {
+        let ctx = document.getElementById(this.chartInfos[idx].name+'Chart');
+        // eslint-disable-next-line
+        let chart = new Chart(ctx, {
+            type: type,
+            data: {
+                labels: this.chartInfos[idx].labels,
+                datasets: [{
+                    label: this.chartInfos[idx].name,
+                    data: this.chartInfos[idx].data,
+                    backgroundColor: this.backgroundColors,
+                    borderColor: this.borderColors,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+              legend: {
+
               },
-              options: {
-                  scales: {
-                      yAxes: [{
-                          ticks: {
-                              beginAtZero: true
-                          }
-                      }]
-                  }
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: true
+                      }
+                  }]
               }
-          });
-        }
+            }
+        });
+        this.createdCharts.push(chart);
+        console.log(this.createdCharts);
       }
     }
   }
