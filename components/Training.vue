@@ -102,7 +102,7 @@
       </v-stepper-items>
     </v-stepper>
     <datatable v-if="allInfos.dataset.length != 0" :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
-    <charts v-if="allInfos.dataset.length != 0"></charts>
+    <charts v-if="allInfos.chartInfos.length != 0" :chartInfos="allInfos.chartInfos"></charts>
 	</div>
 </template>
 
@@ -125,7 +125,8 @@
         fileName: '',
         columns: [],
         dataset: [],
-        colInfos: []
+        colInfos: [],
+        chartInfos: []
       },
       targetCol: '',
       step: 0,
@@ -196,7 +197,8 @@
           fileName: '',
           columns: [],
           dataset: [],
-          colInfos: []
+          colInfos: [],
+          chartInfos: []
         },
         this.step = 1;
         this.selectedTrainCols = [];

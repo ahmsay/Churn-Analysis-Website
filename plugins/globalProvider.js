@@ -37,7 +37,8 @@ export default {
             fileName: '',
             columns: [],
             dataset: [],
-            colInfos: []
+            colInfos: [],
+            chartInfos: []
           };
           if (file != undefined) {
             fileResult.fileName = file.name;
@@ -61,6 +62,7 @@ export default {
                   if (action == 'feedback') {
                     /*this.$post('/check', { columns: columns, dataset: dataset }).then(data => {
                       fileResult.colInfos = data.col_infos;
+                      fileResult.chartInfos = data.chart_infos;
                     })*/
                     let colInfos = [
                       { name: 'Rownumber', number: 10000, cat: 0 },
@@ -79,6 +81,11 @@ export default {
                       { name: 'Exited', number: 2, cat: 0 }
                     ];
                     fileResult.colInfos = colInfos;
+                    let chartInfos = [
+                      { name: 'Geography', labels: ['France', 'Germany', 'Spain'], data: [5014, 2509, 2477] },
+                      { name: 'Gender', labels: ['Female', 'Male'], data: [4543, 5457] }
+                    ]
+                    fileResult.chartInfos = chartInfos;
                   } else if (action == 'predict') {
                     console.log(1);
                   }
