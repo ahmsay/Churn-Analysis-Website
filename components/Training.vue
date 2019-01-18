@@ -41,10 +41,7 @@
           <v-card class="mb-5" color="#f5f5f5">
             <v-card-title>Select your training columns</v-card-title>
             <v-card-text>
-              <div v-bind:key="col.name" v-for="col in allTrainCols">
-                <input type="checkbox" v-model="selectedTrainCols" :id="col.name" :value="col">
-                <label :for="col.name">{{ col.name }}</label>
-              </div>
+              <v-select v-model="selectedTrainCols" :items="allTrainCols" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
             </v-card-text>
           </v-card>
           <v-btn color="primary" :disabled="!colsSelected" @click="step++">Next</v-btn>
@@ -59,8 +56,8 @@
               <span :key="col.name" v-for="col in catList">{{ col.name }} </span><br><br>
               <p>If there are more categoric columns, please select.</p>
               <div :key="col.name" v-for="col in numList">
-                <input :disabled="col.number>30" type="checkbox" :value="col" v-model="moreCatCols">
-                <label :for="col">{{ col.name }}</label>
+                <input :disabled="col.number>30" type="checkbox" :id="col.name+'1'" :value="col" v-model="moreCatCols">
+                <label :for="col.name+'1'">{{ col.name }}</label>
               </div>
             </v-card-text>
           </v-card>
@@ -174,12 +171,8 @@
         let col = {};
         while ((col = this.moreCatCols.pop()) != null)
           col.cat = 1;
-        this.catList.forEach(val => {
-          cats.push(val.name);
-        });
-        this.numList.forEach(val => {
-          nums.push(val.name);
-        });
+        this.catList.forEach(val => { cats.push(val.name); });
+        this.numList.forEach(val => { nums.push(val.name); });
         console.log(this.modelName);
         console.log(this.allInfos.dataset);
         console.log(this.allInfos.columns);
