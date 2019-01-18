@@ -65,7 +65,7 @@ export default {
                       fileResult.chartInfos = data.chart_infos;
                     })*/
                     let colInfos = [
-                      { name: 'Rownumber', number: 10000, cat: 0 },
+                      { name: 'RowNumber', number: 10000, cat: 0 },
                       { name: 'CustomerId', number: 10000, cat: 0 },
                       { name: 'Surname', number: 580, cat: 1 },
                       { name: 'CreditScore', number: 9000, cat: 0 },
@@ -83,7 +83,7 @@ export default {
                     fileResult.colInfos = colInfos;
                     let chartInfos = [
                       { name: 'Geography', labels: ['France', 'Germany', 'Spain'], data: [5014, 2509, 2477] },
-                      { name: 'Gender', labels: ['Female', 'Male'], data: [4543, 5457] }
+                      { name: 'NumOfProducts', labels: ['1', '2', '3', '4'], data: [5084, 4590, 266, 60] }
                     ]
                     fileResult.chartInfos = chartInfos;
                   } else if (action == 'predict') {
