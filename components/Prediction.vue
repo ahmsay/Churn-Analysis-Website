@@ -16,13 +16,14 @@
           <v-btn @click="predictSingle">Predict</v-btn>
           <h3>{{ targetCol }}:</h3>
         </v-layout>
-        <span v-if="!filled">{{ filledError }}</span>
+        <span v-if="!filled">Please fill all values</span>
   	  </v-card-text>
   	</v-card>
     <v-card v-if="selectedModel.name != undefined" class="mb-5" color="#f5f5f5">
       <v-card-title>Multi Customer Prediction</v-card-title>
       <v-card-text>
         <input type="file" id="file" ref="file" @change="upload"/><br><br>
+        <v-btn @click="predictMulti">Predict</v-btn>
         <p v-if="!allInfos.valid">{{ allInfos.error }}</p>
       </v-card-text>
     </v-card>
@@ -58,8 +59,8 @@
         colInfos: [],
         chartInfos: []
       },
-      filled: false,
-      filledError: ''
+      filled: true,
+      predicted: false
     }),
     props: {
       models: Array,
@@ -117,12 +118,24 @@
             values.push(val.value);
           })
           console.log(values);
-        } else {
-          this.filledError = 'Please fill all values';
         }
       },
       upload() {
         this.$parse(this.$refs.file.files[0], 'predict').then(result => { this.allInfos = result; });
+        this.predicted = false;
+      },
+      predictMulti() {
+        if(this.allInfos.dataset.length != 0 && !this.predicted) {
+          let results = [0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1];
+          let columns = this.allInfos.columns;
+          let dataset = this.allInfos.dataset;
+          columns.unshift(this.selectedModel.targetCol);
+          for (let i=0; i<dataset.length; i++)
+            dataset[i].unshift(results[i]);
+          this.allInfos.columns = columns;
+          this.allInfos.dataset = dataset;
+          this.predicted = true;
+        }
       }
     }
   }
