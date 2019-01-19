@@ -8,7 +8,7 @@
           <v-flex xs12 sm6 md3><b>Algorithm:</b> {{ model.algorithm }}</v-flex>
           <v-flex xs12 sm6 md3><b>Accuracy:</b> {{ model.accuracy }}</v-flex>
           <v-flex xs12 sm6 md3>
-            <v-btn @click="predict(model.name)">Predict</v-btn>
+            <v-btn @click="predict(model)">Predict</v-btn>
           </v-flex>
         </v-layout>
         <v-btn @click="train">Train a new model</v-btn>
@@ -29,8 +29,8 @@
       train() {
         EventBus.$emit('train', 0);
       },
-      predict(name) {
-        EventBus.$emit('predict', name);
+      predict(model) {
+        EventBus.$emit('predict', model);
       }
     }
   }

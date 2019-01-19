@@ -31,9 +31,9 @@
       if (this.$session.has("user")) {
         EventBus.$on('train', num => { this.bottomNav = num; });
         EventBus.$on('reset', val => { this.passedModel = val; });
-        EventBus.$on('predict', name => {
+        EventBus.$on('predict', model => {
           this.bottomNav = 1;
-          this.passedModel = name;
+          this.passedModel = model;
         });
         this.models = [
           {
@@ -65,7 +65,7 @@
   	data:() => ({
       bottomNav: 0,
       models: [],
-      passedModel: ''
+      passedModel: {}
   	}),
   	methods: {
 

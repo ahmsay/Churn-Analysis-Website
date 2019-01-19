@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-  	<v-select v-model="modelName" :items="modelList" label="Choose Your Model"></v-select>
-  	<v-card v-if="model!=''" class="mb-5" color="#f5f5f5">
+    <v-select v-model="selectedModel" :items="models" item-text="name" label="Choose Your Model" return-object></v-select>
+  	<v-card v-if="selectedModel.name != undefined" class="mb-5" color="#f5f5f5">
   	  <v-card-title>Single Customer Prediction</v-card-title>
   	  <v-card-text>
         <v-layout row wrap>
@@ -19,7 +19,7 @@
         <span v-if="!filled">{{ filledError }}</span>
   	  </v-card-text>
   	</v-card>
-    <v-card v-if="model!=''" class="mb-5" color="#f5f5f5">
+    <v-card v-if="selectedModel.name != undefined" class="mb-5" color="#f5f5f5">
       <v-card-title>Multi Customer Prediction</v-card-title>
       <v-card-text>
         <input type="file" id="file" ref="file" @change="upload"/><br><br>
@@ -41,11 +41,14 @@
       'datatable': DataTable,
       'charts': Charts
     },
+    created() {
+      this.selectedModel = this.passedModel;
+    },
     destroyed() {
-      EventBus.$emit('reset', '');
+      EventBus.$emit('reset', {});
     },
     data:() => ({
-      modelName: '',
+      selectedModel: {},
       allInfos: {
         error: '',
         valid: false,
@@ -60,27 +63,13 @@
     }),
     props: {
       models: Array,
-      passedModel: String
+      passedModel: Object
     },
     computed: {
-      model() {
-        if (this.passedModel != '' && this.modelName == '')
-          // eslint-disable-next-line
-          this.modelName = this.passedModel;
-        return this.modelName;
-      },
-      modelList() {
-      	let modelList = [];
-      	this.models.forEach(val => {
-      	  modelList.push(val.name);
-      	});
-      	return modelList;
-      },
       catCols() {
         let columns = [];
-        if (this.model != '') {
-          let idx = this.modelList.indexOf(this.model);
-          this.models[idx].catCols.forEach(val => {
+        if (this.selectedModel.name != undefined) {
+          this.selectedModel.catCols.forEach(val => {
             columns.push({ options: val, selected: null });
           });
           return columns;
@@ -90,9 +79,8 @@
       },
       numCols() {
         let columns = [];
-      	if (this.model != '') {
-  	      let idx = this.modelList.indexOf(this.model);
-          this.models[idx].numCols.forEach(val => {
+      	if (this.selectedModel.name != undefined) {
+          this.selectedModel.numCols.forEach(val => {
             columns.push({ name: val, value: null });
           });
   	      return columns;
@@ -102,12 +90,10 @@
       },
       targetCol() {
         let column = '';
-        if (this.model != '') {
-          let idx = this.modelList.indexOf(this.model);
-          return this.models[idx].targetCol;
-        } else {
+        if (this.selectedModel.name != undefined)
+          return this.selectedModel.targetCol;
+        else
           return column;
-        }
       }
     },
     methods: {
