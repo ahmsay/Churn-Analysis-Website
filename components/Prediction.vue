@@ -12,7 +12,10 @@
             <v-text-field type="number" :label="col.name" v-model.number="numCols[idx].value"></v-text-field>
           </v-flex>
         </v-layout>
-        <v-btn @click="predictSingle">Predict</v-btn>
+        <v-layout align-center>
+          <v-btn @click="predictSingle">Predict</v-btn>
+          <h3>{{ targetCol }}:</h3>
+        </v-layout>
         <span v-if="!filled">{{ filledError }}</span>
   	  </v-card-text>
   	</v-card>
@@ -23,13 +26,21 @@
         <p v-if="!allInfos.valid">{{ allInfos.error }}</p>
       </v-card-text>
     </v-card>
+    <datatable v-if="allInfos.dataset.length != 0" :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
+    <charts v-if="allInfos.chartInfos.length != 0" :chartInfos="allInfos.chartInfos"></charts>
   </div>
 </template>
 
 <script>
   import {EventBus} from '../plugins/event-bus.js';
+  import DataTable from './DataTable';
+  import Charts from './Charts';
 
   export default {
+    components: {
+      'datatable': DataTable,
+      'charts': Charts
+    },
     destroyed() {
       EventBus.$emit('reset', '');
     },
@@ -41,7 +52,8 @@
         fileName: '',
         columns: [],
         dataset: [],
-        colInfos: []
+        colInfos: [],
+        chartInfos: []
       },
       filled: false,
       filledError: ''
@@ -87,6 +99,15 @@
       	} else {
       	  return [];
       	}
+      },
+      targetCol() {
+        let column = '';
+        if (this.model != '') {
+          let idx = this.modelList.indexOf(this.model);
+          return this.models[idx].targetCol;
+        } else {
+          return column;
+        }
       }
     },
     methods: {

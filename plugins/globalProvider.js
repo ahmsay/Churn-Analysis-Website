@@ -87,7 +87,11 @@ export default {
                     ]
                     fileResult.chartInfos = chartInfos;
                   } else if (action == 'predict') {
-                    console.log(1);
+                    let chartInfos = [
+                      { name: 'Geography', labels: ['France', 'Germany', 'Spain'], data: [5014, 2509, 2477] },
+                      { name: 'NumOfProducts', labels: ['1', '2', '3', '4'], data: [5084, 4590, 266, 60] }
+                    ]
+                    fileResult.chartInfos = chartInfos;
                   }
                 }.bind(this), false);
                 reader.readAsText(file);
