@@ -1,9 +1,13 @@
 <template>
   <div>
-    <training v-if="bottomNav == 0"></training>
-    <prediction :models="models" :passedModel="passedModel" v-if="bottomNav == 1"></prediction>
-    <models :models="models" v-if="bottomNav == 2"></models>
+    <dashboard :models="models" v-if="bottomNav == 0"></dashboard>
+    <training v-if="bottomNav == 1"></training>
+    <prediction :models="models" :passedModel="passedModel" v-if="bottomNav == 2"></prediction>
     <v-bottom-nav fixed :active.sync="bottomNav" :value="true">
+      <v-btn>
+        <span>Dashboard</span>
+        <v-icon>book</v-icon>
+      </v-btn>
       <v-btn>
         <span>Training</span>
         <v-icon>ondemand_video</v-icon>
@@ -12,18 +16,14 @@
         <span>Prediction</span>
         <v-icon>music_note</v-icon>
       </v-btn>
-      <v-btn>
-        <span>My Models</span>
-        <v-icon>book</v-icon>
-      </v-btn>
     </v-bottom-nav>
   </div>
 </template>
 
 <script>
-  import Training from '../components/Training'
-  import Prediction from '../components/Prediction'
-  import Models from '../components/Models'
+  import Dashboard from '../components/Dashboard';
+  import Training from '../components/Training';
+  import Prediction from '../components/Prediction';
   import {EventBus} from "../plugins/event-bus.js";
 
   export default {
@@ -32,7 +32,7 @@
         EventBus.$on('train', num => { this.bottomNav = num; });
         EventBus.$on('reset', val => { this.passedModel = val; });
         EventBus.$on('predict', model => {
-          this.bottomNav = 1;
+          this.bottomNav = 2;
           this.passedModel = model;
         });
         this.models = [
@@ -71,9 +71,9 @@
 
   	},
     components: {
+      'dashboard': Dashboard,
       'training': Training,
-      'prediction': Prediction,
-      'models': Models
+      'prediction': Prediction
     }
   }
 </script>

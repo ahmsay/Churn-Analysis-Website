@@ -27,7 +27,7 @@
     props: ['models'],
     methods: {
       train() {
-        EventBus.$emit('train', 0);
+        EventBus.$emit('train', 1);
       },
       predict(model) {
         EventBus.$emit('predict', model);
