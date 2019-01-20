@@ -3,18 +3,18 @@
     <dashboard :models="models" v-if="bottomNav == 0"></dashboard>
     <training v-if="bottomNav == 1"></training>
     <prediction :models="models" :passedModel="passedModel" v-if="bottomNav == 2"></prediction>
-    <v-bottom-nav fixed :active.sync="bottomNav" :value="true">
+    <v-bottom-nav app fixed :active.sync="bottomNav" :value="true">
       <v-btn>
         <span>Dashboard</span>
-        <v-icon>book</v-icon>
+        <v-icon>dashboard</v-icon>
       </v-btn>
       <v-btn>
         <span>Training</span>
-        <v-icon>ondemand_video</v-icon>
+        <v-icon>school</v-icon>
       </v-btn>
       <v-btn>
         <span>Prediction</span>
-        <v-icon>music_note</v-icon>
+        <v-icon>not_listed_location</v-icon>
       </v-btn>
     </v-bottom-nav>
   </div>

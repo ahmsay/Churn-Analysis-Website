@@ -1,31 +1,30 @@
 <template>
   <div class="container">
-    <h2>Prediction</h2>
-    <v-select v-model="selectedModel" :items="models" item-text="name" label="Choose Your Model" return-object></v-select>
-  	<v-card v-if="selectedModel.name != undefined" class="mb-5" color="#f5f5f5">
-  	  <v-card-title>Single Customer Prediction</v-card-title>
+    <v-select v-model="selectedModel" :items="models" item-text="name" label="Choose Your Model" :menu-props="{ maxHeight: '400' }" return-object></v-select>
+  	<v-card v-if="selectedModel.name != undefined" class="mb-4" color="#f5f5f5">
+  	  <v-card-title class="subheading font-weight-bold">Single Customer Prediction</v-card-title>
   	  <v-card-text>
         <v-layout row wrap>
-          <v-flex class="px-2" :key="col.options.name" v-for="(col, idx) in catCols" xs12 sm6 md3>
+          <v-flex class="pr-4" :key="col.options.name" v-for="(col, idx) in catCols" xs12 sm6 md3>
             <v-select v-model="catCols[idx].selected" :items="col.options.values" :label="col.options.name"></v-select>
           </v-flex>
-          <v-flex class="px-2" :key="col.name" v-for="(col, idx) in numCols" xs12 sm6 md3>
+          <v-flex class="pr-4" :key="col.name" v-for="(col, idx) in numCols" xs12 sm6 md3>
             <v-text-field type="number" :label="col.name" v-model.number="numCols[idx].value"></v-text-field>
           </v-flex>
         </v-layout>
         <v-layout align-center>
-          <v-btn @click="predictSingle">Predict</v-btn>
+          <v-btn class="ml-0" @click="predictSingle">Predict</v-btn>
           <h3>{{ targetCol }}:</h3>
         </v-layout>
-        <span v-if="!filled">Please fill all values</span>
+        <p class="mb-0 mt-2" v-if="!filled">Please fill all values</p>
   	  </v-card-text>
   	</v-card>
-    <v-card v-if="selectedModel.name != undefined" class="mb-5" color="#f5f5f5">
-      <v-card-title>Multi Customer Prediction</v-card-title>
+    <v-card v-if="selectedModel.name != undefined" class="mb-4" color="#f5f5f5">
+      <v-card-title class="subheading font-weight-bold">Multiple Customer Prediction</v-card-title>
       <v-card-text>
         <input type="file" id="file" ref="file" @change="upload"/><br><br>
-        <v-btn @click="predictMulti">Predict</v-btn>
-        <p v-if="!allInfos.valid">{{ allInfos.error }}</p>
+        <v-btn class="ml-0" @click="predictMulti">Predict</v-btn>
+        <span v-if="!allInfos.valid">{{ allInfos.error }}</span>
       </v-card-text>
     </v-card>
     <datatable v-if="allInfos.dataset.length != 0" :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
@@ -34,7 +33,7 @@
 </template>
 
 <script>
-  import {EventBus} from '../plugins/event-bus.js';
+  import { EventBus } from '../plugins/event-bus.js';
   import DataTable from './DataTable';
   import Charts from './Charts';
 

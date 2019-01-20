@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <v-toolbar app>
-      <v-toolbar-title class="headline">
-        <span class="font-weight-bold">Churnify</span>
+      <v-toolbar-title>
+        <span class="headline font-weight-bold">Churnify</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-dialog v-if="false" persistent v-model="dialog" width="500">
@@ -36,7 +36,7 @@
     </v-toolbar>
 
     <v-content>
-      <router-view style="padding-bottom: 80px"></router-view>
+      <router-view></router-view>
     </v-content>
 
   </v-app>

@@ -1,7 +1,6 @@
 <template>
 	<div>
-    <br>
-    <v-data-table :headers="headers" :items="dataset" :rows-per-page-items="[5, 10, 25]" class="elevation-2">
+    <v-data-table class="elevation-2" :headers="headers" :items="dataset" :rows-per-page-items="[5, 10, 25]">
       <template slot="items" slot-scope="props">
         <td v-bind:key="row" v-for="(row, idx) in columns">{{ props.item[idx] }}</td>
       </template>

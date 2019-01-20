@@ -2,23 +2,23 @@
   <div class="container">
     <v-container grid-list-md>
       <v-layout row wrap>
-        <v-flex xs12 sm6 md8>
+        <v-flex class="pa-2" xs12 sm6 md8>
           <v-card color="#f5f5f5">
-            <v-card-title><h2>Insert title here</h2></v-card-title>
+            <v-card-title class="title font-weight-medium">Insert title here</v-card-title>
             <v-card-text>
               Insert text here
             </v-card-text>
           </v-card>
         </v-flex>
-        <v-flex xs12 sm6 md4>
+        <v-flex class="pa-2" xs12 sm6 md4>
           <v-card color="#f5f5f5">
-            <v-card-title><h2>Sign in to churnify</h2></v-card-title>
+            <v-card-title class="title font-weight-medium">Sign in to churnify</v-card-title>
             <v-card-text>
               <v-text-field v-model="unameL" label="Username"></v-text-field>
               <v-text-field v-model="passwL" label="Password" type="password"></v-text-field>
-              <v-btn @click="login(unameL, passwL)">Sign In</v-btn>
+              <v-btn block @click="login(unameL, passwL)">Sign In</v-btn>
+              <v-btn block @click.stop="dialog = true">Register</v-btn>
               <v-dialog v-model="dialog" persistent max-width="600px">
-                <v-btn slot="activator">Register</v-btn>
                 <v-card class="pa-3">
                   <v-card-title>
                     <span class="headline">Register</span>
@@ -31,7 +31,7 @@
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn @click="closeform">Close</v-btn>
+                    <v-btn @click.native="closeform">Close</v-btn>
                     <v-btn :disabled="!valid" @click="register(uname, passw)">Sign Up</v-btn>
                   </v-card-actions>
                 </v-card>

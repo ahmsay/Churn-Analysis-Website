@@ -1,13 +1,12 @@
 <template>
 	<div>
-    <br>
     <v-layout row wrap>
       <v-flex xs12 sm12 md6 :key="chart.name" v-for="(chart, idx) in chartInfos">
-        <canvas :id="chart.name+'Chart'"></canvas>
+        <canvas class="mt-3" :id="chart.name+'Chart'"></canvas>
         <v-flex class="py-2">
           <v-layout justify-center>
-            <v-btn icon @click="iterate(-1, idx)"><v-icon>arrow_back</v-icon></v-btn>
-            <v-btn icon @click="iterate(1, idx)"><v-icon>arrow_forward</v-icon></v-btn>
+            <v-btn icon @click="iterate(-1, idx)"><v-icon color="#3c3c3c" large>chevron_left</v-icon></v-btn>
+            <v-btn icon @click="iterate(1, idx)"><v-icon color="#3c3c3c" large>chevron_right</v-icon></v-btn>
           </v-layout>
         </v-flex>
       </v-flex>
