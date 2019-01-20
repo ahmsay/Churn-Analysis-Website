@@ -2,15 +2,12 @@
 	<div>
     <br>
     <v-layout row wrap>
-      <v-flex class="px-2" xs12 sm12 md6 :key="chart.name" v-for="(chart, idx) in chartInfos">
+      <v-flex xs12 sm12 md6 :key="chart.name" v-for="(chart, idx) in chartInfos">
         <canvas :id="chart.name+'Chart'"></canvas>
         <v-flex class="py-2">
           <v-layout justify-center>
-            <v-btn-toggle mandatory>
-              <v-btn @click="createChart(idx, 'bar')" flat>Bar</v-btn>
-              <v-btn @click="createChart(idx, 'pie')" flat>Pie</v-btn>
-              <v-btn @click="createChart(idx, 'polarArea')" flat>Polar Area</v-btn>
-            </v-btn-toggle>
+            <v-btn icon @click="iterate(-1, idx)"><v-icon>arrow_back</v-icon></v-btn>
+            <v-btn icon @click="iterate(1, idx)"><v-icon>arrow_forward</v-icon></v-btn>
           </v-layout>
         </v-flex>
       </v-flex>
@@ -31,7 +28,9 @@
     data:() => ({
       backgroundColors: ['rgba(244, 83, 66, 1.0)', 'rgba(66, 158, 244, 1.0)', 'rgba(66, 244, 75, 1.0)', 'rgba(235, 244, 66, 1.0)', 'rgba(173, 66, 244, 1.0)', 'rgba(244, 137, 66, 1.0)', 'rgba(65, 244, 196, 1.0)', 'rgba(244, 65, 208, 1.0)'],
       borderColors: ['rgba(244, 83, 66, 1.0)', 'rgba(66, 158, 244, 1.0)', 'rgba(66, 244, 75, 1.0)', 'rgba(235, 244, 66, 1.0)', 'rgba(173, 66, 244, 1.0)', 'rgba(244, 137, 66, 1.0)', 'rgba(65, 244, 196, 1.0)', 'rgba(244, 65, 208, 1.0)'],
-      createdCharts: []
+      createdCharts: [],
+      chartTypes: ['bar', 'pie', 'polarArea'],
+      displayer: 0
     }),
     props: {
       chartInfos: Array
@@ -67,6 +66,14 @@
           }
         });
         this.createdCharts[idx] = chart;
+      },
+      iterate(num, idx) {
+        this.displayer += num;
+        if (this.displayer == this.chartTypes.length)
+          this.displayer = 0;
+        else if (this.displayer == -1)
+          this.displayer = this.chartTypes.length -1;
+        this.createChart(idx, this.chartTypes[this.displayer]);
       }
     }
   }

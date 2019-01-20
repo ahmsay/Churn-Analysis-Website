@@ -1,30 +1,46 @@
 <template>
   <div class="container">
-    <h2>Sign In</h2>
-    <v-text-field v-model="emailL" label="E-mail"></v-text-field>
-    <v-text-field v-model="passwL" label="Password" type="password"></v-text-field>
-    <v-btn @click="login(emailL, passwL)">Login</v-btn>
-    <v-dialog v-model="dialog" persistent max-width="600px">
-      <v-btn slot="activator">Create an Account</v-btn>
-      <v-card>
-        <v-card-title>
-          <span class="headline">Create an Account</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-form ref="form" v-model="valid">
-              <v-text-field v-model="email" :rules="unameRules" :counter="30" label="E-mail" required></v-text-field>
-              <v-text-field v-model="passw" :rules="passwRules" type="password" label="Password" required></v-text-field>
-            </v-form>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn @click="closeform">Close</v-btn>
-          <v-btn :disabled="!valid" @click="register(email, passw)">Sign Up</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <v-container grid-list-md>
+      <v-layout row wrap>
+        <v-flex xs12 sm6 md8>
+          <v-card color="#f5f5f5">
+            <v-card-title><h2>Insert title here</h2></v-card-title>
+            <v-card-text>
+              Insert text here
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 sm6 md4>
+          <v-card color="#f5f5f5">
+            <v-card-title><h2>Sign in to churnify</h2></v-card-title>
+            <v-card-text>
+              <v-text-field v-model="unameL" label="Username"></v-text-field>
+              <v-text-field v-model="passwL" label="Password" type="password"></v-text-field>
+              <v-btn @click="login(unameL, passwL)">Sign In</v-btn>
+              <v-dialog v-model="dialog" persistent max-width="600px">
+                <v-btn slot="activator">Register</v-btn>
+                <v-card class="pa-3">
+                  <v-card-title>
+                    <span class="headline">Register</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-form ref="form" v-model="valid">
+                      <v-text-field v-model="uname" :rules="unameRules" label="Username" required></v-text-field>
+                      <v-text-field v-model="passw" :rules="passwRules" type="password" label="Password" required></v-text-field>
+                    </v-form>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn @click="closeform">Close</v-btn>
+                    <v-btn :disabled="!valid" @click="register(uname, passw)">Sign Up</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 
@@ -36,32 +52,33 @@
     },
     data:() => ({
       dialog: false,
-      emailL: '',
+      unameL: '',
       passwL: '',
       valid: false,
-      email: '',
+      uname: '',
       passw: '',
       unameRules: [
-        v => !!v || 'E-mail is required',
-        v => v != null && v.length <= 30 && v.length >= 3 || 'E-mail must be between than 3 and 30 characters'
+        v => !!v || 'Username is required',
+        v => v != null && v.length <= 30 && v.length >= 4 || 'Username must be between than 4 and 30 characters'
       ],
       passwRules: [
-        v => !!v || 'Password is required'
+        v => !!v || 'Password is required',
+        v => v != null && v.length <= 50 && v.length >= 6 || 'Password must be between than 6 and 50 characters'
       ]
     }),
     methods: {
-      login (email, passw) {
-        email = 'zorkov';
+      login (uname, passw) {
+        uname = 'zorkov';
         passw = 'asdzxc';
-        console.log("logged in: " + email + ", " + passw);
-        this.$session.set("user", email);
+        console.log("logged in: " + uname + ", " + passw);
+        this.$session.set("user", uname);
         this.$router.push('/home');
       },
-      register(email, passw) {
+      register(uname, passw) {
         this.closeform();
-        this.email = '';
+        this.uname = '';
         this.passw = '';
-        console.log("registered: " + email + ", " + passw);
+        console.log("registered: " + uname + ", " + passw);
       },
       closeform() {
         this.$refs.form.reset();

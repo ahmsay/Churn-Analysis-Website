@@ -2,8 +2,7 @@
   <v-app>
     <v-toolbar app>
       <v-toolbar-title class="headline">
-        <span>Churn</span>
-        <span class="font-weight-light"> | Building the Environment</span>
+        <span class="font-weight-bold">Churnify</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-dialog v-if="false" persistent v-model="dialog" width="500">
@@ -24,6 +23,9 @@
           <v-list>
             <v-list-tile @click="showSettings">
               <v-list-tile-title>Settings</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile @click="showHelp">
+              <v-list-tile-title>Help</v-list-tile-title>
             </v-list-tile>
             <v-list-tile @click="logout">
               <v-list-tile-title>Logout</v-list-tile-title>
@@ -49,6 +51,9 @@
     }),
     methods: {
       showSettings() {
+
+      },
+      showHelp() {
 
       },
       logout() {

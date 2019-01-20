@@ -1,5 +1,6 @@
 <template>
 	<div class="container">
+    <h2 class="pb-3">Training</h2>
     <v-stepper v-model="step">
       <v-stepper-header>
         <v-stepper-step :complete="step>1" step="1">Upload</v-stepper-step>
@@ -42,6 +43,7 @@
             <v-card-title>Select your training columns</v-card-title>
             <v-card-text>
               <v-select v-model="selectedTrainCols" :items="allTrainCols" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
+              <v-btn @click="selectAll">Select All</v-btn>
             </v-card-text>
           </v-card>
           <v-btn color="primary" :disabled="!colsSelected" @click="step++">Next</v-btn>
@@ -164,6 +166,12 @@
     methods: {
       upload() {
         this.$parse(this.$refs.file.files[0], 'feedback').then(result => { this.allInfos = result; });
+      },
+      selectAll() {
+        this.allTrainCols.forEach(val => {
+          if (!this.selectedTrainCols.includes(val))
+            this.selectedTrainCols.push(val);
+        });
       },
       sendUserPrefs() {
         let cats = [];

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <h2 class="pb-3">Dashboard</h2>
     <v-card class="mb-5" color="#f5f5f5">
       <v-card-title>Your Models</v-card-title>
       <v-card-text>
@@ -18,7 +19,7 @@
 </template>
 
 <script>
-  import {EventBus} from "../plugins/event-bus.js";
+  import { EventBus } from "../plugins/event-bus.js";
 
   export default {
     data:() => ({

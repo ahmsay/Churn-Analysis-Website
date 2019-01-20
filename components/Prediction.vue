@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <h2>Prediction</h2>
     <v-select v-model="selectedModel" :items="models" item-text="name" label="Choose Your Model" return-object></v-select>
   	<v-card v-if="selectedModel.name != undefined" class="mb-5" color="#f5f5f5">
   	  <v-card-title>Single Customer Prediction</v-card-title>
