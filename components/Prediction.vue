@@ -5,10 +5,10 @@
   	  <v-card-title class="subheading font-weight-bold">Single Customer Prediction</v-card-title>
   	  <v-card-text>
         <v-layout row wrap>
-          <v-flex class="pr-4" :key="col.options.name" v-for="(col, idx) in catCols" xs12 sm6 md3>
+          <v-flex class="pr-4" :key="col.options.name" v-for="(col, idx) in catCols" xs12 sm4 md3>
             <v-select v-model="catCols[idx].selected" :items="col.options.values" :label="col.options.name"></v-select>
           </v-flex>
-          <v-flex class="pr-4" :key="col.name" v-for="(col, idx) in numCols" xs12 sm6 md3>
+          <v-flex class="pr-4" :key="col.name" v-for="(col, idx) in numCols" xs12 sm4 md3>
             <v-text-field type="number" :label="col.name" v-model.number="numCols[idx].value"></v-text-field>
           </v-flex>
         </v-layout>

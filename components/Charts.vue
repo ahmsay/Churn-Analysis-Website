@@ -1,7 +1,7 @@
 <template>
 	<div>
     <v-layout row wrap>
-      <v-flex xs12 sm12 md6 :key="chart.name" v-for="(chart, idx) in chartInfos">
+      <v-flex xs12 sm6 md6 :key="chart.name" v-for="(chart, idx) in chartInfos">
         <canvas class="mt-3" :id="chart.name+'Chart'"></canvas>
         <v-flex class="py-2">
           <v-layout justify-center>

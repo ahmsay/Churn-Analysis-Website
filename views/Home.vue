@@ -3,16 +3,16 @@
     <dashboard :models="models" v-if="bottomNav == 0"></dashboard>
     <training v-if="bottomNav == 1"></training>
     <prediction :models="models" :passedModel="passedModel" v-if="bottomNav == 2"></prediction>
-    <v-bottom-nav app fixed :active.sync="bottomNav" :value="true">
-      <v-btn>
+    <v-bottom-nav color="#003b60" app fixed :active.sync="bottomNav" :value="true">
+      <v-btn dark>
         <span>Dashboard</span>
         <v-icon>dashboard</v-icon>
       </v-btn>
-      <v-btn>
+      <v-btn dark>
         <span>Training</span>
         <v-icon>school</v-icon>
       </v-btn>
-      <v-btn>
+      <v-btn dark>
         <span>Prediction</span>
         <v-icon>not_listed_location</v-icon>
       </v-btn>

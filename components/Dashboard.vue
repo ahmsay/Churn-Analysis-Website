@@ -4,10 +4,10 @@
       <v-card-title class="title font-weight-medium">Your Models</v-card-title>
       <v-card-text>
         <v-layout align-center row wrap :key="model.name" v-for="model in models">
-          <v-flex xs12 sm6 md3><b>Name:</b> {{ model.name }}</v-flex>
-          <v-flex xs12 sm6 md3><b>Algorithm:</b> {{ model.algorithm }}</v-flex>
-          <v-flex xs12 sm6 md3><b>Accuracy:</b> {{ model.accuracy }}</v-flex>
-          <v-flex xs12 sm6 md3>
+          <v-flex xs12 sm4 md3><b>Name:</b> {{ model.name }}</v-flex>
+          <v-flex xs12 sm4 md3><b>Algorithm:</b> {{ model.algorithm }}</v-flex>
+          <v-flex xs12 sm4 md3><b>Accuracy:</b> {{ model.accuracy }}</v-flex>
+          <v-flex xs12 sm4 md3>
             <v-btn class="ml-0" @click="predict(model)">Predict</v-btn>
           </v-flex>
         </v-layout>
