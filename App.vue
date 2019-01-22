@@ -8,7 +8,7 @@
       <div v-if="this.$session.has('user')">
         <v-menu offset-y>
           <v-btn class="primary" light slot="activator">{{ this.$session.get('user') }}</v-btn>
-          <v-list>
+          <v-list class="secondary">
             <v-list-tile @click="showSettings">
               <v-list-tile-title>Settings</v-list-tile-title>
             </v-list-tile>
@@ -23,7 +23,7 @@
       </div>
     </v-toolbar>
 
-    <v-content class="indigo lighten-5">
+    <v-content>
       <router-view></router-view>
     </v-content>
 

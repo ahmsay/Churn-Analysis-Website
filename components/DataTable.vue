@@ -24,7 +24,7 @@
           return [];
         } else {
           this.columns.forEach((val, idx) => {
-            headers.push({text: val, value: idx, sortable: false});
+            headers.push({ text: val, value: idx, sortable: false });
           });
           return headers;
         }

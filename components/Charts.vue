@@ -5,8 +5,8 @@
         <canvas class="mt-3" :id="chart.name+'Chart'"></canvas>
         <v-flex class="py-2">
           <v-layout justify-center>
-            <v-btn icon @click="iterate(-1, idx)"><v-icon color="#3c3c3c" large>chevron_left</v-icon></v-btn>
-            <v-btn icon @click="iterate(1, idx)"><v-icon color="#3c3c3c" large>chevron_right</v-icon></v-btn>
+            <v-btn icon @click="iterate(-1, idx)"><v-icon color="primary" large>chevron_left</v-icon></v-btn>
+            <v-btn icon @click="iterate(1, idx)"><v-icon color="primary" large>chevron_right</v-icon></v-btn>
           </v-layout>
         </v-flex>
       </v-flex>

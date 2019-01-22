@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <v-container>
     <v-select v-model="selectedModel" :items="models" item-text="name" label="Choose Your Model" :menu-props="{ maxHeight: '400' }" return-object></v-select>
-  	<v-card v-if="selectedModel.name != undefined" class="mb-4" color="#f5f5f5">
+  	<v-card class="mb-4 secondary" v-if="selectedModel.name != undefined">
   	  <v-card-title class="subheading font-weight-bold">Single Customer Prediction</v-card-title>
   	  <v-card-text>
         <v-layout row wrap>
@@ -19,7 +19,7 @@
         <p class="mb-0 mt-2" v-if="!filled">Please fill all values</p>
   	  </v-card-text>
   	</v-card>
-    <v-card v-if="selectedModel.name != undefined" class="mb-4" color="#f5f5f5">
+    <v-card class="mb-4 secondary" v-if="selectedModel.name != undefined">
       <v-card-title class="subheading font-weight-bold">Multiple Customer Prediction</v-card-title>
       <v-card-text>
         <input type="file" id="file" ref="file" @change="upload"/><br><br>
@@ -29,7 +29,7 @@
     </v-card>
     <datatable v-if="allInfos.dataset.length != 0" :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
     <charts v-if="allInfos.chartInfos.length != 0" :chartInfos="allInfos.chartInfos"></charts>
-  </div>
+  </v-container>
 </template>
 
 <script>
