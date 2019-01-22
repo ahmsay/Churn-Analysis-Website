@@ -13,7 +13,7 @@
           </v-flex>
         </v-layout>
         <v-layout align-center>
-          <v-btn class="ml-0" @click="predictSingle">Predict</v-btn>
+          <v-btn class="primary ml-0" @click="predictSingle">Predict</v-btn>
           <h3>{{ targetCol }}:</h3>
         </v-layout>
         <p class="mb-0 mt-2" v-if="!filled">Please fill all values</p>
@@ -23,7 +23,7 @@
       <v-card-title class="subheading font-weight-bold">Multiple Customer Prediction</v-card-title>
       <v-card-text>
         <input type="file" id="file" ref="file" @change="upload"/><br><br>
-        <v-btn class="ml-0" @click="predictMulti">Predict</v-btn>
+        <v-btn class="primary ml-0" @click="predictMulti">Predict</v-btn>
         <span v-if="!allInfos.valid">{{ allInfos.error }}</span>
       </v-card-text>
     </v-card>

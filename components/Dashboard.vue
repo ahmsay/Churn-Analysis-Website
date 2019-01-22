@@ -8,10 +8,10 @@
           <v-flex xs12 sm4 md3><b>Algorithm:</b> {{ model.algorithm }}</v-flex>
           <v-flex xs12 sm4 md3><b>Accuracy:</b> {{ model.accuracy }}</v-flex>
           <v-flex xs12 sm4 md3>
-            <v-btn class="ml-0" @click="predict(model)">Predict</v-btn>
+            <v-btn class="primary ml-0" @click="predict(model)">Predict</v-btn>
           </v-flex>
         </v-layout>
-        <v-btn class="ml-0" @click="train">Train a new model</v-btn>
+        <v-btn class="primary ml-0" @click="train">Train a new model</v-btn>
       </v-card-text>
     </v-card>
   </div>

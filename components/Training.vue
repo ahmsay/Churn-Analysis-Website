@@ -22,7 +22,7 @@
               <p v-if="!allInfos.valid">{{ allInfos.error }}</p>
             </v-card-text>
           </v-card>
-          <v-btn class="ml-0" :disabled="!allInfos.valid" color="primary" @click="step++">Next</v-btn>
+          <v-btn class="primary ml-0" :disabled="!allInfos.valid" @click="step++">Next</v-btn>
         </v-stepper-content>
 
         <v-stepper-content step="2">
@@ -33,7 +33,7 @@
               <span v-if="targetableCols.length==0">Change your dataset ffs</span>
             </v-card-text>
           </v-card>
-          <v-btn class="ml-0" :disabled="targetableCols.length==0" color="primary" @click="step++">Next</v-btn>
+          <v-btn class="primary ml-0" :disabled="targetableCols.length==0" @click="step++">Next</v-btn>
           <v-btn flat @click="cancel">Cancel</v-btn>
         </v-stepper-content>
 
@@ -42,10 +42,10 @@
             <v-card-title class="subheading font-weight-bold">Select your training columns</v-card-title>
             <v-card-text>
               <v-select v-model="selectedTrainCols" :items="allTrainCols" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
-              <v-btn class="ml-0" @click="selectAll">Select All</v-btn>
+              <v-btn class="primary ml-0" @click="selectAll">Select All</v-btn>
             </v-card-text>
           </v-card>
-          <v-btn class="ml-0" color="primary" :disabled="!colsSelected" @click="step++">Next</v-btn>
+          <v-btn class="primary ml-0" :disabled="!colsSelected" @click="step++">Next</v-btn>
           <v-btn flat @click="cancel">Cancel</v-btn>
         </v-stepper-content>
 
@@ -59,7 +59,7 @@
               <v-select v-model="moreCatCols" :items="catable" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
             </v-card-text>
           </v-card>
-          <v-btn class="ml-0" color="primary" @click="step++">Next</v-btn>
+          <v-btn class="primary ml-0" @click="step++">Next</v-btn>
           <v-btn flat @click="cancel">Cancel</v-btn>
         </v-stepper-content>
 
@@ -80,7 +80,7 @@
                 </div>
             </v-card-text>
           </v-card>
-          <v-btn class="ml-0" color="primary" @click="sendUserPrefs">Apply</v-btn>
+          <v-btn class="primary ml-0" @click="sendUserPrefs">Apply</v-btn>
           <v-btn flat @click="cancel">Cancel</v-btn>
         </v-stepper-content>
 
@@ -89,7 +89,7 @@
             <v-card-title class="subheading font-weight-bold">Success</v-card-title>
             <v-card-text>
               <span>Your model is being trained.</span>
-              <v-btn @click="cancel">Train another model</v-btn>
+              <v-btn class="primary" @click="cancel">Train another model</v-btn>
             </v-card-text>
           </v-card>
         </v-stepper-content>

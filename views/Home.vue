@@ -3,7 +3,7 @@
     <dashboard :models="models" v-if="bottomNav == 0"></dashboard>
     <training v-if="bottomNav == 1"></training>
     <prediction :models="models" :passedModel="passedModel" v-if="bottomNav == 2"></prediction>
-    <v-bottom-nav color="#003b60" app fixed :active.sync="bottomNav" :value="true">
+    <v-bottom-nav class="primary" app fixed :active.sync="bottomNav" :value="true">
       <v-btn dark>
         <span>Dashboard</span>
         <v-icon>dashboard</v-icon>

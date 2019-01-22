@@ -1,13 +1,13 @@
 <template>
   <v-app>
-    <v-toolbar color="#003b60" app dark>
+    <v-toolbar class="primary" app dark>
       <v-toolbar-title>
         <span class="headline font-weight-bold">Churnify</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="this.$session.has('user')">
         <v-menu offset-y>
-          <v-btn light slot="activator">{{ this.$session.get('user') }}</v-btn>
+          <v-btn class="primary" light slot="activator">{{ this.$session.get('user') }}</v-btn>
           <v-list>
             <v-list-tile @click="showSettings">
               <v-list-tile-title>Settings</v-list-tile-title>
@@ -23,7 +23,7 @@
       </div>
     </v-toolbar>
 
-    <v-content>
+    <v-content class="indigo lighten-5">
       <router-view></router-view>
     </v-content>
 
