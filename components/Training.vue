@@ -96,7 +96,6 @@
 
       </v-stepper-items>
     </v-stepper>
-    <v-btn @click="test">test</v-btn>
     <datatable v-if="allInfos.dataset.length != 0" :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
     <charts v-if="allInfos.chartInfos.length != 0" :chartInfos="allInfos.chartInfos"></charts>
 	</v-container>
@@ -135,7 +134,6 @@
       targetableCols() {
         let columns = [];
         this.allInfos.colInfos.forEach(val => {
-          console.log(typeof(val));
           if (val.number == 2)
             columns.push(val.name);
         });
@@ -165,9 +163,6 @@
       }
     },
     methods: {
-      test() {
-        console.log(this.allInfos.colInfos);
-      },
       upload() {
         this.$parse(this.$refs.file.files[0], 'feedback', this.$session.get('uname'), this.$session.get('passw')).then(result => {
           this.allInfos = result;
@@ -187,14 +182,12 @@
           col.cat = 1;
         this.catList.forEach(val => { cats.push(val.name); });
         this.numList.forEach(val => { nums.push(val.name); });
-        console.log(this.modelName);
-        console.log(this.allInfos.dataset);
-        console.log(this.allInfos.columns);
-        console.log(this.targetCol);
-        console.log(cats);
-        console.log(nums);
-        this.step = 6;
-        this.sent = true;
+        console.log({ modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: this.targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')});
+        this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: this.targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')}).then(data => {
+          console.log(data);
+        });
+        //this.step = 6;
+        //this.sent = true;
       },
       cancel() {
         this.$refs.file.value = '';

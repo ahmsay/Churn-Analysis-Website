@@ -62,24 +62,7 @@ export default {
                     this.$post('/columnsInfos', { columns: columns, dataset: dataset, username: uname, password: passw }).then(data => {
                       fileResult.colInfos = data.colInfos;
                       resolve(fileResult);
-                    })
-                    /*let colInfos = [
-                      { name: 'RowNumber', number: 10000, cat: 0 },
-                      { name: 'CustomerId', number: 10000, cat: 0 },
-                      { name: 'Surname', number: 580, cat: 1 },
-                      { name: 'CreditScore', number: 9000, cat: 0 },
-                      { name: 'Geography', number: 3, cat: 1 },
-                      { name: 'Gender', number: 2, cat: 1 },
-                      { name: 'Age', number: 48, cat: 0 },
-                      { name: 'Tenure', number: 15, cat: 0 },
-                      { name: 'Balance', number: 9000, cat: 0 },
-                      { name: 'NumOfProducts', number: 10, cat: 0 },
-                      { name: 'HasCrCard', number: 2, cat: 0 },
-                      { name: 'IsActiveMember', number: 2, cat: 0 },
-                      { name: 'EstimatedSalary', number: 9000, cat: 0 },
-                      { name: 'Exited', number: 2, cat: 0 }
-                    ];
-                    fileResult.colInfos = colInfos;*/
+                    });
                     let chartInfos = [
                       { name: 'Geography', labels: ['France', 'Germany', 'Spain'], data: [5014, 2509, 2477] },
                       { name: 'NumOfProducts', labels: ['1', '2', '3', '4'], data: [5084, 4590, 266, 60] }
