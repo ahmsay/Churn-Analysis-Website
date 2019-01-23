@@ -28,7 +28,7 @@
 
   export default {
     created() {
-      if (this.$session.has("user")) {
+      if (this.$session.has("uname")) {
         EventBus.$on('train', num => { this.bottomNav = num; });
         EventBus.$on('reset', val => { this.passedModel = val; });
         EventBus.$on('predict', model => {

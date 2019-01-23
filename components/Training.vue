@@ -30,7 +30,7 @@
             <v-card-title class="subheading font-weight-bold">Select your target column</v-card-title>
             <v-card-text>
               <v-select v-model="targetCol" :items="targetableCols" label="Target column"></v-select>
-              <span v-if="targetableCols.length==0">Change your dataset ffs</span>
+              <span v-if="targetableCols.length==0">Change your dataset</span>
             </v-card-text>
           </v-card>
           <v-btn class="primary ml-0" :disabled="targetableCols.length==0" @click="step++">Next</v-btn>
@@ -54,7 +54,7 @@
             <v-card-title class="subheading font-weight-bold">Select the categoric and numeric columns</v-card-title>
             <v-card-text>
               <p class="mb-2">The following columns are automatically detected as categoric:</p>
-              <v-chip class="ml-0 mr-2 primary white--text" disabled :key="col.name" v-for="col in catList">{{ col.name }}</v-chip>
+              <v-chip class="ml-0 mr-2 primary white--text" small disabled :key="col.name" v-for="col in catList">{{ col.name }}</v-chip>
               <p class="my-2">If there are more categoric columns, please select.</p>
               <v-select v-model="moreCatCols" :items="catable" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
             </v-card-text>
@@ -71,12 +71,12 @@
                 <div><b>Dataset: </b>{{ allInfos.fileName }}</div>
                 <div>
                   <span><b>Selected Columns: </b></span>
-                  <v-chip class="ml-0 mr-2 primary white--text" disabled :key="col.name" v-for="col in selectedTrainCols">{{ col.name }}</v-chip>
+                  <v-chip class="ml-0 mr-2 primary white--text" small disabled :key="col.name" v-for="col in selectedTrainCols">{{ col.name }}</v-chip>
                 </div>
                 <div>
                   <span><b>Categoric Columns: </b></span>
-                  <v-chip class="ml-0 mr-2 primary white--text" disabled :key="col.name" v-for="col in catList">{{ col.name+' ' }}</v-chip>
-                  <v-chip class="ml-0 mr-2 primary white--text" disabled :key="col.name" v-for="col in moreCatCols">{{ col.name+' ' }}</v-chip>
+                  <v-chip class="ml-0 mr-2 primary white--text" small disabled :key="col.name" v-for="col in catList">{{ col.name+' ' }}</v-chip>
+                  <v-chip class="ml-0 mr-2 primary white--text" small disabled :key="col.name" v-for="col in moreCatCols">{{ col.name+' ' }}</v-chip>
                 </div>
             </v-card-text>
           </v-card>
@@ -96,6 +96,7 @@
 
       </v-stepper-items>
     </v-stepper>
+    <v-btn @click="test">test</v-btn>
     <datatable v-if="allInfos.dataset.length != 0" :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
     <charts v-if="allInfos.chartInfos.length != 0" :chartInfos="allInfos.chartInfos"></charts>
 	</v-container>
@@ -134,6 +135,7 @@
       targetableCols() {
         let columns = [];
         this.allInfos.colInfos.forEach(val => {
+          console.log(typeof(val));
           if (val.number == 2)
             columns.push(val.name);
         });
@@ -163,8 +165,13 @@
       }
     },
     methods: {
+      test() {
+        console.log(this.allInfos.colInfos);
+      },
       upload() {
-        this.$parse(this.$refs.file.files[0], 'feedback').then(result => { this.allInfos = result; });
+        this.$parse(this.$refs.file.files[0], 'feedback', this.$session.get('uname'), this.$session.get('passw')).then(result => {
+          this.allInfos = result;
+        });
       },
       selectAll() {
         this.allTrainCols.forEach(val => {

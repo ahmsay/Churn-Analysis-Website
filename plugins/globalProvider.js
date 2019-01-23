@@ -1,7 +1,6 @@
 export default {
     install (Vue) {
-      Vue.prototype.$URL = 'http://127.0.0.1:5000'
-      //Vue.prototype.$URL = 'http://10.31.27.61:5000'
+      Vue.prototype.$URL = 'https://denemeq.herokuapp.com'
       
       Vue.prototype.$get = function(path) {
       	return new Promise(resolve => {
@@ -29,7 +28,7 @@ export default {
       	});
       }
 
-      Vue.prototype.$parse = function(file, action) {
+      Vue.prototype.$parse = function(file, action, uname, passw) {
         return new Promise(resolve => {
           let fileResult = {
             error: '',
@@ -60,11 +59,11 @@ export default {
                   fileResult.columns = columns;
                   fileResult.dataset = dataset;
                   if (action == 'feedback') {
-                    /*this.$post('/check', { columns: columns, dataset: dataset }).then(data => {
-                      fileResult.colInfos = data.col_infos;
-                      fileResult.chartInfos = data.chart_infos;
-                    })*/
-                    let colInfos = [
+                    this.$post('/columnsInfos', { columns: columns, dataset: dataset, username: uname, password: passw }).then(data => {
+                      fileResult.colInfos = data.colInfos;
+                      resolve(fileResult);
+                    })
+                    /*let colInfos = [
                       { name: 'RowNumber', number: 10000, cat: 0 },
                       { name: 'CustomerId', number: 10000, cat: 0 },
                       { name: 'Surname', number: 580, cat: 1 },
@@ -80,7 +79,7 @@ export default {
                       { name: 'EstimatedSalary', number: 9000, cat: 0 },
                       { name: 'Exited', number: 2, cat: 0 }
                     ];
-                    fileResult.colInfos = colInfos;
+                    fileResult.colInfos = colInfos;*/
                     let chartInfos = [
                       { name: 'Geography', labels: ['France', 'Germany', 'Spain'], data: [5014, 2509, 2477] },
                       { name: 'NumOfProducts', labels: ['1', '2', '3', '4'], data: [5084, 4590, 266, 60] }
@@ -103,7 +102,6 @@ export default {
               fileResult.error = 'This file type is not supported.';
             }
           }
-          resolve(fileResult);
         });
       }
 

@@ -11,7 +11,7 @@
       </v-flex>
       <v-flex xs12 sm6 md4>
         <v-card class="secondary">
-          <v-card-title class="title font-weight-medium">Sign in to churnify</v-card-title>
+          <v-card-title class="title font-weight-medium">Sign in to Churnify</v-card-title>
           <v-card-text>
             <v-text-field v-model="unameL" label="Username"></v-text-field>
             <v-text-field v-model="passwL" label="Password" type="password"></v-text-field>
@@ -32,12 +32,13 @@
                   <v-form ref="form" v-model="valid">
                     <v-text-field v-model="uname" :rules="unameRules" label="Username" required></v-text-field>
                     <v-text-field v-model="passw" :rules="passwRules" type="password" label="Password" required></v-text-field>
+                    <v-text-field v-model="email" label="E-mail" required></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn class="primary" @click.native="closeform">Close</v-btn>
-                  <v-btn class="primary" :disabled="!valid" @click="register(uname, passw)">Sign Up</v-btn>
+                  <v-btn class="primary" :disabled="!valid" @click="register(uname, passw, email)">Sign Up</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -51,7 +52,7 @@
 <script>
   export default {
     created() {
-      if (this.$session.has("user"))
+      if (this.$session.has("uname"))
         this.$router.push('/home');
     },
     data:() => ({
@@ -61,6 +62,7 @@
       valid: false,
       uname: '',
       passw: '',
+      email: '',
       unameRules: [
         v => !!v || 'Username is required',
         v => v != null && v.length <= 30 && v.length >= 4 || 'Username must be between than 4 and 30 characters'
@@ -72,17 +74,23 @@
     }),
     methods: {
       login (uname, passw) {
-        uname = 'zorkov';
-        passw = 'asdzxc';
-        console.log("logged in: " + uname + ", " + passw);
-        this.$session.set("user", uname);
-        this.$router.push('/home');
+        this.$post('/login', { username: uname, password: passw }).then(data => {
+          if (data.info == "1") {
+            this.$session.set("uname", uname);
+            this.$session.set("passw", passw);
+            this.$router.push('/home');
+          }
+        })
       },
-      register(uname, passw) {
-        this.closeform();
-        this.uname = '';
-        this.passw = '';
-        console.log("registered: " + uname + ", " + passw);
+      register(uname, passw, email) {
+        this.$post('/register', { username: uname, password: passw, email: email }).then(data => {
+          if (data.info == "1") {
+            this.closeform();
+            this.uname = '';
+            this.passw = '';
+            this.email = '';
+          }
+        })
       },
       closeform() {
         this.$refs.form.reset();
