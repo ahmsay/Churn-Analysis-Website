@@ -180,14 +180,14 @@
         let col = {};
         while ((col = this.moreCatCols.pop()) != null)
           col.cat = 1;
-        this.catList.forEach(val => { cats.push(val.name); });
-        this.numList.forEach(val => { nums.push(val.name); });
+        this.catList.forEach(val => { cats.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
+        this.numList.forEach(val => { nums.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         console.log({ modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: this.targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')});
-        this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: this.targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')}).then(data => {
+        /*this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: this.targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')}).then(data => {
           console.log(data);
-        });
-        //this.step = 6;
-        //this.sent = true;
+        });*/
+        this.step = 6;
+        this.sent = true;
       },
       cancel() {
         this.$refs.file.value = '';
