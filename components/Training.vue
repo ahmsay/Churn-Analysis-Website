@@ -54,7 +54,7 @@
             <v-card-title class="subheading font-weight-bold">Select the categoric and numeric columns</v-card-title>
             <v-card-text>
               <p class="mb-2">The following columns are automatically detected as categoric:</p>
-              <v-chip class="ml-0 mr-2 primary white--text" small disabled :key="col.name" v-for="col in catList">{{ col.name }}</v-chip>
+              <v-chip :class="'ml-0 mr-2 chip'+(col.cat == 1 || moreCatCols.includes(col))+' white--text'" small disabled :key="col.name" v-for="col in catList">{{ col.name }}</v-chip>
               <p class="my-2">If there are more categoric columns, please select.</p>
               <v-select v-model="moreCatCols" :items="catable" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
             </v-card-text>
@@ -70,13 +70,12 @@
                 <v-text-field v-model="modelName" label="Enter your models name"></v-text-field>
                 <div><b>Dataset: </b>{{ allInfos.fileName }}</div>
                 <div>
-                  <span><b>Selected Columns: </b></span>
-                  <v-chip class="ml-0 mr-2 primary white--text" small disabled :key="col.name" v-for="col in selectedTrainCols">{{ col.name }}</v-chip>
-                </div>
-                <div>
-                  <span><b>Categoric Columns: </b></span>
-                  <v-chip class="ml-0 mr-2 primary white--text" small disabled :key="col.name" v-for="col in catList">{{ col.name+' ' }}</v-chip>
-                  <v-chip class="ml-0 mr-2 primary white--text" small disabled :key="col.name" v-for="col in moreCatCols">{{ col.name+' ' }}</v-chip>
+                  <span><b>Training Columns: </b></span>
+                  <v-tooltip top :key="col.name" v-for="col in selectedTrainCols">
+                    <v-chip slot="activator" :class="'ml-0 mr-2 chip'+(col.cat == 1 || moreCatCols.includes(col))+' white--text'" small disabled>{{ col.name }}</v-chip>
+                    <span v-if="col.cat == 1 || moreCatCols.includes(col)">Categoric</span>
+                    <span v-if="col.cat == 0 && !moreCatCols.includes(col)">Numeric</span>
+                  </v-tooltip>
                 </div>
             </v-card-text>
           </v-card>
@@ -183,9 +182,9 @@
         this.catList.forEach(val => { cats.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         this.numList.forEach(val => { nums.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         console.log({ modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: this.targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')});
-        /*this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: this.targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')}).then(data => {
+        this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: this.targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')}).then(data => {
           console.log(data);
-        });*/
+        });
         this.step = 6;
         this.sent = true;
       },
