@@ -92,7 +92,7 @@
       targetCol() {
         let column = '';
         if (this.selectedModel.name != undefined)
-          return this.selectedModel.targetCol;
+          return this.selectedModel.targetCol.name;
         else
           return column;
       }
@@ -129,7 +129,7 @@
           let results = [0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1];
           let columns = this.allInfos.columns;
           let dataset = this.allInfos.dataset;
-          columns.unshift(this.selectedModel.targetCol);
+          columns.unshift(this.selectedModel.targetCol.name);
           for (let i=0; i<dataset.length; i++)
             dataset[i].unshift(results[i]);
           this.allInfos.columns = columns;

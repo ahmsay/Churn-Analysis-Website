@@ -181,8 +181,9 @@
           col.cat = 1;
         this.catList.forEach(val => { cats.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         this.numList.forEach(val => { nums.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
-        console.log({ modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: this.targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')});
-        this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: this.targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')}).then(data => {
+        let targetCol = this.allInfos.columns.indexOf(this.targetCol);
+        console.log({ modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')});
+        this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')}).then(data => {
           console.log(data);
         });
         this.step = 6;

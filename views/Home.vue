@@ -43,7 +43,7 @@
               { name: 'Gender', values: ['Female', 'Male']}
             ],
             numCols: ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard', 'IsActiveMember', 'EstimatedSalary'],
-            targetCol: 'Exited',
+            targetCol: { name: 'Exited', values: ['0', '1'] },
             algorithm: 'Neural Networks',
             accuracy: '84.38'
           },
@@ -53,7 +53,7 @@
 
             ],
             numCols: ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard', 'IsActiveMember', 'EstimatedSalary'],
-            targetCol: 'Churn',
+            targetCol: { name: 'Churn', values: ['Yes', 'No'] },
             algorithm: 'KNN',
             accuracy: '81.53'
           }

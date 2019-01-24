@@ -74,6 +74,7 @@ export default {
                       { name: 'NumOfProducts', labels: ['1', '2', '3', '4'], data: [5084, 4590, 266, 60] }
                     ]
                     fileResult.chartInfos = chartInfos;
+                    resolve(fileResult);
                   }
                 }.bind(this), false);
                 reader.readAsText(file);
