@@ -2,7 +2,7 @@
   <v-container>
     <v-select v-model="selectedModel" :items="models" item-text="name" label="Choose Your Model" :menu-props="{ maxHeight: '400' }" return-object></v-select>
   	<v-card class="mb-4 secondary" v-if="selectedModel.name != undefined">
-  	  <v-card-title class="subheading font-weight-bold">Single Customer Prediction</v-card-title>
+  	  <v-card-title class="subheading font-weight-bold primary white--text">Single Customer Prediction</v-card-title>
   	  <v-card-text>
         <v-layout row wrap>
           <v-flex class="pr-4" :key="col.options.name" v-for="(col, idx) in catCols" xs12 sm4 md3>
@@ -20,7 +20,7 @@
   	  </v-card-text>
   	</v-card>
     <v-card class="mb-4 secondary" v-if="selectedModel.name != undefined">
-      <v-card-title class="subheading font-weight-bold">Multiple Customer Prediction</v-card-title>
+      <v-card-title class="subheading font-weight-bold primary white--text">Multiple Customer Prediction</v-card-title>
       <v-card-text>
         <input type="file" id="file" ref="file" @change="upload"/><br><br>
         <v-btn class="primary ml-0" @click="predictMulti">Predict</v-btn>

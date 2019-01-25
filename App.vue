@@ -13,16 +13,16 @@
             <span>{{ this.$session.get('uname') }}</span>
           </v-btn>
           <v-list class="secondary">
-            <v-list-tile @click="showSettings">
-                <v-icon class="pr-3" left>build</v-icon>
-                <span>Settings</span>
-            </v-list-tile>
             <v-list-tile @click="showHelp">
-                <v-icon class="pr-3" left>help</v-icon>
+                <v-icon class="pr-3" color="primary" left>help</v-icon>
                 <span>Help</span>
             </v-list-tile>
+            <v-list-tile @click="showSettings">
+                <v-icon class="pr-3" color="primary" left>build</v-icon>
+                <span>Settings</span>
+            </v-list-tile>
             <v-list-tile @click="logout">
-                <v-icon class="pr-3" left>backspace</v-icon>
+                <v-icon class="pr-3" color="primary" left>backspace</v-icon>
                 <span>Logout</span>
             </v-list-tile>
           </v-list>
@@ -30,7 +30,7 @@
       </div>
     </v-toolbar>
 
-    <v-content>
+    <v-content class="mt-3">
       <router-view></router-view>
     </v-content>
 
@@ -45,10 +45,10 @@
       dialog: false
     }),
     methods: {
-      showSettings() {
+      showHelp() {
 
       },
-      showHelp() {
+      showSettings() {
 
       },
       logout() {

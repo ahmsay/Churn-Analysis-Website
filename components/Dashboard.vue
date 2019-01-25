@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card class="secondary">
-      <v-card-title class="title font-weight-medium">Your Models</v-card-title>
+      <v-card-title class="title font-weight-medium primary white--text">Your Models</v-card-title>
       <v-card-text>
         <v-layout align-center row wrap :key="model.name" v-for="model in models">
           <v-flex xs12 sm4 md3><b>Name:</b> {{ model.name }}</v-flex>
@@ -14,6 +14,7 @@
         <v-btn class="primary ml-0 mb-0" @click="train">Train a new model</v-btn>
       </v-card-text>
     </v-card>
+    <v-btn @click="test">test</v-btn>
   </v-container>
 </template>
 
@@ -26,6 +27,12 @@
     }),
     props: ['models'],
     methods: {
+      test() {
+        console.log({ username: this.$session.get('uname'), password: this.$session.get('passw') });
+        this.$post('/modelList', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+          console.log(data);
+        })
+      },
       train() {
         EventBus.$emit('train', 1);
       },
