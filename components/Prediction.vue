@@ -98,10 +98,23 @@
       }
     },
     methods: {
+      encode(row, idx, len) {
+        if (len < 3) {
+          row.push(idx);
+        } else {
+          for(let i=0; i<len; i++) {
+            if (i == idx)
+              row.push(1);
+            else
+              row.push(0);
+          }
+        }
+        return row;
+      },
       predictSingle() {
         let filled = true;
         for (let i=0; i<this.numCols.length; i++) {
-          if (this.numCols[i].value == null || this.numCols[i].value == '')
+          if (this.numCols[i].value == null || this.numCols[i].value === '')
             filled = false;
         }
         for (let i=0; i<this.catCols.length; i++) {
@@ -110,25 +123,14 @@
         }
         this.filled = filled;
         if (this.filled) {
-          let values = [];
+          let row = [];
           this.catCols.forEach(val => {
             let idx = val.options.values.indexOf(val.selected);
             let len = val.options.values.length;
-            if (len < 3) {
-              values.push(idx);
-            } else {
-              for(let i=0; i<len; i++) {
-                if (i == idx)
-                  values.push(1);
-                else
-                  values.push(0);
-              }
-            }
+            row = this.encode(row, idx, len);
           });
-          this.numCols.forEach(val => {
-            values.push(val.value);
-          })
-          console.log(values);
+          this.numCols.forEach(val => { row.push(val.value); });
+          console.log(row);
         }
       },
       upload() {
@@ -136,8 +138,27 @@
         this.predicted = false;
       },
       predictMulti() {
-        if(this.allInfos.dataset.length != 0 && !this.predicted) {
-          let results = [0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1];
+        let catIndexes = [];
+        let numIndexes = [];
+        this.selectedModel.catCols.forEach(val => { catIndexes.push(this.allInfos.columns.indexOf(val.name)); });
+        this.selectedModel.numCols.forEach(val => { numIndexes.push(this.allInfos.columns.indexOf(val)); });
+        let rows = [];
+        this.allInfos.dataset.forEach(val => {
+          let row = [];
+          this.selectedModel.catCols.forEach((col, i) => {
+            let idx = col.values.indexOf(val[catIndexes[i]]);
+            let len = col.values.length;
+            row = this.encode(row, idx, len);
+          });
+          rows.push(row);
+          for(let i=0; i<numIndexes.length; i++) {
+            let v = parseFloat(val[numIndexes[i]]);
+            row.push(v);
+          }
+        });
+        console.log(rows);
+        /*if(this.allInfos.dataset.length != 0 && !this.predicted) {
+          let results = [0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1];
           let columns = this.allInfos.columns;
           let dataset = this.allInfos.dataset;
           columns.unshift(this.selectedModel.targetCol.name);
@@ -146,7 +167,7 @@
           this.allInfos.columns = columns;
           this.allInfos.dataset = dataset;
           this.predicted = true;
-        }
+        }*/
       }
     }
   }
