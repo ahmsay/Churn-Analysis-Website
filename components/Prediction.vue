@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-select v-model="selectedModel" :items="models" item-text="name" label="Choose Your Model" :menu-props="{ maxHeight: '400' }" return-object></v-select>
-  	<v-card class="mb-4 secondary" v-if="selectedModel.name != undefined">
+    <v-select v-model="selectedModel" :items="models" item-text="modelname" label="Choose Your Model" :menu-props="{ maxHeight: '400' }" return-object></v-select>
+  	<v-card class="mb-4 secondary" v-if="selectedModel.modelname != undefined">
   	  <v-card-title class="subheading font-weight-bold primary white--text">Single Customer Prediction</v-card-title>
   	  <v-card-text>
         <v-layout row wrap>
@@ -19,7 +19,7 @@
         <p class="mb-0 mt-2" v-if="!filled">Please fill all values</p>
   	  </v-card-text>
   	</v-card>
-    <v-card class="mb-4 secondary" v-if="selectedModel.name != undefined">
+    <v-card class="mb-4 secondary" v-if="selectedModel.modelname != undefined">
       <v-card-title class="subheading font-weight-bold primary white--text">Multiple Customer Prediction</v-card-title>
       <v-card-text>
         <input type="file" id="file" ref="file" @change="upload"/><br><br>
@@ -69,7 +69,7 @@
     computed: {
       catCols() {
         let columns = [];
-        if (this.selectedModel.name != undefined) {
+        if (this.selectedModel.modelname != undefined) {
           this.selectedModel.catCols.forEach(val => {
             columns.push({ options: val, selected: null });
           });
@@ -80,7 +80,7 @@
       },
       numCols() {
         let columns = [];
-      	if (this.selectedModel.name != undefined) {
+      	if (this.selectedModel.modelname != undefined) {
           this.selectedModel.numCols.forEach(val => {
             columns.push({ name: val, value: null });
           });
@@ -91,7 +91,7 @@
       },
       targetCol() {
         let column = '';
-        if (this.selectedModel.name != undefined)
+        if (this.selectedModel.modelname != undefined)
           return this.selectedModel.targetCol.name;
         else
           return column;
@@ -112,7 +112,18 @@
         if (this.filled) {
           let values = [];
           this.catCols.forEach(val => {
-            values.push(val.selected);
+            let idx = val.options.values.indexOf(val.selected);
+            let len = val.options.values.length;
+            if (len < 3) {
+              values.push(idx);
+            } else {
+              for(let i=0; i<len; i++) {
+                if (i == idx)
+                  values.push(1);
+                else
+                  values.push(0);
+              }
+            }
           });
           this.numCols.forEach(val => {
             values.push(val.value);

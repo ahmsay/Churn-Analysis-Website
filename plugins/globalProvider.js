@@ -1,6 +1,6 @@
 export default {
     install (Vue) {
-      Vue.prototype.$URL = 'https://denemeq.herokuapp.com'
+      Vue.prototype.$URL = 'https://churn-analysis-api.herokuapp.com'
       
       Vue.prototype.$get = function(path) {
       	return new Promise(resolve => {

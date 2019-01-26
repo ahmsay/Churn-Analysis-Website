@@ -35,29 +35,9 @@
           this.bottomNav = 2;
           this.passedModel = model;
         });
-        this.models = [
-          {
-            name: 'bankmodel',
-            catCols: [
-              { name: 'Geography', values: ['France', 'Germany', 'Spain'] },
-              { name: 'Gender', values: ['Female', 'Male']}
-            ],
-            numCols: ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard', 'IsActiveMember', 'EstimatedSalary'],
-            targetCol: { name: 'Exited', values: ['0', '1'] },
-            algorithm: 'Neural Networks',
-            accuracy: '84.38'
-          },
-          {
-            name: 'telcoModel',
-            catCols: [
-
-            ],
-            numCols: ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard', 'IsActiveMember', 'EstimatedSalary'],
-            targetCol: { name: 'Churn', values: ['Yes', 'No'] },
-            algorithm: 'KNN',
-            accuracy: '81.53'
-          }
-        ]
+        this.$post('/modelList', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+          this.models = data;
+        })
       } else {
         this.$router.push('/');
       }
