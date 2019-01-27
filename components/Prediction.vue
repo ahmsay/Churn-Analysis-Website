@@ -130,7 +130,7 @@
             row = this.encode(row, idx, len);
           });
           this.numCols.forEach(val => { row.push(val.value); });
-          console.log(row);
+          console.log([row]);
         }
       },
       upload() {
