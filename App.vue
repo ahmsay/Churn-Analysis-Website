@@ -8,9 +8,10 @@
       <v-spacer></v-spacer>
       <div v-if="this.$session.has('uname')">
         <v-menu offset-y>
-          <v-btn class="primary" light slot="activator">
+          <v-btn flat class="primary mr-0" light slot="activator">
             <v-icon left>account_box</v-icon>
             <span>{{ this.$session.get('uname') }}</span>
+            <v-icon>arrow_drop_down</v-icon>
           </v-btn>
           <v-list class="secondary">
             <v-list-tile @click="showHelp">

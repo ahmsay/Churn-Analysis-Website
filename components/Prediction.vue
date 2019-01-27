@@ -130,7 +130,10 @@
             row = this.encode(row, idx, len);
           });
           this.numCols.forEach(val => { row.push(val.value); });
-          console.log([row]);
+          console.log(row);
+          /*this.$post('/predict', { predictset: row, username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+            console.log(data);
+          });*/
         }
       },
       upload() {
@@ -157,6 +160,9 @@
           }
         });
         console.log(rows);
+        /*this.$post('/predict', { predictset: rows, username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+          console.log(data);
+        });*/
         /*if(this.allInfos.dataset.length != 0 && !this.predicted) {
           let results = [0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1];
           let columns = this.allInfos.columns;
