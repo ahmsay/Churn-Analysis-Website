@@ -108,8 +108,8 @@
           row.push(idx);
         } else {
           idx = idx.toString(2);
-          idx = idx.padStart(len-1, '0');
-          for(let i=0; i<len-1; i++) {
+          idx = idx.padStart(Math.ceil(Math.log2(len)), '0');
+          for(let i=0; i<idx.length; i++) {
             row.push(parseInt(idx[i]));
           }
         }
