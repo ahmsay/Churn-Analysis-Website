@@ -3,7 +3,7 @@
     <dashboard :models="models" v-if="bottomNav == 0"></dashboard>
     <training v-if="bottomNav == 1"></training>
     <prediction :models="models" :passedModel="passedModel" v-if="bottomNav == 2"></prediction>
-    <v-btn @click="test">test</v-btn>
+    <!--<v-btn @click="test">test</v-btn>-->
     <v-bottom-nav class="primary" app fixed :active.sync="bottomNav" :value="true">
       <v-btn dark>
         <span>Dashboard</span>
@@ -26,7 +26,7 @@
   import Training from '../components/Training';
   import Prediction from '../components/Prediction';
   import {EventBus} from "../plugins/event-bus.js";
-  import db from '../plugins/fb';
+  //import db from '../plugins/fb';
 
   export default {
     created() {
@@ -51,14 +51,14 @@
   	}),
   	methods: {
       test() {
-        const user = {
+        /*const user = {
           username: 'uname',
           password: 'passw',
           email: 'email'
         }
         db.collection('userList').add(user).then(() => {
           console.log('added');
-        });
+        });*/
       }
   	},
     components: {

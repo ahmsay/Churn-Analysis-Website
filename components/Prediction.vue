@@ -14,7 +14,7 @@
         </v-layout>
         <v-layout align-center>
           <v-btn class="primary ml-0" @click="predictSingle">Predict</v-btn>
-          <h3>{{ targetCol }}:</h3>
+          <h3>{{ targetCol }}: {{ result }}</h3>
         </v-layout>
         <p class="mb-0 mt-2" v-if="!filled">Please fill all values</p>
   	  </v-card-text>
@@ -60,7 +60,8 @@
         chartInfos: []
       },
       filled: true,
-      predicted: false
+      predicted: false,
+      result : ''
     }),
     props: {
       models: Array,
@@ -102,11 +103,10 @@
         if (len < 3) {
           row.push(idx);
         } else {
-          for(let i=0; i<len; i++) {
-            if (i == idx)
-              row.push(1);
-            else
-              row.push(0);
+          idx = idx.toString(2);
+          idx = idx.padStart(len-1, '0');
+          for(let i=0; i<len-1; i++) {
+            row.push(parseInt(idx[i]));
           }
         }
         return row;
@@ -130,10 +130,9 @@
             row = this.encode(row, idx, len);
           });
           this.numCols.forEach(val => { row.push(val.value); });
-          console.log(row);
-          /*this.$post('/predict', { predictset: row, username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
-            console.log(data);
-          });*/
+          this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: [row], username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+            this.result = this.selectedModel.targetCol.values[parseInt(data.prediction[0])];
+          });
         }
       },
       upload() {
@@ -159,21 +158,21 @@
             row.push(v);
           }
         });
-        console.log(rows);
-        /*this.$post('/predict', { predictset: rows, username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
-          console.log(data);
-        });*/
-        /*if(this.allInfos.dataset.length != 0 && !this.predicted) {
-          let results = [0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1];
-          let columns = this.allInfos.columns;
-          let dataset = this.allInfos.dataset;
-          columns.unshift(this.selectedModel.targetCol.name);
-          for (let i=0; i<dataset.length; i++)
-            dataset[i].unshift(results[i]);
-          this.allInfos.columns = columns;
-          this.allInfos.dataset = dataset;
-          this.predicted = true;
-        }*/
+        if(this.allInfos.dataset.length != 0 && !this.predicted) {
+          this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: rows, username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+            let results = data.prediction;
+            for (let i=0; i<results.length; i++)
+              results[i] = this.selectedModel.targetCol.values[parseInt(data.prediction[i])];
+            let columns = this.allInfos.columns;
+            let dataset = this.allInfos.dataset;
+            columns.unshift(this.selectedModel.targetCol.name+'2');
+            for (let i=0; i<dataset.length; i++)
+              dataset[i].unshift(results[i]);
+            this.allInfos.columns = columns;
+            this.allInfos.dataset = dataset;
+            this.predicted = true;
+          });
+        }
       }
     }
   }
