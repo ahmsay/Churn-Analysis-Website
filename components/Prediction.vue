@@ -13,7 +13,7 @@
           </v-flex>
         </v-layout>
         <v-layout align-center>
-          <v-btn class="primary ml-0" @click="predictSingle">Predict</v-btn>
+          <v-btn class="primary ml-0" :loading="loaders.single" :disabled="loaders.single" @click="predictSingle">Predict</v-btn>
           <h3>{{ targetCol }}: {{ result }}</h3>
         </v-layout>
         <p class="mb-0 mt-2" v-if="!filled">Please fill all values</p>
@@ -23,7 +23,7 @@
       <v-card-title class="subheading font-weight-bold primary white--text">Multiple Customer Prediction</v-card-title>
       <v-card-text>
         <input type="file" id="file" ref="file" @change="upload"/><br><br>
-        <v-btn class="primary ml-0" @click="predictMulti">Predict</v-btn>
+        <v-btn class="primary ml-0" :loading="loaders.multi" :disabled="loaders.multi" @click="predictMulti">Predict</v-btn>
         <span v-if="!allInfos.valid">{{ allInfos.error }}</span>
       </v-card-text>
     </v-card>
@@ -49,6 +49,10 @@
       EventBus.$emit('reset', {});
     },
     data:() => ({
+      loaders: {
+        single: false,
+        multi: false
+      },
       selectedModel: {},
       allInfos: {
         error: '',
@@ -112,6 +116,7 @@
         return row;
       },
       predictSingle() {
+        this.loaders.single = true;
         let filled = true;
         for (let i=0; i<this.numCols.length; i++) {
           if (this.numCols[i].value == null || this.numCols[i].value === '')
@@ -130,8 +135,11 @@
             row = this.encode(row, idx, len);
           });
           this.numCols.forEach(val => { row.push(val.value); });
+          console.log([row]);
           this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: [row], username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
             this.result = this.selectedModel.targetCol.values[parseInt(data.prediction[0])];
+            console.log(data);
+            this.loaders.single = false;
           });
         }
       },
@@ -140,6 +148,7 @@
         this.predicted = false;
       },
       predictMulti() {
+        this.loaders.multi = true;
         let catIndexes = [];
         let numIndexes = [];
         this.selectedModel.catCols.forEach(val => { catIndexes.push(this.allInfos.columns.indexOf(val.name)); });
@@ -160,6 +169,7 @@
         });
         if(this.allInfos.dataset.length != 0 && !this.predicted) {
           this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: rows, username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+            console.log(data);
             let results = data.prediction;
             for (let i=0; i<results.length; i++)
               results[i] = this.selectedModel.targetCol.values[parseInt(data.prediction[i])];
@@ -171,6 +181,7 @@
             this.allInfos.columns = columns;
             this.allInfos.dataset = dataset;
             this.predicted = true;
+            this.loaders.multi = false;
           });
         }
       }

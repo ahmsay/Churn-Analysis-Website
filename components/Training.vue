@@ -22,7 +22,7 @@
               <p v-if="!allInfos.valid">{{ allInfos.error }}</p>
             </v-card-text>
           </v-card>
-          <v-btn class="primary ml-0" :disabled="!allInfos.valid" @click="step++">Next</v-btn>
+          <v-btn class="primary ml-0" :loading="loaders.upload" :disabled="!allInfos.valid || loaders.upload" @click="step++">Next</v-btn>
         </v-stepper-content>
 
         <v-stepper-content step="2">
@@ -79,7 +79,7 @@
                 </div>
             </v-card-text>
           </v-card>
-          <v-btn class="primary ml-0" @click="sendUserPrefs">Apply</v-btn>
+          <v-btn class="primary ml-0" :loading="loaders.send" :disabled="loaders.send" @click="sendUserPrefs">Apply</v-btn>
           <v-btn flat @click="cancel">Cancel</v-btn>
         </v-stepper-content>
 
@@ -109,10 +109,11 @@
       'datatable': DataTable,
       'charts': Charts
     },
-    created() {
-
-    },
     data:() => ({
+      loaders: {
+        upload: false,
+        send: false
+      },
       allInfos: {
         error: '',
         valid: false,
@@ -163,8 +164,10 @@
     },
     methods: {
       upload() {
+        this.loaders.upload = true;
         this.$parse(this.$refs.file.files[0], 'feedback', this.$session.get('uname'), this.$session.get('passw')).then(result => {
           this.allInfos = result;
+          this.loaders.upload = false;
         });
       },
       selectAll() {
@@ -174,6 +177,7 @@
         });
       },
       sendUserPrefs() {
+        this.loaders.send = true;
         let cats = [];
         let nums = [];
         let col = {};
@@ -185,9 +189,10 @@
         console.log({ modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')});
         this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')}).then(data => {
           console.log(data);
+          this.loaders.send = false;
+          this.step = 6;
+          this.sent = true;
         });
-        this.step = 6;
-        this.sent = true;
       },
       cancel() {
         this.$refs.file.value = '';

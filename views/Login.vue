@@ -17,7 +17,7 @@
             <v-text-field v-model="passwL" label="Password" type="password"></v-text-field>
             <v-layout row wrap>
               <v-flex xs12 sm6 md6 class="pb-0">
-                <v-btn class="mb-0 primary" block @click="login(unameL, passwL)">Sign In</v-btn>
+                <v-btn class="mb-0 primary" :loading="loaders.login" :disabled="loaders.login" block @click="login(unameL, passwL)">Sign In</v-btn>
               </v-flex>
               <v-flex xs12 sm6 md6 class="pb-0">
                 <v-btn class="mb-0 primary" block @click.stop="dialog = true">Register</v-btn>
@@ -37,7 +37,7 @@
                 </v-card-text>
                 <v-layout justify-end class="pr-2 pb-2">
                   <v-btn class="primary mr-0" @click.native="closeform">Close</v-btn>
-                  <v-btn class="primary" :disabled="!valid" @click="register(uname, passw, email)">Sign Up</v-btn>
+                  <v-btn class="primary" :loading="loaders.register" :disabled="!valid || loaders.register" @click="register(uname, passw, email)">Sign Up</v-btn>
                 </v-layout>
               </v-card>
             </v-dialog>
@@ -55,6 +55,10 @@
         this.$router.push('/home');
     },
     data:() => ({
+      loaders: {
+        register: false,
+        login: false
+      },
       dialog: false,
       unameL: '',
       passwL: '',
@@ -76,8 +80,10 @@
     }),
     methods: {
       login (uname, passw) {
+        this.loaders.login = true;
         this.$post('/login', { username: uname, password: passw }).then(data => {
           if (data.info == "1") {
+            this.loaders.login = false;
             this.$session.set("uname", uname);
             this.$session.set("passw", passw);
             this.$router.push('/home');
@@ -85,8 +91,10 @@
         })
       },
       register(uname, passw, email) {
+        this.loaders.register = true;
         this.$post('/register', { username: uname, password: passw, email: email }).then(data => {
           if (data.info == "1") {
+            this.loaders.register = false;
             this.closeform();
             this.uname = '';
             this.passw = '';
