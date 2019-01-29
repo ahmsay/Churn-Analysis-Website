@@ -1,15 +1,7 @@
 <template>
   <v-container grid-list-md>
     <v-layout row wrap>
-      <v-flex xs12 sm6 md8>
-        <v-card class="secondary">
-          <v-card-title class="title font-weight-medium primary white--text">Lorem Ipsum</v-card-title>
-          <v-card-text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </v-card-text>
-        </v-card>
-      </v-flex>
-      <v-flex xs12 sm6 md4>
+      <v-flex d-flex xs12 sm6 md4 order-md2 order-sm2>
         <v-card class="secondary">
           <v-card-title class="title font-weight-medium primary white--text">Sign in to Churnify</v-card-title>
           <v-card-text>
@@ -44,6 +36,14 @@
           </v-card-text>
         </v-card>
       </v-flex>
+      <v-flex d-flex xs12 sm6 md8 order-md1 order-sm1>
+        <v-card class="secondary">
+          <v-card-title class="title font-weight-medium primary white--text">Lorem Ipsum</v-card-title>
+          <v-card-text>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </v-card-text>
+        </v-card>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -59,6 +59,7 @@
         register: false,
         login: false
       },
+      lorem: 'Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos.',
       dialog: false,
       unameL: '',
       passwL: '',

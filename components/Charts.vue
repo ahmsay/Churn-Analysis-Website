@@ -1,6 +1,7 @@
 <template>
-	<div>
-    <v-layout row wrap>
+  <v-card>
+    <v-card-title class="title font-weight-medium primary white--text">Charts</v-card-title>
+    <v-layout row wrap class="px-2">
       <v-flex xs12 sm6 md6 :key="chart.name" v-for="(chart, idx) in chartInfos">
         <canvas class="mt-3" :id="chart.name+'Chart'"></canvas>
         <v-flex class="py-2">
@@ -11,7 +12,7 @@
         </v-flex>
       </v-flex>
     </v-layout>
-	</div>
+  </v-card>
 </template>
 
 <script>

@@ -1,11 +1,12 @@
 <template>
-	<div>
+  <v-card flat class="secondary mb-4">
+    <v-card-title class="title font-weight-medium primary white--text">Data Table</v-card-title>
     <v-data-table class="elevation-2" :headers="headers" :items="dataset" :rows-per-page-items="[5, 10, 25]">
       <template slot="items" slot-scope="props">
         <td v-bind:key="row" v-for="(row, idx) in columns">{{ props.item[idx] }}</td>
       </template>
     </v-data-table>
-	</div>
+  </v-card>
 </template>
 
 <script>

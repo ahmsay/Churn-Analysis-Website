@@ -31,7 +31,7 @@
       </div>
     </v-toolbar>
 
-    <v-content class="mt-3">
+    <v-content>
       <router-view></router-view>
     </v-content>
 

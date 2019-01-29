@@ -1,14 +1,17 @@
 <template>
   <v-container>
-    <v-select v-model="selectedModel" :items="models" item-text="modelname" label="Choose Your Model" :menu-props="{ maxHeight: '400' }" return-object></v-select>
+    <v-card class="mb-4">
+      <v-card-title class="title font-weight-medium primary white--text">Select a Model</v-card-title>
+      <v-select class="px-3" v-model="selectedModel" :items="models" item-text="modelname" label="Select" :menu-props="{ maxHeight: '400' }" return-object></v-select>
+    </v-card>
   	<v-card class="mb-4 secondary" v-if="selectedModel.modelname != undefined">
   	  <v-card-title class="subheading font-weight-bold primary white--text">Single Customer Prediction</v-card-title>
   	  <v-card-text>
         <v-layout row wrap>
-          <v-flex class="pr-4" :key="col.options.name" v-for="(col, idx) in catCols" xs12 sm4 md3>
+          <v-flex class="px-2" :key="col.options.name" v-for="(col, idx) in catCols" xs12 sm4 md3>
             <v-select v-model="catCols[idx].selected" :items="col.options.values" :label="col.options.name"></v-select>
           </v-flex>
-          <v-flex class="pr-4" :key="col.name" v-for="(col, idx) in numCols" xs12 sm4 md3>
+          <v-flex class="px-2" :key="col.name" v-for="(col, idx) in numCols" xs12 sm4 md3>
             <v-text-field type="number" :label="col.name" v-model.number="numCols[idx].value"></v-text-field>
           </v-flex>
         </v-layout>
