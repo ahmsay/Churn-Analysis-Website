@@ -15,7 +15,7 @@
       </v-btn>
       <v-btn dark>
         <span>Prediction</span>
-        <v-icon>not_listed_location</v-icon>
+        <v-icon>contact_support</v-icon>
       </v-btn>
     </v-bottom-nav>
   </div>
@@ -38,7 +38,7 @@
           this.passedModel = model;
         });
         this.$post('/modelList', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
-          this.models = data;
+          this.models = data.models;
         })
       } else {
         this.$router.push('/');

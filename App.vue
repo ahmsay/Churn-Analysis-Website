@@ -19,11 +19,11 @@
                 <span>Help</span>
             </v-list-tile>
             <v-list-tile @click="showSettings">
-                <v-icon class="pr-3" color="primary" left>build</v-icon>
+                <v-icon class="pr-3" color="primary" left>settings</v-icon>
                 <span>Settings</span>
             </v-list-tile>
             <v-list-tile @click="logout">
-                <v-icon class="pr-3" color="primary" left>backspace</v-icon>
+                <v-icon class="pr-3" color="primary" left>cancel</v-icon>
                 <span>Logout</span>
             </v-list-tile>
           </v-list>

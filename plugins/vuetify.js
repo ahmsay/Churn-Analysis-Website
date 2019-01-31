@@ -7,6 +7,8 @@ Vue.use(Vuetify, {
   theme: {
   	primary: '#003b60',
   	secondary: '#e8eaf6',
+  	ternary: '#FF6D00',
+  	fourthary: '#FFF3E0',
   	chiptrue: '#ffaa2c',
   	chipfalse: '#34c1b3'
   }

@@ -12,7 +12,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
-        <v-btn class="primary ml-0 mb-0" @click="train">Train a new model</v-btn>
+        <v-btn class="primary mx-0 mb-0" @click="train">Train a new model</v-btn>
         <v-btn class="primary mb-0" @click="refresh">Refresh</v-btn>
       </v-card-text>
     </v-card>

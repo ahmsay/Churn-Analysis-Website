@@ -49,7 +49,7 @@ export default {
                 reader.addEventListener("load", function() {
                   let rawData = reader.result;
                   let dataset = [];
-                  let lines = rawData.split("\n");
+                  let lines = rawData.match(/[^\r\n]+/g);
                   let len = lines.length-1;
                   let columns = lines[0].split(",");
                   for (let i=1; i<len; i++) {

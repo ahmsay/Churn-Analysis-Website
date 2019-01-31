@@ -110,10 +110,11 @@
         if (len < 3) {
           row.push(idx);
         } else {
-          idx = idx.toString(2);
-          idx = idx.padStart(Math.ceil(Math.log2(len)), '0');
-          for(let i=0; i<idx.length; i++) {
-            row.push(parseInt(idx[i]));
+          for(let i=1; i<len; i++) {
+            if (i == idx)
+              row.push(1);
+            else
+              row.push(0);
           }
         }
         return row;
@@ -138,9 +139,8 @@
             row = this.encode(row, idx, len);
           });
           this.numCols.forEach(val => { row.push(val.value); });
-          console.log([row]);
           this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: [row], username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
-            this.result = this.selectedModel.targetCol.values[parseInt(data.prediction[0])];
+            this.result = this.selectedModel.targetCol.values[data.prediction[0]];
             console.log(data);
             this.loaders.single = false;
           });
@@ -172,10 +172,9 @@
         });
         if(this.allInfos.dataset.length != 0 && !this.predicted) {
           this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: rows, username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
-            console.log(data);
             let results = data.prediction;
             for (let i=0; i<results.length; i++)
-              results[i] = this.selectedModel.targetCol.values[parseInt(data.prediction[i])];
+              results[i] = this.selectedModel.targetCol.values[data.prediction[i]];
             let columns = this.allInfos.columns;
             let dataset = this.allInfos.dataset;
             columns.unshift(this.selectedModel.targetCol.name+'2');
