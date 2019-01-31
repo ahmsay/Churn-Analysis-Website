@@ -97,8 +97,8 @@
           </v-stepper-items>
         </v-stepper>
     </v-card>
-    <datatable v-if="allInfos.dataset.length != 0" :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
-    <charts v-if="allInfos.chartInfos.length != 0" :chartInfos="allInfos.chartInfos"></charts>
+    <datatable v-if="allInfos.valid" :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
+    <charts v-if="allInfos.valid" :chartInfos="allInfos.chartInfos"></charts>
 	</v-container>
 </template>
 
@@ -168,8 +168,8 @@
       upload() {
         this.loaders.upload = true;
         this.$parse(this.$refs.file.files[0], 'feedback', this.$session.get('uname'), this.$session.get('passw')).then(result => {
-          this.allInfos = result;
           this.loaders.upload = false;
+          this.allInfos = result;
         });
       },
       selectAll() {
@@ -188,12 +188,14 @@
         this.catList.forEach(val => { cats.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         this.numList.forEach(val => { nums.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         let targetCol = this.allInfos.columns.indexOf(this.targetCol);
-        console.log({ modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')});
         this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')}).then(data => {
-          console.log(data);
           this.loaders.send = false;
-          this.step = 6;
-          this.sent = true;
+          if(data.info == 1) {
+            this.step = 6;
+            this.sent = true;
+          } else if (data.info == -1) {
+            
+          }
         });
       },
       cancel() {

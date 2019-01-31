@@ -60,8 +60,14 @@ export default {
                   fileResult.dataset = dataset;
                   if (action == 'feedback') {
                     this.$post('/columnsInfos', { columns: columns, dataset: dataset, username: uname, password: passw }).then(data => {
-                      fileResult.colInfos = data.colInfos;
-                      resolve(fileResult);
+                      if (data.info == 1) {
+                        fileResult.colInfos = data.colInfos;
+                        fileResult.valid = true;
+                        resolve(fileResult);
+                      } else if (data.info == -1) {
+                        fileResult.error = 'There is something wrong with your dataset. Please check it or try another one.';
+                        resolve(fileResult);
+                      }
                     });
                     let chartInfos = [
                       { name: 'Geography', labels: ['France', 'Germany', 'Spain'], data: [5014, 2509, 2477] },
@@ -74,11 +80,11 @@ export default {
                       { name: 'NumOfProducts', labels: ['1', '2', '3', '4'], data: [5084, 4590, 266, 60] }
                     ]
                     fileResult.chartInfos = chartInfos;
+                    fileResult.valid = true;
                     resolve(fileResult);
                   }
                 }.bind(this), false);
                 reader.readAsText(file);
-                fileResult.valid = true;
               } else {
                 fileResult.error = 'The file size is too big.';
               }

@@ -30,8 +30,8 @@
         <span v-if="!allInfos.valid">{{ allInfos.error }}</span>
       </v-card-text>
     </v-card>
-    <datatable v-if="allInfos.dataset.length != 0" :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
-    <charts v-if="allInfos.chartInfos.length != 0" :chartInfos="allInfos.chartInfos"></charts>
+    <datatable v-if="allInfos.valid" :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
+    <charts v-if="allInfos.valid" :chartInfos="allInfos.chartInfos"></charts>
   </v-container>
 </template>
 
@@ -140,9 +140,12 @@
           });
           this.numCols.forEach(val => { row.push(val.value); });
           this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: [row], username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
-            this.result = this.selectedModel.targetCol.values[data.prediction[0]];
-            console.log(data);
-            this.loaders.single = false;
+            if (data.info == 1) {
+              this.result = this.selectedModel.targetCol.values[data.prediction[0]];
+              this.loaders.single = false;
+            } else if (data.info == -1) {
+
+            }
           });
         }
       },
@@ -151,39 +154,43 @@
         this.predicted = false;
       },
       predictMulti() {
-        this.loaders.multi = true;
-        let catIndexes = [];
-        let numIndexes = [];
-        this.selectedModel.catCols.forEach(val => { catIndexes.push(this.allInfos.columns.indexOf(val.name)); });
-        this.selectedModel.numCols.forEach(val => { numIndexes.push(this.allInfos.columns.indexOf(val)); });
-        let rows = [];
-        this.allInfos.dataset.forEach(val => {
-          let row = [];
-          this.selectedModel.catCols.forEach((col, i) => {
-            let idx = col.values.indexOf(val[catIndexes[i]]);
-            let len = col.values.length;
-            row = this.encode(row, idx, len);
-          });
-          rows.push(row);
-          for(let i=0; i<numIndexes.length; i++) {
-            let v = parseFloat(val[numIndexes[i]]);
-            row.push(v);
-          }
-        });
         if(this.allInfos.dataset.length != 0 && !this.predicted) {
+          this.loaders.multi = true;
+          let catIndexes = [];
+          let numIndexes = [];
+          this.selectedModel.catCols.forEach(val => { catIndexes.push(this.allInfos.columns.indexOf(val.name)); });
+          this.selectedModel.numCols.forEach(val => { numIndexes.push(this.allInfos.columns.indexOf(val)); });
+          let rows = [];
+          this.allInfos.dataset.forEach(val => {
+            let row = [];
+            this.selectedModel.catCols.forEach((col, i) => {
+              let idx = col.values.findIndex(el => el == val[catIndexes[i]]);
+              let len = col.values.length;
+              row = this.encode(row, idx, len);
+            });
+            rows.push(row);
+            for(let i=0; i<numIndexes.length; i++) {
+              let v = parseFloat(val[numIndexes[i]]);
+              row.push(v);
+            }
+          });
           this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: rows, username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
-            let results = data.prediction;
-            for (let i=0; i<results.length; i++)
-              results[i] = this.selectedModel.targetCol.values[data.prediction[i]];
-            let columns = this.allInfos.columns;
-            let dataset = this.allInfos.dataset;
-            columns.unshift(this.selectedModel.targetCol.name+'2');
-            for (let i=0; i<dataset.length; i++)
-              dataset[i].unshift(results[i]);
-            this.allInfos.columns = columns;
-            this.allInfos.dataset = dataset;
-            this.predicted = true;
-            this.loaders.multi = false;
+            if(data.info == 1) {
+              let results = data.prediction;
+              for (let i=0; i<results.length; i++)
+                results[i] = this.selectedModel.targetCol.values[data.prediction[i]];
+              let columns = this.allInfos.columns;
+              let dataset = this.allInfos.dataset;
+              columns.unshift(this.selectedModel.targetCol.name);
+              for (let i=0; i<dataset.length; i++)
+                dataset[i].unshift(results[i]);
+              this.allInfos.columns = columns;
+              this.allInfos.dataset = dataset;
+              this.predicted = true;
+              this.loaders.multi = false;
+            } else if (data.info == -1) {
+              
+            }
           });
         }
       }

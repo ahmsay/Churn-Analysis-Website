@@ -7,6 +7,7 @@
           <v-card-text>
             <v-text-field v-model="unameL" label="Username"></v-text-field>
             <v-text-field v-model="passwL" label="Password" type="password"></v-text-field>
+            <span v-if="errors.login.show">{{ errors.login.msg }}</span>
             <v-layout row wrap>
               <v-flex xs12 sm6 md6 class="pb-0">
                 <v-btn class="mb-0 primary" :loading="loaders.login" :disabled="loaders.login" block @click="login(unameL, passwL)">Sign In</v-btn>
@@ -26,6 +27,7 @@
                     <v-text-field v-model="passw" :rules="passwRules" label="Password" required type="password"></v-text-field>
                     <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
                   </v-form>
+                  <span v-if="errors.register.show">{{ errors.register.msg }}</span>
                 </v-card-text>
                 <v-layout justify-end class="pr-2 pb-2">
                   <v-btn class="primary mr-0" @click.native="closeform">Close</v-btn>
@@ -55,6 +57,10 @@
         this.$router.push('/home');
     },
     data:() => ({
+      errors: {
+        register: { show: false, msg: '' },
+        login: { show: false, msg: '' }
+      },
       loaders: {
         register: false,
         login: false
@@ -82,25 +88,41 @@
       login (uname, passw) {
         this.loaders.login = true;
         this.$post('/login', { username: uname, password: passw }).then(data => {
-          if (data.info == "1") {
-            this.loaders.login = false;
+          this.loaders.login = false;
+          if (data.info == 1) {
+            this.errors.login.show = false;
+            this.errors.login.msg = '';
             this.$session.set("uname", uname);
             this.$session.set("passw", passw);
             this.$router.push('/home');
+          } else if (data.info == 0) {
+            this.errors.login.msg = 'Username and password do not match.';
+            this.errors.login.show = true;
+          } else if (data.info == -1) {
+            this.errors.login.msg = 'Something happened.';
+            this.errors.login.show = true;
           }
-        })
+        });
       },
       register(uname, passw, email) {
         this.loaders.register = true;
         this.$post('/register', { username: uname, password: passw, email: email }).then(data => {
-          if (data.info == "1") {
-            this.loaders.register = false;
+          this.loaders.register = false;
+          if (data.info == 1) {
+            this.errors.register.show = false;
+            this.errors.register.msg = '';
             this.closeform();
             this.uname = '';
             this.passw = '';
             this.email = '';
+          } else if (data.info == 0) {
+            this.errors.register.msg = 'Username "' + uname + '" already exists.';
+            this.errors.register.show = true;
+          } else if (data.info == -1) {
+            this.errors.register.msg = 'Something happened.';
+            this.errors.register.show = true;
           }
-        })
+        });
       },
       closeform() {
         this.$refs.form.reset();
