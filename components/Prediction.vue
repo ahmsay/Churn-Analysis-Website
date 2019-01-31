@@ -140,17 +140,19 @@
           });
           this.numCols.forEach(val => { row.push(val.value); });
           this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: [row], username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+            this.loaders.single = false;
             if (data.info == 1) {
               this.result = this.selectedModel.targetCol.values[data.prediction[0]];
-              this.loaders.single = false;
             } else if (data.info == -1) {
-
+              console.log(data);
             }
           });
         }
       },
       upload() {
-        this.$parse(this.$refs.file.files[0], 'predict').then(result => { this.allInfos = result; });
+        this.$parse(this.$refs.file.files[0], 'predict').then(result => {
+          this.allInfos = result;
+        });
         this.predicted = false;
       },
       predictMulti() {
@@ -175,6 +177,7 @@
             }
           });
           this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: rows, username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+            this.loaders.multi = false;
             if(data.info == 1) {
               let results = data.prediction;
               for (let i=0; i<results.length; i++)
@@ -187,9 +190,8 @@
               this.allInfos.columns = columns;
               this.allInfos.dataset = dataset;
               this.predicted = true;
-              this.loaders.multi = false;
             } else if (data.info == -1) {
-              
+              console.log(data);
             }
           });
         }

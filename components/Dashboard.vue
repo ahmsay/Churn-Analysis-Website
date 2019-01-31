@@ -3,6 +3,7 @@
     <v-card class="secondary">
       <v-card-title class="title font-weight-medium primary white--text">Your Models</v-card-title>
       <v-card-text>
+        <span v-if="models.length == 0">You don't have any model :(</span>
         <v-list three-line class="secondary pt-0">
           <v-list-tile @click="predict(model)" :key="model.modelname" v-for="model in models">
             <v-list-tile-content>
@@ -13,7 +14,6 @@
           </v-list-tile>
         </v-list>
         <v-btn class="primary mx-0 mb-0" @click="train">Train a new model</v-btn>
-        <v-btn class="primary mb-0" @click="refresh">Refresh</v-btn>
       </v-card-text>
     </v-card>
   </v-container>
@@ -29,9 +29,9 @@
     props: ['models'],
     methods: {
       refresh() {
-        this.$post('/modelList', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+        /*this.$post('/modelList', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
           console.log(data);
-        });
+        });*/
       },
       train() {
         EventBus.$emit('train', 1);

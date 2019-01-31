@@ -41,9 +41,9 @@
           if (data.info == 1) {
             this.models = data.models;
           } else if (data.info == 0) {
-            
+            console.log(data);
           } else if (data.info == -1) {
-            
+            console.log(data);
           }
         })
       } else {

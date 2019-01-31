@@ -79,6 +79,7 @@
                         <span v-if="col.cat == 0 && !moreCatCols.includes(col)">Numeric</span>
                       </v-tooltip>
                     </div>
+                    <span v-if="sendError.show">{{ sendError.msg }}</span>
                 </v-card-text>
               </v-card>
               <v-btn class="primary ml-0" :loading="loaders.send" :disabled="loaders.send" @click="sendUserPrefs">Send</v-btn>
@@ -112,6 +113,7 @@
       'charts': Charts
     },
     data:() => ({
+      sendError: { msg: 'This model name already exists. Please enter another name.', show: false },
       loaders: {
         upload: false,
         send: false
@@ -193,8 +195,11 @@
           if(data.info == 1) {
             this.step = 6;
             this.sent = true;
+            this.sendError.show = false;
+          } else if (data.info == 0) {
+            this.sendError.show = true;
           } else if (data.info == -1) {
-            
+            console.log(data);
           }
         });
       },
