@@ -1,11 +1,11 @@
 <template>
   <v-container>
     <v-card class="mb-4">
-      <v-card-title class="title font-weight-medium primary white--text">Select a Model</v-card-title>
+      <v-card-title class="title font-weight-light teal darken-1 white--text">Select a Model</v-card-title>
       <v-select class="px-3" v-model="selectedModel" :items="models" item-text="modelname" label="Select" :menu-props="{ maxHeight: '400' }" return-object></v-select>
     </v-card>
-  	<v-card class="mb-4 secondary" v-if="selectedModel.modelname != undefined">
-  	  <v-card-title class="subheading font-weight-bold primary white--text">Single Customer Prediction</v-card-title>
+  	<v-card class="mb-4" v-if="selectedModel.modelname != undefined">
+  	  <v-card-title class="title font-weight-light blue darken-3 white--text">Single Customer Prediction</v-card-title>
   	  <v-card-text>
         <v-layout row wrap>
           <v-flex class="px-2" :key="col.options.name" v-for="(col, idx) in catCols" xs12 sm4 md3>
@@ -16,22 +16,22 @@
           </v-flex>
         </v-layout>
         <v-layout align-center>
-          <v-btn class="primary ml-0" :loading="loaders.single" :disabled="loaders.single" @click="predictSingle">Predict</v-btn>
+          <v-btn class="blue darken-2 white--text ml-0" :loading="loaders.single" :disabled="loaders.single" @click="predictSingle">Predict</v-btn>
           <h3>{{ targetCol }}: {{ result }}</h3>
         </v-layout>
         <p class="mb-0 mt-2" v-if="!filled">Please fill all values</p>
   	  </v-card-text>
   	</v-card>
-    <v-card class="mb-4 secondary" v-if="selectedModel.modelname != undefined">
-      <v-card-title class="subheading font-weight-bold primary white--text">Multiple Customer Prediction</v-card-title>
+    <v-card class="mb-4" v-if="selectedModel.modelname != undefined">
+      <v-card-title class="title font-weight-light blue darken-2 white--text">Multiple Customer Prediction</v-card-title>
       <v-card-text>
         <input type="file" id="file" ref="file" @change="upload"/><br><br>
-        <v-btn class="primary ml-0" :loading="loaders.multi" :disabled="loaders.multi" @click="predictMulti">Predict</v-btn>
+        <v-btn class="blue darken-2 white--text ml-0" :loading="loaders.multi" :disabled="loaders.multi" @click="predictMulti">Predict</v-btn>
         <span v-if="!allInfos.valid">{{ allInfos.error }}</span>
       </v-card-text>
     </v-card>
-    <datatable v-if="allInfos.valid" :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
-    <charts v-if="allInfos.valid" :chartInfos="allInfos.chartInfos"></charts>
+    <datatable v-if="allInfos.valid" :dataset="allInfos.dataset" :columns="allInfos.columns" :color="'green darken-1'"></datatable>
+    <charts v-if="allInfos.valid" :chartInfos="allInfos.chartInfos" :color="'deep-orange accent-2'"></charts>
   </v-container>
 </template>
 

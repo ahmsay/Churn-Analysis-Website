@@ -1,13 +1,13 @@
 <template>
   <v-card>
-    <v-card-title class="title font-weight-medium primary white--text">Charts</v-card-title>
+    <v-card-title :class="'title font-weight-light ' + color + ' white--text'">Charts</v-card-title>
     <v-layout row wrap class="px-2">
       <v-flex xs12 sm6 md6 :key="chart.name" v-for="(chart, idx) in chartInfos">
         <canvas class="mt-3" :id="chart.name+'Chart'"></canvas>
         <v-flex class="py-2">
           <v-layout justify-center>
-            <v-btn icon @click="iterate(-1, idx)"><v-icon color="primary" large>chevron_left</v-icon></v-btn>
-            <v-btn icon @click="iterate(1, idx)"><v-icon color="primary" large>chevron_right</v-icon></v-btn>
+            <v-btn icon @click="iterate(-1, idx)"><v-icon :color="color" large>chevron_left</v-icon></v-btn>
+            <v-btn icon @click="iterate(1, idx)"><v-icon :color="color" large>chevron_right</v-icon></v-btn>
           </v-layout>
         </v-flex>
       </v-flex>
@@ -33,7 +33,8 @@
       displayer: 0
     }),
     props: {
-      chartInfos: Array
+      chartInfos: Array,
+      color: String
     },
     computed: {
 

@@ -2,23 +2,23 @@
   <v-container grid-list-md>
     <v-layout row wrap>
       <v-flex d-flex xs12 sm6 md4 order-md2 order-sm2>
-        <v-card class="secondary">
-          <v-card-title class="title font-weight-medium primary white--text">Sign in to Churnify</v-card-title>
+        <v-card>
+          <v-card-title class="title font-weight-light indigo darken-2 white--text">Sign in to Churnify</v-card-title>
           <v-card-text>
             <v-text-field v-model="unameL" label="Username"></v-text-field>
             <v-text-field v-model="passwL" label="Password" type="password"></v-text-field>
             <span v-if="errors.login.show">{{ errors.login.msg }}</span>
             <v-layout row wrap>
               <v-flex xs12 sm6 md6 class="pb-0">
-                <v-btn class="mb-0 primary" :loading="loaders.login" :disabled="loaders.login" block @click="login(unameL, passwL)">Sign In</v-btn>
+                <v-btn class="mb-0 indigo darken-2 white--text" :loading="loaders.login" :disabled="loaders.login" block @click="login(unameL, passwL)">Sign In</v-btn>
               </v-flex>
               <v-flex xs12 sm6 md6 class="pb-0">
-                <v-btn class="mb-0 primary" block @click.stop="dialog = true">Register</v-btn>
+                <v-btn class="mb-0 indigo darken-2 white--text" block @click.stop="dialog = true">Register</v-btn>
               </v-flex>
             </v-layout>
             <v-dialog v-model="dialog" persistent max-width="600px">
-              <v-card class="pa-0 secondary">
-                <v-card-title class="primary white--text">
+              <v-card class="pa-0">
+                <v-card-title class="cyan darken-2 white--text">
                   <span class="headline">Register</span>
                 </v-card-title>
                 <v-card-text>
@@ -30,8 +30,8 @@
                   <span v-if="errors.register.show">{{ errors.register.msg }}</span>
                 </v-card-text>
                 <v-layout justify-end class="pr-2 pb-2">
-                  <v-btn class="primary mr-0" @click.native="closeform">Close</v-btn>
-                  <v-btn class="primary" :loading="loaders.register" :disabled="!valid || loaders.register" @click="register(uname, passw, email)">Sign Up</v-btn>
+                  <v-btn class="cyan darken-2 white--text mr-0" @click.native="closeform">Close</v-btn>
+                  <v-btn class="cyan darken-2 white--text" :loading="loaders.register" :disabled="!valid || loaders.register" @click="register(uname, passw, email)">Sign Up</v-btn>
                 </v-layout>
               </v-card>
             </v-dialog>
@@ -39,8 +39,8 @@
         </v-card>
       </v-flex>
       <v-flex d-flex xs12 sm6 md8 order-md1 order-sm1>
-        <v-card class="secondary">
-          <v-card-title class="title font-weight-medium primary white--text">Lorem Ipsum</v-card-title>
+        <v-card>
+          <v-card-title class="title font-weight-light teal darken-2 white--text">Lorem Ipsum</v-card-title>
           <v-card-text>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
           </v-card-text>

@@ -1,10 +1,10 @@
 <template>
   <v-container>
-    <v-card class="secondary">
-      <v-card-title class="title font-weight-medium primary white--text">Your Models</v-card-title>
+    <v-card>
+      <v-card-title class="title font-weight-light amber darken-2 white--text">Your Models</v-card-title>
       <v-card-text>
         <span v-if="models.length == 0">You don't have any model :(</span>
-        <v-list three-line class="secondary pt-0">
+        <v-list three-line class="pt-0">
           <v-list-tile @click="predict(model)" :key="model.modelname" v-for="model in models">
             <v-list-tile-content>
               <v-list-tile-title><b>Name:</b> {{ model.modelname }}</v-list-tile-title>
@@ -13,7 +13,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
-        <v-btn class="primary mx-0 mb-0" @click="train">Train a new model</v-btn>
+        <v-btn class="amber darken-2 white--text mx-0 mb-0" @click="train">Train a new model</v-btn>
       </v-card-text>
     </v-card>
   </v-container>
