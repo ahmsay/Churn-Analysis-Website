@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card>
-      <v-card-title class="title font-weight-light amber darken-2 white--text">Your Models</v-card-title>
+      <v-card-title class="title font-weight-light yourmodels white--text">Your Models</v-card-title>
       <v-card-text>
         <span v-if="models.length == 0">You don't have any model :(</span>
         <v-list three-line class="pt-0">
@@ -13,7 +13,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
-        <v-btn class="amber darken-2 white--text mx-0 mb-0" @click="train">Train a new model</v-btn>
+        <v-btn class="yourmodels white--text mx-0 mb-0" @click="train">Train a new model</v-btn>
       </v-card-text>
     </v-card>
   </v-container>

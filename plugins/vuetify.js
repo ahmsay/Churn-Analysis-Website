@@ -1,21 +1,25 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
 import 'vuetify/src/stylus/app.styl'
+import colors from 'vuetify/es5/util/colors'
 
 Vue.use(Vuetify, {
   iconfont: 'md',
   theme: {
   	background: '#ededed',
   	foreground: '#404040',
-  	mdgreen: '#5ab761',
-  	mdblue: '#07a8bc',
-  	mdorange: '#fea120',
-  	mdnavy: '#003b60',
   	primary: '#546e7a',
-  	secondary: '#e8eaf6',
-  	ternary: '#37474f',
-  	fourthary: '#eceff1',
   	chiptrue: '#ffaa2c',
-  	chipfalse: '#34c1b3'
+  	chipfalse: '#34c1b3',
+    signin: colors.indigo.darken2,
+    register: colors.cyan.darken2,
+    loremipsum: colors.teal.darken2,
+    yourmodels: colors.amber.darken2,
+    trainamodel: colors.lightBlue.darken4,
+    datatable: colors.green.darken1,
+    charts: colors.deepOrange.accent2,
+    selectamodel: colors.teal.darken1,
+    singlepred: colors.blue.darken2,
+    multipred: colors.blue.darken2
   }
 })

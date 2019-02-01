@@ -1,7 +1,7 @@
 <template>
 	<v-container>
     <v-card class="mb-4" flat>
-      <v-card-title class="title font-weight-light light-blue darken-4 white--text">Train a Model</v-card-title>
+      <v-card-title class="title font-weight-light trainamodel white--text">Train a Model</v-card-title>
         <v-stepper v-model="step">
           <v-stepper-header>
             <v-stepper-step :complete="step>1" step="1">Upload</v-stepper-step>
@@ -24,7 +24,7 @@
                   <p v-if="!allInfos.valid">{{ allInfos.error }}</p>
                 </v-card-text>
               </v-card>
-              <v-btn class="light-blue darken-4 white--text ml-0" :loading="loaders.upload" :disabled="!allInfos.valid || loaders.upload" @click="step++">Next</v-btn>
+              <v-btn class="trainamodel white--text ml-0" :loading="loaders.upload" :disabled="!allInfos.valid || loaders.upload" @click="step++">Next</v-btn>
             </v-stepper-content>
 
             <v-stepper-content step="2">
@@ -35,7 +35,7 @@
                   <span v-if="targetableCols.length==0">Change your dataset</span>
                 </v-card-text>
               </v-card>
-              <v-btn class="light-blue darken-4 white--text ml-0" :disabled="targetableCols.length==0" @click="step++">Next</v-btn>
+              <v-btn class="trainamodel white--text ml-0" :disabled="targetableCols.length==0" @click="step++">Next</v-btn>
               <v-btn flat @click="cancel">Cancel</v-btn>
             </v-stepper-content>
 
@@ -44,10 +44,10 @@
                 <v-card-title class="subheading font-weight-bold">Select your training columns</v-card-title>
                 <v-card-text>
                   <v-select v-model="selectedTrainCols" :items="allTrainCols" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
-                  <v-btn class="light-blue darken-4 white--text ml-0" @click="selectAll">Select All</v-btn>
+                  <v-btn class="trainamodel white--text ml-0" @click="selectAll">Select All</v-btn>
                 </v-card-text>
               </v-card>
-              <v-btn class="light-blue darken-4 white--text ml-0" :disabled="!colsSelected" @click="step++">Next</v-btn>
+              <v-btn class="trainamodel white--text ml-0" :disabled="!colsSelected" @click="step++">Next</v-btn>
               <v-btn flat @click="cancel">Cancel</v-btn>
             </v-stepper-content>
 
@@ -61,7 +61,7 @@
                   <v-select v-model="moreCatCols" :items="catable" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
                 </v-card-text>
               </v-card>
-              <v-btn class="light-blue darken-4 white--text ml-0" @click="step++">Next</v-btn>
+              <v-btn class="trainamodel white--text ml-0" @click="step++">Next</v-btn>
               <v-btn flat @click="cancel">Cancel</v-btn>
             </v-stepper-content>
 
@@ -82,7 +82,7 @@
                     <span v-if="sendError.show">{{ sendError.msg }}</span>
                 </v-card-text>
               </v-card>
-              <v-btn class="light-blue darken-4 white--text ml-0" :loading="loaders.send" :disabled="loaders.send" @click="sendUserPrefs">Send</v-btn>
+              <v-btn class="trainamodel white--text ml-0" :loading="loaders.send" :disabled="loaders.send" @click="sendUserPrefs">Send</v-btn>
               <v-btn flat @click="cancel">Cancel</v-btn>
             </v-stepper-content>
 
@@ -91,15 +91,15 @@
                 <v-card-title class="subheading font-weight-bold">Success</v-card-title>
                 <v-card-text>
                   <span>Your model is being trained.</span>
-                  <v-btn class="mdblue white--text" @click="cancel">Train another model</v-btn>
+                  <v-btn class="trainamodel white--text" @click="cancel">Train another model</v-btn>
                 </v-card-text>
               </v-card>
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
     </v-card>
-    <datatable v-if="allInfos.valid" :dataset="allInfos.dataset" :columns="allInfos.columns" :color="'green darken-1'"></datatable>
-    <charts v-if="allInfos.valid" :chartInfos="allInfos.chartInfos" :color="'deep-orange accent-2'"></charts>
+    <datatable v-if="allInfos.valid" :dataset="allInfos.dataset" :columns="allInfos.columns" :color="'datatable'"></datatable>
+    <charts v-if="allInfos.valid" :chartInfos="allInfos.chartInfos" :color="'charts'"></charts>
 	</v-container>
 </template>
 
