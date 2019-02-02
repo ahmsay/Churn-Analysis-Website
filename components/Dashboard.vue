@@ -1,21 +1,39 @@
 <template>
-  <v-container>
-    <v-card>
-      <v-card-title class="title font-weight-light yourmodels white--text">Your Models</v-card-title>
-      <v-card-text>
-        <span v-if="models.length == 0">You don't have any model :(</span>
-        <v-list three-line class="pt-0">
-          <v-list-tile @click="predict(model)" :key="model.modelname" v-for="model in models">
-            <v-list-tile-content>
-              <v-list-tile-title><b>Name:</b> {{ model.modelname }}</v-list-tile-title>
-              <v-list-tile-sub-title><b>Algorithm:</b> {{ model.algorithm }}</v-list-tile-sub-title>
-              <v-list-tile-sub-title><b>Accuracy:</b> {{ model.accuracy }}</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-        <v-btn class="yourmodels white--text mx-0 mb-0" @click="train">Train a new model</v-btn>
-      </v-card-text>
-    </v-card>
+  <v-container grid-list-md>
+    <v-layout row wrap>
+      <v-flex xs12 sm6 md6>
+        <v-card>
+          <v-card-title class="title font-weight-light yourmodels white--text">Your Models</v-card-title>
+          <v-card-text>
+            <span v-if="models.length == 0">You don't have any model :(</span>
+            <v-list three-line class="pt-0">
+              <v-list-tile @click="predict(model)" :key="model.modelname" v-for="model in models">
+                <v-list-tile-content>
+                  <v-list-tile-title class="font-weight-medium">{{ model.modelname }}</v-list-tile-title>
+                  <v-list-tile-sub-title>
+                    <span class="font-weight-medium">Algorithm: </span>
+                    <span>{{ model.algorithm }}</span>
+                  </v-list-tile-sub-title>
+                  <v-list-tile-sub-title>
+                    <span class="font-weight-medium">Accuracy: </span>
+                    <span>{{ model.accuracy }}</span>
+                  </v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+            <v-btn class="yourmodels white--text mx-0 mb-0" @click="train">Train a new model</v-btn>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex xs12 sm6 md6>
+        <v-card>
+          <v-card-title class="title font-weight-light loremipsum white--text">Lorem Ipsum</v-card-title>
+          <v-card-text>
+            <span class="subheading font-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 

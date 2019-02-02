@@ -1,17 +1,17 @@
 <template>
   <v-app>
-    <v-toolbar class="background" app>
+    <v-toolbar class="toolbar" app>
       <v-icon color="foreground">album</v-icon>
       <v-toolbar-title>
-        <span class="headline font-weight-bold foreground--text">Churnify</span>
+        <span class="headline">Churnify</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="this.$session.has('uname')">
         <v-menu offset-y>
-          <v-btn flat class="background mr-0" light slot="activator">
-            <v-icon left color="foreground">account_box</v-icon>
+          <v-btn flat class="toolbar mr-0" slot="activator">
+            <v-icon left>account_box</v-icon>
             <span>{{ this.$session.get('uname') }}</span>
-            <v-icon color="foreground">arrow_drop_down</v-icon>
+            <v-icon>arrow_drop_down</v-icon>
           </v-btn>
           <v-list>
             <v-list-tile @click="showHelp">
@@ -31,7 +31,7 @@
       </div>
     </v-toolbar>
 
-    <v-content class="background image">
+    <v-content class="background">
       <router-view></router-view>
     </v-content>
 
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-  export default {//https://malydziennik.pl/wp-content/uploads/2018/12/wave-1913559_960_720.jpg
+  export default {
     name: 'App',
     data:() => ({
       email: null,
@@ -61,10 +61,3 @@
     } 
   }
 </script>
-
-<style>
-  .image {
-    background-image: url('https://www.infoquestconsulting.com/images/grey-geometric-background.png');
-    background-size: cover;
-  }
-</style>

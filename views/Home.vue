@@ -4,7 +4,7 @@
     <training v-if="bottomNav == 1"></training>
     <prediction :models="models" :passedModel="passedModel" v-if="bottomNav == 2"></prediction>
     <!--<v-btn @click="test">test</v-btn>-->
-    <v-bottom-nav color="background" app fixed :active.sync="bottomNav" :value="true">
+    <v-bottom-nav color="bottomnav" app fixed :active.sync="bottomNav" :value="true">
       <v-btn>
         <span>Dashboard</span>
         <v-icon>dashboard</v-icon>
