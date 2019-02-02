@@ -6,7 +6,7 @@
           <v-card-title class="title font-weight-light yourmodels white--text">Your Models</v-card-title>
           <v-card-text>
             <span v-if="models.length == 0">You don't have any model :(</span>
-            <v-list three-line class="pt-0">
+            <v-list three-line class="pt-0" style="max-height: 360px; overflow-y: auto;">
               <v-list-tile @click="predict(model)" :key="model.modelname" v-for="model in models">
                 <v-list-tile-content>
                   <v-list-tile-title class="font-weight-medium">{{ model.modelname }}</v-list-tile-title>
@@ -25,14 +25,6 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex xs12 sm6 md6>
-        <v-card>
-          <v-card-title class="title font-weight-light loremipsum white--text">Lorem Ipsum</v-card-title>
-          <v-card-text>
-            <span class="subheading font-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span>
-          </v-card-text>
-        </v-card>
-      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -46,6 +38,9 @@
     }),
     props: ['models'],
     methods: {
+      dewit() {
+        console.log(1);
+      },
       refresh() {
         /*this.$post('/modelList', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
           console.log(data);
