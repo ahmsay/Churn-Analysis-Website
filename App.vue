@@ -7,24 +7,28 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="this.$session.has('uname')">
-        <v-menu offset-y>
-          <v-btn flat class="toolbar mr-0" slot="activator">
-            <v-icon left>account_box</v-icon>
-            <span>{{ this.$session.get('uname') }}</span>
-            <v-icon>arrow_drop_down</v-icon>
+        <v-btn icon flat class="toolbar">
+          <v-icon>notifications</v-icon>
+        </v-btn>
+        <v-menu left offset-y>
+          <v-btn icon flat class="toolbar" slot="activator">
+            <v-icon>account_circle</v-icon>
           </v-btn>
           <v-list>
+            <v-list-tile>
+              <span class="font-weight-bold">{{ this.$session.get('uname') }}</span>
+            </v-list-tile>
             <v-list-tile @click="showHelp">
-                <v-icon class="pr-3" color="foreground" left>help</v-icon>
-                <span>Help</span>
+              <v-icon class="pr-3" color="foreground" left>help</v-icon>
+              <span>Help</span>
             </v-list-tile>
             <v-list-tile @click="showSettings">
-                <v-icon class="pr-3" color="foreground" left>settings</v-icon>
-                <span>Settings</span>
+              <v-icon class="pr-3" color="foreground" left>settings</v-icon>
+              <span>Settings</span>
             </v-list-tile>
             <v-list-tile @click="logout">
-                <v-icon class="pr-3" color="foreground" left>cancel</v-icon>
-                <span>Logout</span>
+              <v-icon class="pr-3" color="foreground" left>cancel</v-icon>
+              <span>Logout</span>
             </v-list-tile>
           </v-list>
         </v-menu>
@@ -58,6 +62,6 @@
         this.$session.remove("passw");
         this.$router.push('/');
       }
-    } 
+    }
   }
 </script>
