@@ -38,9 +38,6 @@
     }),
     props: ['models'],
     methods: {
-      dewit() {
-        console.log(1);
-      },
       refresh() {
         /*this.$post('/modelList', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
           console.log(data);
