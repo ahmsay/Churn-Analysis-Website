@@ -106,7 +106,7 @@
         <v-flex xs12 sm6 md6>
           <v-card color="datatable" height="120" @click.stop="dialogDataTable = true">
             <v-card-title class="title font-weight-light white--text">Data Table</v-card-title>
-            <v-dialog v-model="dialogDataTable" max-width="800px">
+            <v-dialog v-model="dialogDataTable" max-width="950px">
               <datatable :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
             </v-dialog>
           </v-card>
@@ -114,7 +114,7 @@
         <v-flex xs12 sm6 md6>
           <v-card color="charts" height="120" @click.stop="dialogChart = true">
             <v-card-title class="title font-weight-light white--text">Charts</v-card-title>
-            <v-dialog v-model="dialogChart" max-width="800px">
+            <v-dialog v-model="dialogChart" max-width="950px">
               <charts :chartInfos="allInfos.chartInfos"></charts>
             </v-dialog>
           </v-card>

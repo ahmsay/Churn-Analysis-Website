@@ -2,13 +2,18 @@
   <v-container grid-list-md>
     <v-layout row wrap>
       <v-flex xs12 sm6 md6>
-        <v-card>
-          <v-card-title class="title font-weight-light yourmodels white--text">Your Models</v-card-title>
-          <v-card-text>
+        <v-card style="max-height: 550px; overflow-y: auto;">
+          <v-card-title class="title font-weight-light yourmodels white--text mb-0">
+            <span>Your Models</span>
+            <v-btn small absolute fab right @click="train">
+              <v-icon color="yourmodels">add</v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text class="pa-0">
             <span v-if="models.length == 0">You don't have any model :(</span>
-            <v-list three-line class="pt-0" style="max-height: 360px; overflow-y: auto;">
-              <v-list-tile @click="predict(model)" :key="model.modelname" v-for="model in models">
-                <v-list-tile-content>
+            <v-list three-line style="max-height: 360px; overflow-y: auto;" class="py-0">
+              <v-list-tile @click="" :key="model.modelname" v-for="model in models">
+                <v-list-tile-content @click="predict(model)">
                   <v-list-tile-title class="font-weight-medium">{{ model.modelname }}</v-list-tile-title>
                   <v-list-tile-sub-title>
                     <span class="font-weight-medium">Algorithm: </span>
@@ -19,9 +24,11 @@
                     <span>{{ model.accuracy }}</span>
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
+                <v-btn @click="deleteModel(model)" icon flat>
+                  <v-icon color="yourmodels">close</v-icon>
+                </v-btn>
               </v-list-tile>
             </v-list>
-            <v-btn class="yourmodels white--text mx-0 mb-0" @click="train">Train a new model</v-btn>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -36,18 +43,19 @@
     data:() => ({
 
     }),
-    props: ['models'],
+    props: {
+      models: Array,
+      statuslist: Array
+    },
     methods: {
-      refresh() {
-        /*this.$post('/modelList', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
-          console.log(data);
-        });*/
-      },
       train() {
         EventBus.$emit('train', 1);
       },
       predict(model) {
         EventBus.$emit('predict', model);
+      },
+      deleteModel(model) {
+        console.log(model);
       }
     }
   }
