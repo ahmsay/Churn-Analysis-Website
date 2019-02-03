@@ -1,6 +1,6 @@
 <template>
 	<v-container>
-    <v-card class="mb-4" flat>
+    <v-card flat>
       <v-card-title class="title font-weight-light trainamodel white--text">Train a Model</v-card-title>
         <v-stepper v-model="step">
           <v-stepper-header>
@@ -101,8 +101,26 @@
           </v-stepper-items>
         </v-stepper>
     </v-card>
-    <datatable v-if="allInfos.valid" :dataset="allInfos.dataset" :columns="allInfos.columns" :color="'datatable'"></datatable>
-    <charts v-if="allInfos.valid" :chartInfos="allInfos.chartInfos" :color="'charts'"></charts>
+    <v-container v-if="allInfos.valid" grid-list-md class="px-0">
+      <v-layout row wrap>
+        <v-flex xs12 sm6 md6>
+          <v-card color="datatable" height="120" @click.stop="dialogDataTable = true">
+            <v-card-title class="title font-weight-light white--text">Data Table</v-card-title>
+            <v-dialog v-model="dialogDataTable" max-width="800px">
+              <datatable :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
+            </v-dialog>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 sm6 md6>
+          <v-card color="charts" height="120" @click.stop="dialogChart = true">
+            <v-card-title class="title font-weight-light white--text">Charts</v-card-title>
+            <v-dialog v-model="dialogChart" max-width="800px">
+              <charts :chartInfos="allInfos.chartInfos"></charts>
+            </v-dialog>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
 	</v-container>
 </template>
 
@@ -116,6 +134,8 @@
       'charts': Charts
     },
     data:() => ({
+      dialogDataTable: false,
+      dialogChart: false,
       sendError: { msg: 'This model name already exists. Please enter another name.', show: false },
       loaders: {
         upload: false,
@@ -170,6 +190,9 @@
       }
     },
     methods: {
+      test() {
+        console.log(1);
+      },
       upload() {
         this.loaders.upload = true;
         this.$parse(this.$refs.file.files[0], 'feedback', this.$session.get('uname'), this.$session.get('passw')).then(result => {

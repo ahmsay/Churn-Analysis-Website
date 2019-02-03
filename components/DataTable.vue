@@ -1,6 +1,6 @@
 <template>
-  <v-card flat class="mb-4">
-    <v-card-title :class="'title font-weight-light ' + color + ' white--text'">Data Table</v-card-title>
+  <v-card flat>
+    <v-card-title :class="'title font-weight-light datatable white--text'">Data Table</v-card-title>
     <v-data-table class="elevation-2" :headers="headers" :items="dataset" :rows-per-page-items="[5, 10, 25]">
       <template slot="items" slot-scope="props">
         <td v-bind:key="row" v-for="(row, idx) in columns">{{ props.item[idx] }}</td>
@@ -16,8 +16,7 @@
     }),
     props: {
       columns: Array,
-      dataset: Array,
-      color: String
+      dataset: Array
     },
     computed: {
       headers() {
