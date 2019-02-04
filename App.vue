@@ -1,14 +1,15 @@
 <template>
   <v-app>
-    <v-toolbar class="toolbar" app>
-      <v-icon color="foreground">album</v-icon>
+    <v-toolbar v-if="!this.$session.has('uname')" flat></v-toolbar>
+    <v-toolbar v-if="this.$session.has('uname')" class="darky" app dark flat>
+      <v-icon>album</v-icon>
       <v-toolbar-title>
         <span class="headline">Churnify</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="this.$session.has('uname')">
         <v-menu left offset-y max-height="230">
-          <v-btn icon flat class="toolbar" slot="activator">
+          <v-btn icon flat dark slot="activator">
             <v-icon>notifications</v-icon>
           </v-btn>
           <v-list two-line>
@@ -20,26 +21,18 @@
             </v-list-tile>
           </v-list>
         </v-menu>
-        <v-menu left offset-y>
-          <v-btn icon flat class="toolbar" slot="activator">
+        <v-menu left offset-y min-width="175">
+          <v-btn icon flat dark slot="activator">
             <v-icon>account_circle</v-icon>
           </v-btn>
-          <v-list>
+          <v-list class="py-0">
             <v-list-tile>
               <span class="font-weight-bold">{{ this.$session.get('uname') }}</span>
             </v-list-tile>
-            <v-list-tile @click="showHelp">
-              <v-icon class="pr-3" color="foreground" left>help</v-icon>
-              <span>Help</span>
-            </v-list-tile>
-            <v-list-tile @click="showSettings">
-              <v-icon class="pr-3" color="foreground" left>settings</v-icon>
-              <span>Settings</span>
-            </v-list-tile>
-            <v-list-tile @click="logout">
-              <v-icon class="pr-3" color="foreground" left>cancel</v-icon>
-              <span>Logout</span>
-            </v-list-tile>
+            <v-divider></v-divider>
+            <v-list-tile @click="showHelp">Help</v-list-tile>
+            <v-list-tile @click="showSettings">Settings</v-list-tile>
+            <v-list-tile @click="logout">Logout</v-list-tile>
           </v-list>
         </v-menu>
       </div>

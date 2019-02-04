@@ -1,46 +1,89 @@
 <template>
-  <v-container>
-    <v-card class="mb-4">
-      <v-card-title class="title font-weight-light selectamodel white--text">
-        <v-icon color="white" class="mr-3">gps_fixed</v-icon>
-        <span>Select a model</span>
-      </v-card-title>
-      <v-select class="px-3" v-model="selectedModel" :items="models" item-text="modelname" label="Select" :menu-props="{ maxHeight: '400' }" return-object></v-select>
-    </v-card>
-  	<v-card class="mb-4" v-if="selectedModel.modelname != undefined">
-  	  <v-card-title class="title font-weight-light singlepred white--text">
-        <v-icon color="white" class="mr-3">person</v-icon>
-        <span>Single Custome Prediction</span>
-      </v-card-title>
-  	  <v-card-text>
-        <v-layout row wrap>
-          <v-flex class="px-2" :key="col.options.name" v-for="(col, idx) in catCols" xs12 sm4 md3>
-            <v-select v-model="catCols[idx].selected" :items="col.options.values" :label="col.options.name"></v-select>
-          </v-flex>
-          <v-flex class="px-2" :key="col.name" v-for="(col, idx) in numCols" xs12 sm4 md3>
-            <v-text-field type="number" :label="col.name" v-model.number="numCols[idx].value"></v-text-field>
-          </v-flex>
-        </v-layout>
-        <v-layout align-center>
-          <v-btn class="singlepred white--text ml-0" :loading="loaders.single" :disabled="loaders.single" @click="predictSingle">Predict</v-btn>
-          <h3>{{ targetCol }}: {{ result }}</h3>
-        </v-layout>
-        <p class="mb-0 mt-2" v-if="!filled">Please fill all values</p>
-  	  </v-card-text>
-  	</v-card>
-    <v-card class="mb-4" v-if="selectedModel.modelname != undefined">
-      <v-card-title class="title font-weight-light multipred white--text">
-        <v-icon color="white" class="mr-3">group</v-icon>
-        <span>Multiple Customer Prediction</span>
-      </v-card-title>
-      <v-card-text>
-        <input type="file" id="file" ref="file" @change="upload"/><br><br>
-        <v-btn class="multipred white--text ml-0" :loading="loaders.multi" :disabled="loaders.multi" @click="predictMulti">Predict</v-btn>
-        <span v-if="!allInfos.valid">{{ allInfos.error }}</span>
-      </v-card-text>
-    </v-card>
-    <datatable v-if="allInfos.valid" :dataset="allInfos.dataset" :columns="allInfos.columns" :color="'green darken-1'"></datatable>
-    <charts v-if="allInfos.valid" :chartInfos="allInfos.chartInfos" :color="'deep-orange accent-2'"></charts>
+  <v-container grid-list-md>
+    <v-layout row wrap>
+      <v-flex xs12 sm12 md12>
+        <v-card flat>
+          <v-card-title class="title font-weight-light selectamodel white--text">
+            <v-icon color="white" class="mr-3">gps_fixed</v-icon>
+            <span>Select a model</span>
+          </v-card-title>
+          <v-select class="px-3" v-model="selectedModel" :items="models" item-text="modelname" label="Select" :menu-props="{ maxHeight: '400' }" return-object></v-select>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs12 sm8 md8 d-flex>
+        <v-card v-if="selectedModel.modelname != undefined" flat>
+          <v-card-title class="title font-weight-light singlepred white--text">
+            <v-icon color="white" class="mr-3">person</v-icon>
+            <span>Single Customer Prediction</span>
+          </v-card-title>
+          <v-card-text style="max-height: 295px; overflow-y: auto;">
+            <v-layout row wrap>
+              <v-flex class="px-2" :key="col.options.name" v-for="(col, idx) in catCols" xs12 sm6 md4>
+                <v-select v-model="catCols[idx].selected" :items="col.options.values" :label="col.options.name"></v-select>
+              </v-flex>
+              <v-flex class="px-2" :key="col.name" v-for="(col, idx) in numCols" xs12 sm6 md4>
+                <v-text-field type="number" :label="col.name" v-model.number="numCols[idx].value"></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+          <v-card-text>
+            <v-layout align-center>
+              <v-btn class="singlepred white--text ml-1" :loading="loaders.single" :disabled="loaders.single" @click="predictSingle">Predict</v-btn>
+              <span class="subheading font-weight-medium">{{ targetCol }}: </span>
+              <v-chip v-if="result != ''" disabled class="singlepred white--text">{{ result }}</v-chip>
+            </v-layout>
+            <p v-if="!filled">Please fill all values</p>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs12 sm4 md4 d-flex>
+        <v-card v-if="selectedModel.modelname != undefined" flat>
+          <v-card-title class="title font-weight-light multipred white--text">
+            <v-icon color="white" class="mr-3">group</v-icon>
+            <span>Multiple Customer Prediction</span>
+          </v-card-title>
+          <v-card-text>
+            <v-layout row wrap>
+              <v-flex xs12 sm12 md12>
+                <input type="file" id="file" ref="file" @change="upload"/><br><br>
+              </v-flex>
+
+              <v-flex xs12 sm12 md12>
+                <v-card v-if="allInfos.valid" flat color="datatable" @click.stop="dialogDataTable = true" style="cursor: pointer">
+                  <v-card-title class="title font-weight-light white--text">
+                    <v-icon color="white" class="mr-3">table_chart</v-icon>
+                    <span>Data Table</span>
+                  </v-card-title>
+                  <v-dialog v-model="dialogDataTable" max-width="950px">
+                    <datatable :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
+                  </v-dialog>
+                </v-card>
+              </v-flex>
+
+              <v-flex xs12 sm12 md12>
+                <v-card v-if="allInfos.valid" flat color="charts" @click.stop="dialogChart = true" style="cursor: pointer">
+                  <v-card-title class="title font-weight-light white--text">
+                    <v-icon color="white" class="mr-3">insert_chart</v-icon>
+                    <span>Charts</span>
+                  </v-card-title>
+                  <v-dialog v-model="dialogChart" max-width="950px">
+                    <charts :chartInfos="allInfos.chartInfos"></charts>
+                  </v-dialog>
+                </v-card>
+              </v-flex>
+
+              <v-flex v-if="allInfos.valid" xs12 sm12 md12>
+                <v-btn class="multipred white--text ml-0" :loading="loaders.multi" :disabled="loaders.multi" @click="predictMulti">Predict</v-btn>
+                <span v-if="!allInfos.valid">{{ allInfos.error }}</span>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+        </v-card>
+        
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -61,6 +104,8 @@
       EventBus.$emit('reset', {});
     },
     data:() => ({
+      dialogDataTable: false,
+      dialogChart: false,
       loaders: {
         single: false,
         multi: false
@@ -156,6 +201,8 @@
               console.log(data);
             }
           });
+        } else {
+          this.loaders.single = false;
         }
       },
       upload() {
@@ -199,6 +246,7 @@
               this.allInfos.columns = columns;
               this.allInfos.dataset = dataset;
               this.predicted = true;
+              this.dialogDataTable = true;
             } else if (data.info == -1) {
               console.log(data);
             }

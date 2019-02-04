@@ -1,6 +1,9 @@
 <template>
   <v-card>
-    <v-card-title :class="'title font-weight-light charts white--text'">Charts</v-card-title>
+    <v-card-title class="title font-weight-light charts white--text">
+      <v-icon color="white" class="mr-3">insert_chart</v-icon>
+      <span>Charts</span>
+    </v-card-title>
     <v-layout row wrap class="px-2">
       <v-flex xs12 sm6 md6 :key="chart.name" v-for="(chart, idx) in chartInfos">
         <canvas class="mt-3" :id="chart.name+'Chart'"></canvas>

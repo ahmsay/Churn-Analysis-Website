@@ -4,16 +4,16 @@
     <training v-if="bottomNav == 1"></training>
     <prediction :models="models" :passedModel="passedModel" v-if="bottomNav == 2"></prediction>
     <!--<v-btn @click="test">test</v-btn>-->
-    <v-bottom-nav color="bottomnav" app fixed :active.sync="bottomNav" :value="true">
-      <v-btn>
+    <v-bottom-nav color="darky" app fixed :active.sync="bottomNav" :value="true">
+      <v-btn dark>
         <span>Dashboard</span>
         <v-icon>dashboard</v-icon>
       </v-btn>
-      <v-btn>
+      <v-btn dark>
         <span>Training</span>
         <v-icon>school</v-icon>
       </v-btn>
-      <v-btn>
+      <v-btn dark>
         <span>Prediction</span>
         <v-icon>contact_support</v-icon>
       </v-btn>

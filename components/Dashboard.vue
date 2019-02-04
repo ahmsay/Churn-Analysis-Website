@@ -2,7 +2,7 @@
   <v-container grid-list-md>
     <v-layout row wrap>
       <v-flex xs12 sm6 md6>
-        <v-card style="max-height: 550px; overflow-y: auto;">
+        <v-card flat>
           <v-card-title class="title font-weight-light yourmodels white--text mb-0">
             <v-icon color="white" class="mr-3">cloud</v-icon>
             <span>Your Models</span>
@@ -10,9 +10,9 @@
               <v-icon color="yourmodels">add</v-icon>
             </v-btn>
           </v-card-title>
+          <v-card-text v-if="models.length == 0">You don't have any model.</v-card-text>
           <v-card-text class="pa-0">
-            <span v-if="models.length == 0">You don't have any model :(</span>
-            <v-list three-line style="max-height: 450px; overflow-y: auto;" class="py-0">
+            <v-list three-line style="max-height: 441px; overflow-y: auto;" class="py-0">
               <v-list-tile @mouseover="showDeleteBtn = idx" @mouseout="showDeleteBtn = -1" @click="test" :key="model.modelname" v-for="(model, idx) in models">
                 <v-list-tile-content @click="predict(model)">
                   <v-list-tile-title class="font-weight-medium">{{ model.modelname }}</v-list-tile-title>

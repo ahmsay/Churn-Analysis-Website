@@ -25,7 +25,7 @@
                   <v-dialog v-model="dialog" persistent max-width="600px">
                     <v-card class="pa-0">
                       <v-card-title class="register white--text">
-                        <v-icon color="white" class="mr-3">assignment_ind</v-icon>
+                        <v-icon color="white" class="mr-3">person_add</v-icon>
                         <span class="title font-weight-light">Register</span>
                       </v-card-title>
                       <v-card-text>
@@ -106,7 +106,7 @@
             <v-card-title primary-title class="layout justify-center">
               <div class="headline">Contact us</div>
             </v-card-title>
-            <v-card-text>
+            <v-card-text class="text-xs-center">
               Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
             </v-card-text>
             <v-list class="transparent">
