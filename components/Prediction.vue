@@ -1,11 +1,17 @@
 <template>
   <v-container>
     <v-card class="mb-4">
-      <v-card-title class="title font-weight-light selectamodel white--text">Select a Model</v-card-title>
+      <v-card-title class="title font-weight-light selectamodel white--text">
+        <v-icon color="white" class="mr-3">gps_fixed</v-icon>
+        <span>Select a model</span>
+      </v-card-title>
       <v-select class="px-3" v-model="selectedModel" :items="models" item-text="modelname" label="Select" :menu-props="{ maxHeight: '400' }" return-object></v-select>
     </v-card>
   	<v-card class="mb-4" v-if="selectedModel.modelname != undefined">
-  	  <v-card-title class="title font-weight-light singlepred white--text">Single Customer Prediction</v-card-title>
+  	  <v-card-title class="title font-weight-light singlepred white--text">
+        <v-icon color="white" class="mr-3">person</v-icon>
+        <span>Single Custome Prediction</span>
+      </v-card-title>
   	  <v-card-text>
         <v-layout row wrap>
           <v-flex class="px-2" :key="col.options.name" v-for="(col, idx) in catCols" xs12 sm4 md3>
@@ -23,7 +29,10 @@
   	  </v-card-text>
   	</v-card>
     <v-card class="mb-4" v-if="selectedModel.modelname != undefined">
-      <v-card-title class="title font-weight-light multipred white--text">Multiple Customer Prediction</v-card-title>
+      <v-card-title class="title font-weight-light multipred white--text">
+        <v-icon color="white" class="mr-3">group</v-icon>
+        <span>Multiple Customer Prediction</span>
+      </v-card-title>
       <v-card-text>
         <input type="file" id="file" ref="file" @change="upload"/><br><br>
         <v-btn class="multipred white--text ml-0" :loading="loaders.multi" :disabled="loaders.multi" @click="predictMulti">Predict</v-btn>

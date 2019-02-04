@@ -6,7 +6,10 @@
           <v-layout row wrap>
             <v-flex d-flex xs12 sm6 md4 order-md2 order-sm2>
               <v-card>
-                <v-card-title class="title font-weight-light signin white--text">Sign in to Churnify</v-card-title>
+                <v-card-title class="title font-weight-light signin white--text">
+                  <v-icon color="white" class="mr-3">account_box</v-icon>
+                  <span>Sign in to Churnify</span>
+                </v-card-title>
                 <v-card-text>
                   <v-text-field v-model="unameL" label="Username"></v-text-field>
                   <v-text-field v-model="passwL" label="Password" type="password"></v-text-field>
@@ -22,6 +25,7 @@
                   <v-dialog v-model="dialog" persistent max-width="600px">
                     <v-card class="pa-0">
                       <v-card-title class="register white--text">
+                        <v-icon color="white" class="mr-3">assignment_ind</v-icon>
                         <span class="title font-weight-light">Register</span>
                       </v-card-title>
                       <v-card-text>

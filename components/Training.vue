@@ -1,7 +1,10 @@
 <template>
 	<v-container>
     <v-card flat>
-      <v-card-title class="title font-weight-light trainamodel white--text">Train a Model</v-card-title>
+      <v-card-title class="title font-weight-light trainamodel white--text">
+        <v-icon color="white" class="mr-3">school</v-icon>
+        <span>Train a Model</span>
+      </v-card-title>
         <v-stepper v-model="step">
           <v-stepper-header>
             <v-stepper-step :complete="step>1" step="1">Upload</v-stepper-step>
@@ -105,7 +108,10 @@
       <v-layout row wrap>
         <v-flex xs12 sm6 md6>
           <v-card color="datatable" height="120" @click.stop="dialogDataTable = true">
-            <v-card-title class="title font-weight-light white--text">Data Table</v-card-title>
+            <v-card-title class="title font-weight-light white--text">
+              <v-icon color="white" class="mr-3">table_chart</v-icon>
+              <span>Data Table</span>
+            </v-card-title>
             <v-dialog v-model="dialogDataTable" max-width="950px">
               <datatable :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
             </v-dialog>
@@ -113,7 +119,10 @@
         </v-flex>
         <v-flex xs12 sm6 md6>
           <v-card color="charts" height="120" @click.stop="dialogChart = true">
-            <v-card-title class="title font-weight-light white--text">Charts</v-card-title>
+            <v-card-title class="title font-weight-light white--text">
+              <v-icon color="white" class="mr-3">insert_chart</v-icon>
+              <span>Charts</span>
+            </v-card-title>
             <v-dialog v-model="dialogChart" max-width="950px">
               <charts :chartInfos="allInfos.chartInfos"></charts>
             </v-dialog>

@@ -4,6 +4,7 @@
       <v-flex xs12 sm6 md6>
         <v-card style="max-height: 550px; overflow-y: auto;">
           <v-card-title class="title font-weight-light yourmodels white--text mb-0">
+            <v-icon color="white" class="mr-3">cloud</v-icon>
             <span>Your Models</span>
             <v-btn small absolute fab right @click="train">
               <v-icon color="yourmodels">add</v-icon>
