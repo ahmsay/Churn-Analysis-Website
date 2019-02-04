@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dashboard :models="models" :statuslist="statuslist" v-if="bottomNav == 0"></dashboard>
+    <dashboard :models="models" v-if="bottomNav == 0"></dashboard>
     <training v-if="bottomNav == 1"></training>
     <prediction :models="models" :passedModel="passedModel" v-if="bottomNav == 2"></prediction>
     <!--<v-btn @click="test">test</v-btn>-->
@@ -46,10 +46,6 @@
             console.log(data);
           }
         });
-        this.$post('/checkStatus', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
-          console.log(data);
-          this.statuslist = data.statuslist;
-        });
       } else {
         this.$router.push('/');
       }
@@ -57,7 +53,6 @@
   	data:() => ({
       bottomNav: 0,
       models: [],
-      statuslist: [],
       passedModel: {}
   	}),
   	methods: {

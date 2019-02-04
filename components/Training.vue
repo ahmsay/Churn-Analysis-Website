@@ -55,9 +55,9 @@
               <v-card class="mb-3 background">
                 <v-card-title class="subheading font-weight-bold">Configure your column types</v-card-title>
                 <v-card-text>
-                  <p class="mb-2 subheading font-weight-light">The following columns are automatically detected as categoric:</p>
+                  <p class="mb-2 subheading">The following columns are automatically detected as categoric:</p>
                   <v-chip :class="'ml-0 mr-2 chip'+(col.cat == 1 || moreCatCols.includes(col))+' white--text'" small disabled :key="col.name" v-for="col in catList">{{ col.name }}</v-chip>
-                  <p class="my-2 subheading font-weight-light">If there are more categoric columns, please select.</p>
+                  <p class="my-2 subheading">If there are more categoric columns, please select.</p>
                   <v-select v-model="moreCatCols" :items="catable" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
                 </v-card-text>
               </v-card>
@@ -72,7 +72,7 @@
                     <v-text-field v-model="modelName" label="Enter your models name"></v-text-field>
                     <p class="mb-2">
                       <span class="subheading font-weight-medium">Dataset: </span>
-                      <span class="subheading font-weight-light">{{ allInfos.fileName }}</span>
+                      <span class="subheading">{{ allInfos.fileName }}</span>
                     </p>
                     <p class="mb-0">
                       <span class="subheading font-weight-medium">Training Columns: </span>
@@ -93,7 +93,7 @@
               <v-card class="mb-3 background">
                 <v-card-title class="subheading font-weight-bold">Success</v-card-title>
                 <v-card-text>
-                  <p class="mb-0 subheading font-weight-light">Your model is being trained.</p>
+                  <p class="mb-0 subheading">Your model is being trained.</p>
                 </v-card-text>
               </v-card>
               <v-btn class="ml-0 trainamodel white--text" @click="cancel">Train another model</v-btn>

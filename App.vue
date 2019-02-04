@@ -7,9 +7,19 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="this.$session.has('uname')">
-        <v-btn icon flat class="toolbar">
-          <v-icon>notifications</v-icon>
-        </v-btn>
+        <v-menu left offset-y max-height="230">
+          <v-btn icon flat class="toolbar" slot="activator">
+            <v-icon>notifications</v-icon>
+          </v-btn>
+          <v-list two-line>
+            <v-list-tile v-for="status in statuslist" :key="status.modelname">
+              <v-list-tile-content>
+                <v-list-tile-title class="font-weight-medium">{{ status.modelname }}</v-list-tile-title>
+                <v-list-tile-sub-title>{{ status.detail }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
         <v-menu left offset-y>
           <v-btn icon flat class="toolbar" slot="activator">
             <v-icon>account_circle</v-icon>
@@ -45,9 +55,18 @@
 <script>
   export default {
     name: 'App',
+    created() {
+      if(this.$session.has('uname')) {
+        this.$post('/checkStatus', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+          console.log(data);
+          this.statuslist = data.statuslist;
+        });
+      }
+    },
     data:() => ({
       email: null,
-      dialog: false
+      dialog: false,
+      statuslist: []
     }),
     methods: {
       showHelp() {

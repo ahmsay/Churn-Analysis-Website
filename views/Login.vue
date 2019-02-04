@@ -43,7 +43,7 @@
             </v-flex>
             <v-flex d-flex xs12 sm6 md8 order-md1 order-sm1>
               <v-card class="transparent" flat>
-                <v-card-title class="display-2 font-weight-medium transparent white--text">Lorem Ipsum</v-card-title>
+                <v-card-title class="display-2 font-weight-medium transparent white--text">Churnify</v-card-title>
                 <v-card-text>
                   <span class="title font-weight-light white--text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span>
                 </v-card-text>

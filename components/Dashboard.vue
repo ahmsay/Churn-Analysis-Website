@@ -12,7 +12,7 @@
           <v-card-text class="pa-0">
             <span v-if="models.length == 0">You don't have any model :(</span>
             <v-list three-line style="max-height: 450px; overflow-y: auto;" class="py-0">
-              <v-list-tile @mouseover="showDeleteBtn = idx" @mouseout="showDeleteBtn = -1" @click="" :key="model.modelname" v-for="(model, idx) in models">
+              <v-list-tile @mouseover="showDeleteBtn = idx" @mouseout="showDeleteBtn = -1" @click="test" :key="model.modelname" v-for="(model, idx) in models">
                 <v-list-tile-content @click="predict(model)">
                   <v-list-tile-title class="font-weight-medium">{{ model.modelname }}</v-list-tile-title>
                   <v-list-tile-sub-title>
@@ -44,12 +44,14 @@
       showDeleteBtn: -1
     }),
     props: {
-      models: Array,
-      statuslist: Array
+      models: Array
     },
     methods: {
       train() {
         EventBus.$emit('train', 1);
+      },
+      test() {
+
       },
       predict(model) {
         EventBus.$emit('predict', model);
