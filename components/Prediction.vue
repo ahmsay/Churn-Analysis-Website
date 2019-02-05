@@ -7,7 +7,7 @@
             <v-icon color="white" class="mr-3">gps_fixed</v-icon>
             <span>Select a model</span>
           </v-card-title>
-          <v-select class="px-3" v-model="selectedModel" :items="models" item-text="modelname" label="Select" :menu-props="{ maxHeight: '400' }" return-object></v-select>
+          <v-select @change="refresh" class="px-3" v-model="selectedModel" :items="models" item-text="modelname" label="Select" :menu-props="{ maxHeight: '400' }" return-object></v-select>
         </v-card>
       </v-flex>
 
@@ -15,7 +15,7 @@
         <v-card v-if="selectedModel.modelname != undefined" flat>
           <v-card-title class="title font-weight-light singlepred white--text">
             <v-icon color="white" class="mr-3">person</v-icon>
-            <span>Single Customer Prediction</span>
+            <span>Single Prediction</span>
           </v-card-title>
           <v-card-text style="max-height: 295px; overflow-y: auto;">
             <v-layout row wrap>
@@ -32,8 +32,8 @@
               <v-btn class="singlepred white--text ml-1" :loading="loaders.single" :disabled="loaders.single" @click="predictSingle">Predict</v-btn>
               <span class="subheading font-weight-medium">{{ targetCol }}: </span>
               <v-chip v-if="result != ''" disabled class="singlepred white--text">{{ result }}</v-chip>
+              <span class="ml-2" v-if="!filled">Please fill all values</span>
             </v-layout>
-            <p v-if="!filled">Please fill all values</p>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -42,16 +42,17 @@
         <v-card v-if="selectedModel.modelname != undefined" flat>
           <v-card-title class="title font-weight-light multipred white--text">
             <v-icon color="white" class="mr-3">group</v-icon>
-            <span>Multiple Customer Prediction</span>
+            <span>Multiple Prediction</span>
           </v-card-title>
           <v-card-text>
             <v-layout row wrap>
               <v-flex xs12 sm12 md12>
                 <input type="file" id="file" ref="file" @change="upload"/><br><br>
+                <span v-if="!allInfos.valid">{{ allInfos.error }}</span>
               </v-flex>
 
               <v-flex xs12 sm12 md12>
-                <v-card v-if="allInfos.valid" flat color="datatable" @click.stop="dialogDataTable = true" style="cursor: pointer">
+                <v-card v-if="allInfos.valid || allInfos.dataset.length != 0" flat color="datatable" @click.stop="dialogDataTable = true" style="cursor: pointer">
                   <v-card-title class="title font-weight-light white--text">
                     <v-icon color="white" class="mr-3">table_chart</v-icon>
                     <span>Data Table</span>
@@ -63,7 +64,7 @@
               </v-flex>
 
               <v-flex xs12 sm12 md12>
-                <v-card v-if="allInfos.valid" flat color="charts" @click.stop="dialogChart = true" style="cursor: pointer">
+                <v-card v-if="allInfos.valid || allInfos.dataset.length != 0" flat color="charts" @click.stop="dialogChart = true" style="cursor: pointer">
                   <v-card-title class="title font-weight-light white--text">
                     <v-icon color="white" class="mr-3">insert_chart</v-icon>
                     <span>Charts</span>
@@ -74,14 +75,12 @@
                 </v-card>
               </v-flex>
 
-              <v-flex v-if="allInfos.valid" xs12 sm12 md12>
+              <v-flex v-if="allInfos.valid || allInfos.dataset.length != 0" xs12 sm12 md12>
                 <v-btn class="multipred white--text ml-0" :loading="loaders.multi" :disabled="loaders.multi" @click="predictMulti">Predict</v-btn>
-                <span v-if="!allInfos.valid">{{ allInfos.error }}</span>
               </v-flex>
             </v-layout>
           </v-card-text>
         </v-card>
-        
       </v-flex>
     </v-layout>
   </v-container>
@@ -160,6 +159,9 @@
       }
     },
     methods: {
+      refresh() {
+        console.log(1);
+      },
       encode(row, idx, len) {
         if (len < 3) {
           row.push(idx);
@@ -248,7 +250,8 @@
               this.predicted = true;
               this.dialogDataTable = true;
             } else if (data.info == -1) {
-              console.log(data);
+              this.allInfos.error = this.allInfos.fileName + " doesn't match with " + this.selectedModel.modelname + ". Please try another dataset.";
+              this.allInfos.valid = false;
             }
           });
         }

@@ -91,6 +91,7 @@ export default {
             } else {
               fileResult.error = 'This file type is not supported.';
             }
+            resolve(fileResult);
           }
         });
       }

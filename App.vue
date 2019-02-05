@@ -13,6 +13,9 @@
             <v-icon>notifications</v-icon>
           </v-btn>
           <v-list two-line>
+            <v-list-tile v-if="statuslist.length == 0">
+              <span>You don't have any notification.</span>
+            </v-list-tile>
             <v-list-tile v-for="status in statuslist" :key="status.modelname">
               <v-list-tile-content>
                 <v-list-tile-title class="font-weight-medium">{{ status.modelname }}</v-list-tile-title>

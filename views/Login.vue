@@ -209,6 +209,9 @@
             this.uname = '';
             this.passw = '';
             this.email = '';
+            this.$session.set("uname", uname);
+            this.$session.set("passw", passw);
+            this.$router.push('/home');
           } else if (data.info == 0) {
             this.errors.register.msg = 'Username "' + uname + '" already exists.';
             this.errors.register.show = true;
