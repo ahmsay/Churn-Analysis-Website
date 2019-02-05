@@ -5,7 +5,7 @@
         <v-card flat>
           <v-card-title class="title font-weight-light trainamodel white--text">
             <v-icon color="white" class="mr-3">school</v-icon>
-            <span>Train a Model</span>
+            <span>Train a New Model</span>
           </v-card-title>
             <v-stepper v-model="step">
               <v-stepper-header>
@@ -25,11 +25,12 @@
                   <v-card flat class="mb-3 background">
                     <v-card-title class="subheading font-weight-bold">Upload your dataset</v-card-title>
                     <v-card-text>
-                      <input type="file" id="file" ref="file" @change="upload"/><br><br>
-                      <p class="mb-0 error--text" v-if="!allInfos.valid">{{ allInfos.error }}</p>
+                      <upload-btn v-if="!loaders.upload" class="px-0 white--text" color="trainamodel" :ripple="false" :fileChangedCallback="upload"></upload-btn>
+                      <v-btn v-if="loaders.upload" :disabled="true" :loading="true">Upload</v-btn>
+                      <p class="mb-0 mt-2 error--text" v-if="!allInfos.valid">{{ allInfos.error }}</p>
                     </v-card-text>
                   </v-card>
-                  <v-btn class="trainamodel white--text ml-0" :loading="loaders.upload" :disabled="!allInfos.valid || loaders.upload" @click="step++">Next</v-btn>
+                  <v-btn class="trainamodel white--text ml-0" :disabled="!allInfos.valid || loaders.upload" @click="step++">Next</v-btn>
                 </v-stepper-content>
 
                 <v-stepper-content step="2">
@@ -140,11 +141,13 @@
 <script>
   import DataTable from './DataTable'
   import Charts from './Charts'
+  import UploadButton from 'vuetify-upload-button';
 
   export default {
     components: {
       'datatable': DataTable,
-      'charts': Charts
+      'charts': Charts,
+      'upload-btn': UploadButton
     },
     data:() => ({
       dialogDataTable: false,
@@ -203,9 +206,9 @@
       }
     },
     methods: {
-      upload() {
+      upload(file) {
         this.loaders.upload = true;
-        this.$parse(this.$refs.file.files[0], 'feedback', this.$session.get('uname'), this.$session.get('passw')).then(result => {
+        this.$parse(file, 'feedback', this.$session.get('uname'), this.$session.get('passw')).then(result => {
           this.loaders.upload = false;
           this.allInfos = result;
         });
@@ -240,7 +243,6 @@
         });
       },
       cancel() {
-        this.$refs.file.value = '';
         this.allInfos = {
           error: '',
           valid: false,

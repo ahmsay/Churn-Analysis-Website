@@ -5,7 +5,7 @@
         <v-card flat>
           <v-card-title class="title font-weight-light selectamodel white--text">
             <v-icon color="white" class="mr-3">gps_fixed</v-icon>
-            <span>Select a model</span>
+            <span>Select a Model</span>
           </v-card-title>
           <v-select @change="refresh" class="px-3" v-model="selectedModel" :items="models" item-text="modelname" label="Select" :menu-props="{ maxHeight: '400' }" return-object></v-select>
         </v-card>
@@ -46,9 +46,18 @@
           </v-card-title>
           <v-card-text>
             <v-layout row wrap>
+              <v-layout row wrap>
+                <v-flex xs6 sm12 md6>
+                  <upload-btn v-if="!loaders.upload" block class="px-0 white--text" color="multipred" :ripple="false" :fileChangedCallback="upload"></upload-btn>
+                  <v-btn v-if="loaders.upload" block :disabled="true" :loading="true">Upload</v-btn>
+                </v-flex>
+                <v-flex xs6 sm12 md6 v-if="allInfos.valid || allInfos.dataset.length != 0">
+                  <v-btn block class="multipred white--text mb-1" :loading="loaders.multi" :disabled="loaders.multi" @click="predictMulti">Predict</v-btn>
+                </v-flex>
+              </v-layout>
+
               <v-flex xs12 sm12 md12>
-                <input type="file" id="file" ref="file" @change="upload"/><br><br>
-                <span class="error--text" v-if="!allInfos.valid">{{ allInfos.error }}</span>
+                <p class="mb-0 error--text" v-if="!allInfos.valid">{{ allInfos.error }}</p>
               </v-flex>
 
               <v-flex xs12 sm12 md12>
@@ -74,10 +83,6 @@
                   </v-dialog>
                 </v-card>
               </v-flex>
-
-              <v-flex v-if="allInfos.valid || allInfos.dataset.length != 0" xs12 sm12 md12>
-                <v-btn class="multipred white--text ml-0" :loading="loaders.multi" :disabled="loaders.multi" @click="predictMulti">Predict</v-btn>
-              </v-flex>
             </v-layout>
           </v-card-text>
         </v-card>
@@ -90,11 +95,13 @@
   import { EventBus } from '../plugins/event-bus.js';
   import DataTable from './DataTable';
   import Charts from './Charts';
+  import UploadButton from 'vuetify-upload-button';
 
   export default {
     components: {
       'datatable': DataTable,
-      'charts': Charts
+      'charts': Charts,
+      'upload-btn': UploadButton
     },
     created() {
       this.selectedModel = this.passedModel;
@@ -107,7 +114,8 @@
       dialogChart: false,
       loaders: {
         single: false,
-        multi: false
+        multi: false,
+        upload: false
       },
       selectedModel: {},
       allInfos: {
@@ -160,8 +168,6 @@
     },
     methods: {
       refresh() {
-        if (this.$refs.file != undefined)
-          this.$refs.file.value = '';
         this.allInfos = {
           error: '',
           valid: false,
@@ -217,14 +223,16 @@
           this.loaders.single = false;
         }
       },
-      upload() {
-        this.$parse(this.$refs.file.files[0], 'predict').then(result => {
+      upload(file) {
+        this.loaders.upload = true;
+        this.$parse(file, 'predict').then(result => {
+          this.loaders.upload = false;
           this.allInfos = result;
         });
         this.predicted = false;
       },
       predictMulti() {
-        if(this.allInfos.dataset.length != 0 && !this.predicted && this.$refs.file.value != '') {
+        if(this.allInfos.dataset.length != 0 && !this.predicted) {
           this.loaders.multi = true;
           let catIndexes = [];
           let numIndexes = [];

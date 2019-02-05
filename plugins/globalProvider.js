@@ -7,7 +7,7 @@ export default {
       		this.$http.get(this.$URL + path)
       		.then(data => {
       			let x = data.json();
-    			resolve(x);
+    			  resolve(x);
       		})
       		.catch(error => {
       			console.log(error);
@@ -50,6 +50,7 @@ export default {
                   let rawData = reader.result;
                   let dataset = [];
                   let lines = rawData.match(/[^\r\n]+/g);
+                  //let lines = rawData.split("\r\n")
                   let len = lines.length-1;
                   let columns = lines[0].split(",");
                   for (let i=1; i<len; i++) {
@@ -87,11 +88,14 @@ export default {
                 reader.readAsText(file);
               } else {
                 fileResult.error = 'The file size is too big.';
+                resolve(fileResult);
               }
             } else {
               fileResult.error = 'This file type is not supported.';
               resolve(fileResult);
             }
+          } else {
+            resolve(fileResult);
           }
         });
       }
