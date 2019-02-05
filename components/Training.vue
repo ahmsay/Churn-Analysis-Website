@@ -75,27 +75,29 @@
                   <v-card flat class="mb-3 background">
                     <v-card-title class="subheading font-weight-bold">Send your preferences</v-card-title>
                     <v-card-text>
-                        <v-text-field v-model="modelName" label="Enter your models name"></v-text-field>
-                        <p class="mb-0">
-                          <span class="subheading font-weight-medium">Dataset: </span>
-                          <span class="subheading">{{ allInfos.fileName }}</span>
-                        </p>
-                        <p class="mb-0">
-                          <span class="subheading font-weight-medium">Training columns: </span>
-                          <v-tooltip top :key="col.name" v-for="col in selectedTrainCols">
-                            <v-chip slot="activator" :class="'ml-0 mr-2 chip'+(col.cat == 1 || moreCatCols.includes(col))+' white--text'" small disabled>{{ col.name }}</v-chip>
-                            <span v-if="col.cat == 1 || moreCatCols.includes(col)">Categoric</span>
-                            <span v-if="col.cat == 0 && !moreCatCols.includes(col)">Numeric</span>
-                          </v-tooltip>
-                        </p>
-                        <p class="mb-0">
-                          <span class="subheading font-weight-medium">Target column: </span>
-                          <v-chip small disabled class="trainamodel white--text">{{ targetCol }}</v-chip>
-                        </p>
-                        <span class="error--text" v-if="sendError.show">{{ sendError.msg }}</span>
+                      <v-form ref="form" v-model="modelNameValid">
+                        <v-text-field v-model="modelName" label="Enter your models name" required :rules="modelNameRules"></v-text-field>
+                      </v-form>
+                      <p class="mb-0">
+                        <span class="subheading font-weight-medium">Dataset: </span>
+                        <span class="subheading">{{ allInfos.fileName }}</span>
+                      </p>
+                      <p class="mb-0">
+                        <span class="subheading font-weight-medium">Training columns: </span>
+                        <v-tooltip top :key="col.name" v-for="col in selectedTrainCols">
+                          <v-chip slot="activator" :class="'ml-0 mr-2 chip'+(col.cat == 1 || moreCatCols.includes(col))+' white--text'" small disabled>{{ col.name }}</v-chip>
+                          <span v-if="col.cat == 1 || moreCatCols.includes(col)">Categoric</span>
+                          <span v-if="col.cat == 0 && !moreCatCols.includes(col)">Numeric</span>
+                        </v-tooltip>
+                      </p>
+                      <p class="mb-0">
+                        <span class="subheading font-weight-medium">Target column: </span>
+                        <v-chip small disabled class="trainamodel white--text">{{ targetCol }}</v-chip>
+                      </p>
+                      <span class="error--text" v-if="sendError.show">{{ sendError.msg }}</span>
                     </v-card-text>
                   </v-card>
-                  <v-btn class="trainamodel white--text ml-0" :loading="loaders.send" :disabled="loaders.send" @click="sendUserPrefs">Send</v-btn>
+                  <v-btn class="trainamodel white--text ml-0" :loading="loaders.send" :disabled="loaders.send || !modelNameValid" @click="sendUserPrefs">Send</v-btn>
                   <v-btn flat @click="cancel">Cancel</v-btn>
                 </v-stepper-content>
 
@@ -150,6 +152,11 @@
       'upload-btn': UploadButton
     },
     data:() => ({
+      modelNameValid: false,
+      modelNameRules: [
+        v => !!v || 'Model name is required',
+        v => v != null && v.length <= 20 && v.length >= 3 || 'Model name must be between than 3 and 20 characters'
+      ],
       dialogDataTable: false,
       dialogChart: false,
       sendError: { msg: 'This model name already exists. Please enter another name.', show: false },
@@ -257,6 +264,8 @@
         this.modelName = '';
         this.sent = false;
         this.moreCatCols = []; // test
+        this.modelNameValid = false;
+        this.$refs.form.reset();
       }
     }
   }

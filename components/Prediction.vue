@@ -177,6 +177,7 @@
           colInfos: [],
           chartInfos: []
         }
+        this.filled = true;
       },
       encode(row, idx, len) {
         if (len < 3) {

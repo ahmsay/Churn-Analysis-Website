@@ -160,14 +160,15 @@
       email: '',
       unameRules: [
         v => !!v || 'Username is required',
-        v => v != null && v.length <= 30 && v.length >= 4 || 'Username must be between than 4 and 30 characters'
+        v => v != null && v.length <= 25 && v.length >= 4 || 'Username must be between than 4 and 25 characters'
       ],
       passwRules: [
         v => !!v || 'Password is required',
-        v => v != null && v.length <= 50 && v.length >= 6 || 'Password must be between than 6 and 50 characters'
+        v => v != null && v.length <= 30 && v.length >= 6 || 'Password must be between than 6 and 30 characters'
       ],
       emailRules: [
-        v => !!v || 'E-mail is required'
+        v => !!v || 'E-mail is required',
+        v => v != null && v.length <= 50 && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
       ],
       contents: [
         { icon: 'color_lens', title: 'What is Churnify ?', text: 'Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.' },
@@ -182,24 +183,26 @@
     }),
     methods: {
       login (uname, passw) {
-        this.loaders.login = true;
-        this.$post('/login', { username: uname, password: passw }).then(data => {
-          this.loaders.login = false;
-          if (data.info == 1) {
-            this.errors.login.show = false;
-            this.errors.login.msg = '';
-            this.$session.set("uname", uname);
-            this.$session.set("passw", passw);
-            EventBus.$emit('refreshStatus', 0);
-            this.$router.push('/home');
-          } else if (data.info == 0) {
-            this.errors.login.msg = 'Username and password do not match.';
-            this.errors.login.show = true;
-          } else if (data.info == -1) {
-            this.errors.login.msg = 'Server error.';
-            this.errors.login.show = true;
-          }
-        });
+        if (uname != '' && passw != '') {
+          this.loaders.login = true;
+          this.$post('/login', { username: uname, password: passw }).then(data => {
+            this.loaders.login = false;
+            if (data.info == 1) {
+              this.errors.login.show = false;
+              this.errors.login.msg = '';
+              this.$session.set("uname", uname);
+              this.$session.set("passw", passw);
+              EventBus.$emit('refreshStatus', 0);
+              this.$router.push('/home');
+            } else if (data.info == 0) {
+              this.errors.login.msg = 'Username and password do not match.';
+              this.errors.login.show = true;
+            } else if (data.info == -1) {
+              this.errors.login.msg = 'Server error.';
+              this.errors.login.show = true;
+            }
+          });
+        }
       },
       register(uname, passw, email) {
         this.loaders.register = true;
