@@ -6,9 +6,8 @@
           <v-card-title class="title font-weight-light yourmodels white--text mb-0">
             <v-icon color="white" class="mr-3">cloud</v-icon>
             <span>Your Models</span>
-            <v-btn small absolute fab right @click="train">
-              <v-icon color="yourmodels">add</v-icon>
-            </v-btn>
+            <v-spacer></v-spacer>
+            <v-icon color="white" @click="train">add_circle</v-icon>
           </v-card-title>
           <v-card-text v-if="models.length == 0">You don't have any model.</v-card-text>
           <v-card-text class="pa-0">
@@ -42,17 +41,17 @@
 
   export default {
     data:() => ({
-      showDeleteBtn: -1
+      showDeleteBtn: -1,
     }),
     props: {
       models: Array
     },
     methods: {
-      train() {
-        EventBus.$emit('train', 1);
-      },
       test() {
 
+      },
+      train() {
+        EventBus.$emit('train', 1);
       },
       predict(model) {
         EventBus.$emit('predict', model);

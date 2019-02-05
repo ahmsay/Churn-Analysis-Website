@@ -15,12 +15,12 @@ Vue.use(Vuetify, {
     register: colors.orange.darken1,
     loremipsum: colors.lightBlue.darken1,
     yourmodels: colors.lightGreen.darken1,
-    trainamodel: colors.lightBlue.darken3,
+    trainamodel: colors.blue.darken3,
     datatable: colors.green.darken1,
     charts: colors.deepOrange.accent2,
     selectamodel: colors.amber.darken2,
-    singlepred: colors.blue.darken3,
-    multipred: colors.blue.darken3,
+    singlepred: colors.purple.darken1,
+    multipred: colors.purple.darken1,
     darky: colors.cyan.darken4,
   }
 })

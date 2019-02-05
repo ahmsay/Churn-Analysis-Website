@@ -66,7 +66,7 @@
                     <v-icon color="white" class="mr-3">table_chart</v-icon>
                     <span>Data Table</span>
                   </v-card-title>
-                  <v-dialog v-model="dialogDataTable" max-width="950px">
+                  <v-dialog v-model="dialogDataTable" max-width="1250px">
                     <datatable :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
                   </v-dialog>
                 </v-card>
@@ -78,7 +78,7 @@
                     <v-icon color="white" class="mr-3">insert_chart</v-icon>
                     <span>Charts</span>
                   </v-card-title>
-                  <v-dialog v-model="dialogChart" max-width="950px">
+                  <v-dialog v-model="dialogChart" max-width="1250px">
                     <charts :chartInfos="allInfos.chartInfos"></charts>
                   </v-dialog>
                 </v-card>

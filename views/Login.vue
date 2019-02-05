@@ -11,8 +11,8 @@
                   <span>Sign in to Churnify</span>
                 </v-card-title>
                 <v-card-text>
-                  <v-text-field prepend-icon="person" v-model="unameL" label="Username"></v-text-field>
-                  <v-text-field prepend-icon="lock" v-model="passwL" label="Password" type="password"></v-text-field>
+                  <v-text-field @keydown.enter="login(unameL, passwL)" prepend-icon="person" v-model="unameL" label="Username"></v-text-field>
+                  <v-text-field @keydown.enter="login(unameL, passwL)" prepend-icon="lock" v-model="passwL" label="Password" type="password"></v-text-field>
                   <span class="error--text" v-if="errors.login.show">{{ errors.login.msg }}</span>
                   <v-layout row wrap>
                     <v-flex xs12 sm6 md6 class="pb-0">
