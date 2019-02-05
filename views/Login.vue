@@ -7,13 +7,13 @@
             <v-flex d-flex xs12 sm6 md4 order-md2 order-sm2>
               <v-card>
                 <v-card-title class="title font-weight-light signin white--text">
-                  <v-icon color="white" class="mr-3">account_box</v-icon>
+                  <v-icon color="white" class="mr-3">exit_to_app</v-icon>
                   <span>Sign in to Churnify</span>
                 </v-card-title>
                 <v-card-text>
-                  <v-text-field v-model="unameL" label="Username"></v-text-field>
-                  <v-text-field v-model="passwL" label="Password" type="password"></v-text-field>
-                  <span v-if="errors.login.show">{{ errors.login.msg }}</span>
+                  <v-text-field prepend-icon="person" v-model="unameL" label="Username"></v-text-field>
+                  <v-text-field prepend-icon="lock" v-model="passwL" label="Password" type="password"></v-text-field>
+                  <span class="error--text" v-if="errors.login.show">{{ errors.login.msg }}</span>
                   <v-layout row wrap>
                     <v-flex xs12 sm6 md6 class="pb-0">
                       <v-btn class="mb-0 signin white--text" :loading="loaders.login" :disabled="loaders.login" block @click="login(unameL, passwL)">Sign In</v-btn>
@@ -30,11 +30,11 @@
                       </v-card-title>
                       <v-card-text>
                         <v-form ref="form" v-model="valid">
-                          <v-text-field v-model="uname" :rules="unameRules" label="Username" required></v-text-field>
-                          <v-text-field v-model="passw" :rules="passwRules" label="Password" required type="password"></v-text-field>
-                          <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
+                          <v-text-field prepend-icon="person" v-model="uname" :rules="unameRules" label="Username" required></v-text-field>
+                          <v-text-field prepend-icon="lock" v-model="passw" :rules="passwRules" label="Password" required type="password"></v-text-field>
+                          <v-text-field prepend-icon="email" v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
                         </v-form>
-                        <span v-if="errors.register.show">{{ errors.register.msg }}</span>
+                        <span class="error--text" v-if="errors.register.show">{{ errors.register.msg }}</span>
                       </v-card-text>
                       <v-layout justify-end class="pr-2 pb-2">
                         <v-btn class="register white--text mr-0" @click.native="closeform">Close</v-btn>
@@ -127,6 +127,8 @@
 </template>
 
 <script>
+  import { EventBus } from "../plugins/event-bus.js";
+
   export default {
     created() {
       if (this.$session.has("uname"))
@@ -188,12 +190,13 @@
             this.errors.login.msg = '';
             this.$session.set("uname", uname);
             this.$session.set("passw", passw);
+            EventBus.$emit('refreshStatus', 0);
             this.$router.push('/home');
           } else if (data.info == 0) {
             this.errors.login.msg = 'Username and password do not match.';
             this.errors.login.show = true;
           } else if (data.info == -1) {
-            this.errors.login.msg = 'Something happened.';
+            this.errors.login.msg = 'Server error.';
             this.errors.login.show = true;
           }
         });
@@ -216,7 +219,7 @@
             this.errors.register.msg = 'Username "' + uname + '" already exists.';
             this.errors.register.show = true;
           } else if (data.info == -1) {
-            this.errors.register.msg = 'Something happened.';
+            this.errors.register.msg = 'Server error.';
             this.errors.register.show = true;
           }
         });

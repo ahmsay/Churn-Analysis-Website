@@ -25,7 +25,7 @@
   import Dashboard from '../components/Dashboard';
   import Training from '../components/Training';
   import Prediction from '../components/Prediction';
-  import {EventBus} from "../plugins/event-bus.js";
+  import { EventBus } from "../plugins/event-bus.js";
   //import db from '../plugins/fb';
 
   export default {

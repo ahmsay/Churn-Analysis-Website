@@ -26,7 +26,7 @@
                     <v-card-title class="subheading font-weight-bold">Upload your dataset</v-card-title>
                     <v-card-text>
                       <input type="file" id="file" ref="file" @change="upload"/><br><br>
-                      <p v-if="!allInfos.valid">{{ allInfos.error }}</p>
+                      <p class="mb-0 error--text" v-if="!allInfos.valid">{{ allInfos.error }}</p>
                     </v-card-text>
                   </v-card>
                   <v-btn class="trainamodel white--text ml-0" :loading="loaders.upload" :disabled="!allInfos.valid || loaders.upload" @click="step++">Next</v-btn>
@@ -91,7 +91,7 @@
                           <span class="subheading font-weight-medium">Target column: </span>
                           <v-chip small disabled class="trainamodel white--text">{{ targetCol }}</v-chip>
                         </p>
-                        <span v-if="sendError.show">{{ sendError.msg }}</span>
+                        <span class="error--text" v-if="sendError.show">{{ sendError.msg }}</span>
                     </v-card-text>
                   </v-card>
                   <v-btn class="trainamodel white--text ml-0" :loading="loaders.send" :disabled="loaders.send" @click="sendUserPrefs">Send</v-btn>
@@ -203,9 +203,6 @@
       }
     },
     methods: {
-      test() {
-        console.log(1);
-      },
       upload() {
         this.loaders.upload = true;
         this.$parse(this.$refs.file.files[0], 'feedback', this.$session.get('uname'), this.$session.get('passw')).then(result => {

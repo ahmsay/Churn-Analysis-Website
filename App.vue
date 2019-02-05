@@ -49,15 +49,22 @@
 </template>
 
 <script>
+  import { EventBus } from "./plugins/event-bus.js";
+
   export default {
     name: 'App',
     created() {
-      if(this.$session.has('uname')) {
+      if (this.$session.has("uname")) {
         this.$post('/checkStatus', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
-          console.log(data);
           this.statuslist = data.statuslist;
         });
       }
+      // eslint-disable-next-line
+      EventBus.$once('refreshStatus', num => {
+        this.$post('/checkStatus', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+          this.statuslist = data.statuslist;
+        });
+      });
     },
     data:() => ({
       email: null,

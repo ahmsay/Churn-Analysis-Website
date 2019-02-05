@@ -32,7 +32,7 @@
               <v-btn class="singlepred white--text ml-1" :loading="loaders.single" :disabled="loaders.single" @click="predictSingle">Predict</v-btn>
               <span class="subheading font-weight-medium">{{ targetCol }}: </span>
               <v-chip v-if="result != ''" disabled class="singlepred white--text">{{ result }}</v-chip>
-              <span class="ml-2" v-if="!filled">Please fill all values</span>
+              <span class="ml-2 error--text" v-if="!filled">Please fill all values.</span>
             </v-layout>
           </v-card-text>
         </v-card>
@@ -48,7 +48,7 @@
             <v-layout row wrap>
               <v-flex xs12 sm12 md12>
                 <input type="file" id="file" ref="file" @change="upload"/><br><br>
-                <span v-if="!allInfos.valid">{{ allInfos.error }}</span>
+                <span class="error--text" v-if="!allInfos.valid">{{ allInfos.error }}</span>
               </v-flex>
 
               <v-flex xs12 sm12 md12>
@@ -160,7 +160,17 @@
     },
     methods: {
       refresh() {
-        console.log(1);
+        if (this.$refs.file != undefined)
+          this.$refs.file.value = '';
+        this.allInfos = {
+          error: '',
+          valid: false,
+          fileName: '',
+          columns: [],
+          dataset: [],
+          colInfos: [],
+          chartInfos: []
+        }
       },
       encode(row, idx, len) {
         if (len < 3) {
@@ -214,7 +224,7 @@
         this.predicted = false;
       },
       predictMulti() {
-        if(this.allInfos.dataset.length != 0 && !this.predicted) {
+        if(this.allInfos.dataset.length != 0 && !this.predicted && this.$refs.file.value != '') {
           this.loaders.multi = true;
           let catIndexes = [];
           let numIndexes = [];
@@ -254,6 +264,8 @@
               this.allInfos.valid = false;
             }
           });
+        } else {
+          this.dialogDataTable = true;
         }
       }
     }
