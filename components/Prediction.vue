@@ -46,18 +46,16 @@
           </v-card-title>
           <v-card-text>
             <v-layout row wrap>
-              <v-layout row wrap>
-                <v-flex xs6 sm12 md6>
-                  <upload-btn v-if="!loaders.upload" block class="px-0 white--text" color="multipred" :ripple="false" :fileChangedCallback="upload"></upload-btn>
-                  <v-btn v-if="loaders.upload" block :disabled="true" :loading="true">Upload</v-btn>
-                </v-flex>
-                <v-flex xs6 sm12 md6 v-if="allInfos.valid || allInfos.dataset.length != 0">
-                  <v-btn block class="multipred white--text mb-1" :loading="loaders.multi" :disabled="loaders.multi" @click="predictMulti">Predict</v-btn>
-                </v-flex>
-              </v-layout>
+              <v-flex xs6 sm12 md6>
+                <upload-btn v-if="!loaders.upload" block class="px-0 white--text" color="multipred" :ripple="false" :fileChangedCallback="upload"></upload-btn>
+                <v-btn v-if="loaders.upload" block :disabled="true" :loading="true">Upload</v-btn>
+              </v-flex>
+              <v-flex xs6 sm12 md6 v-if="allInfos.valid || allInfos.dataset.length != 0">
+                <v-btn block class="multipred white--text mb-1" :loading="loaders.multi" :disabled="loaders.multi" @click="predictMulti">Predict</v-btn>
+              </v-flex>
 
-              <v-flex xs12 sm12 md12>
-                <p class="mb-0 error--text" v-if="!allInfos.valid">{{ allInfos.error }}</p>
+              <v-flex xs12 sm12 md12 class="py-0" v-if="!allInfos.valid">
+                <p class="mb-0 error--text">{{ allInfos.error }}</p>
               </v-flex>
 
               <v-flex xs12 sm12 md12>
@@ -82,6 +80,10 @@
                     <charts :chartInfos="allInfos.chartInfos"></charts>
                   </v-dialog>
                 </v-card>
+              </v-flex>
+
+              <v-flex xs12 sm12 md12 v-if="predicted">
+                <v-btn class="multipred white--text" block>Save</v-btn>
               </v-flex>
             </v-layout>
           </v-card-text>
@@ -142,10 +144,8 @@
           this.selectedModel.catCols.forEach(val => {
             columns.push({ options: val, selected: null });
           });
-          return columns;
-        } else {
-          return [];
         }
+        return columns;
       },
       numCols() {
         let columns = [];
@@ -153,17 +153,14 @@
           this.selectedModel.numCols.forEach(val => {
             columns.push({ name: val, value: null });
           });
-  	      return columns;
-      	} else {
-      	  return [];
-      	}
+        }
+        return columns;
       },
       targetCol() {
         let column = '';
         if (this.selectedModel.modelname != undefined)
-          return this.selectedModel.targetCol.name;
-        else
-          return column;
+          column = this.selectedModel.targetCol.name;
+        return column;
       }
     },
     methods: {

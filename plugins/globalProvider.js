@@ -61,6 +61,7 @@ export default {
                   fileResult.dataset = dataset;
                   if (action == 'feedback') {
                     this.$post('/columnsInfos', { columns: columns, dataset: dataset, username: uname, password: passw }).then(data => {
+                      console.log(data);
                       if (data.info == 1) {
                         fileResult.colInfos = data.colInfos;
                         fileResult.valid = true;
