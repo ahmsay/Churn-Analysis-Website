@@ -23,11 +23,21 @@
               <v-stepper-items>
                 <v-stepper-content step="1">
                   <v-card flat class="mb-3 background">
-                    <v-card-title class="subheading font-weight-bold">Upload your dataset</v-card-title>
+                    <v-card-title class="subheading font-weight-bold">
+                      <span>Upload Your Dataset</span>
+                      <v-spacer></v-spacer>
+                      <v-tooltip left color="trainamodel">
+                        <v-icon slot="activator" color="#9d9d9d">help</v-icon>
+                        <ul style="padding-left: 1.2em">
+                          <li>.csv files are supported.</li>
+                          <li>Missing values will be automatically filled later.</li>
+                        </ul>
+                      </v-tooltip>
+                    </v-card-title>
                     <v-card-text>
                       <upload-btn v-if="!loaders.upload" class="px-0 white--text" color="trainamodel" :ripple="false" :fileChangedCallback="upload"></upload-btn>
                       <v-btn v-if="loaders.upload" :disabled="true" :loading="true">Upload</v-btn>
-                      <p class="mb-0 mt-2 error--text" v-if="!allInfos.valid">{{ allInfos.error }}</p>
+                      <p class="mb-0 mt-2 error--text" v-if="allInfos.error != ''">{{ allInfos.error }}</p>
                     </v-card-text>
                   </v-card>
                   <v-btn class="trainamodel white--text ml-0" :disabled="!allInfos.valid || loaders.upload" @click="step++">Next</v-btn>
@@ -35,10 +45,19 @@
 
                 <v-stepper-content step="2">
                   <v-card flat class="mb-3 background">
-                    <v-card-title class="subheading font-weight-bold">Select your target column</v-card-title>
+                    <v-card-title class="subheading font-weight-bold">
+                      <span>Select Your Target Column</span>
+                      <v-spacer></v-spacer>
+                      <v-tooltip left color="trainamodel">
+                        <v-icon slot="activator" color="#9d9d9d">help</v-icon>
+                        <ul style="padding-left: 1.2em">
+                          <li>Target column should be binary<br>(churn or not churn).</li>
+                        </ul>
+                      </v-tooltip>
+                    </v-card-title>
                     <v-card-text>
                       <v-select v-model="targetCol" :items="targetableCols" label="Target column"></v-select>
-                      <span v-if="targetableCols.length==0">Change your dataset</span>
+                      <span class="error--text" v-if="targetableCols.length == 0">There is no proper target column in your dataset. Please upload another one.</span>
                     </v-card-text>
                   </v-card>
                   <v-btn class="trainamodel white--text ml-0" :disabled="targetableCols.length==0" @click="step++">Next</v-btn>
@@ -47,7 +66,16 @@
 
                 <v-stepper-content step="3">
                   <v-card flat class="mb-3 background">
-                    <v-card-title class="subheading font-weight-bold">Select your training columns</v-card-title>
+                    <v-card-title class="subheading font-weight-bold">
+                      <span>Select Your Training Columns</span>
+                      <v-spacer></v-spacer>
+                      <v-tooltip left color="trainamodel">
+                        <v-icon slot="activator" color="#9d9d9d">help</v-icon>
+                        <ul style="padding-left: 1.2em">
+                          <li>Categorical columns with more than 30 categories<br>cannot be selected due to improve server<br>performance and model accuracy.</li>
+                        </ul>
+                      </v-tooltip>
+                    </v-card-title>
                     <v-card-text>
                       <v-select v-model="selectedTrainCols" :items="allTrainCols" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
                       <v-btn class="trainamodel white--text ml-0" @click="selectAll">Select All</v-btn>
@@ -59,12 +87,28 @@
 
                 <v-stepper-content step="4">
                   <v-card flat class="mb-3 background">
-                    <v-card-title class="subheading font-weight-bold">Configure your column types</v-card-title>
+                    <v-card-title class="subheading font-weight-bold">
+                      <span>Configure Your Column Types</span>
+                      <v-spacer></v-spacer>
+                      <v-tooltip left color="trainamodel">
+                        <v-icon slot="activator" color="#9d9d9d">help</v-icon>
+                        <ul style="padding-left: 1.2em">
+                          <li>This step contains only your training columns.</li>
+                          <li>Columns with non-numeric values are selected as<br>categoric.</li>
+                          <li>Columns with numeric values are selected as <br>numeric.</li>
+                          <li>Please check your dataset to see if there are<br>categoric columns with numeric values.</li>
+                          <li>Columns having more than 30 unique values cannot<br>be selected as categoric.</li>
+                        </ul>
+                      </v-tooltip>
+                    </v-card-title>
                     <v-card-text>
-                      <p class="mb-2 subheading">The following columns are automatically detected as categoric:</p>
+                      <p class="mb-2 subheading" v-if="catList.length != 0">The following columns are automatically detected as categoric:</p>
+                      <p class="mb-2 subheading" v-if="catList.length == 0">No columns automatically detected as categoric.</p>
                       <v-chip :class="'ml-0 mr-2 chip'+(col.cat == 1 || moreCatCols.includes(col))+' white--text'" small disabled :key="col.name" v-for="col in catList">{{ col.name }}</v-chip>
-                      <p class="my-2 subheading">If there are more categoric columns, please select.</p>
-                      <v-select v-model="moreCatCols" :items="catable" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
+                      <p class="my-2 subheading" v-if="catList.length != 0 && catable.length != 0">If there are more categoric columns, please select from below.</p>
+                      <p class="my-2 subheading" v-if="catList.length == 0 && catable.length != 0">If there are categoric columns, please select from below.</p>
+                      <p class="my-2 subheading" v-if="catable.length == 0">There are no columns that can be selected as categoric.</p>
+                      <v-select v-if="catable.length != 0" v-model="moreCatCols" :items="catable" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
                     </v-card-text>
                   </v-card>
                   <v-btn class="trainamodel white--text ml-0" @click="step++">Next</v-btn>
@@ -73,7 +117,16 @@
 
                 <v-stepper-content step="5">
                   <v-card flat class="mb-3 background">
-                    <v-card-title class="subheading font-weight-bold">Send your preferences</v-card-title>
+                    <v-card-title class="subheading font-weight-bold">
+                      <span>Send Your Preferences</span>
+                      <v-spacer></v-spacer>
+                      <v-tooltip left color="trainamodel">
+                        <v-icon slot="activator" color="#9d9d9d">help</v-icon>
+                        <ul style="padding-left: 1.2em">
+                          <li>Your dataset will not be saved.</li>
+                        </ul>
+                      </v-tooltip>
+                    </v-card-title>
                     <v-card-text>
                       <v-form ref="form" v-model="modelNameValid">
                         <v-text-field v-model="modelName" label="Enter your models name" required :rules="modelNameRules"></v-text-field>
@@ -263,7 +316,7 @@
         this.selectedTrainCols = [];
         this.modelName = '';
         this.sent = false;
-        this.moreCatCols = []; // test
+        this.moreCatCols = [];
         this.modelNameValid = false;
         this.$refs.form.reset();
       }
