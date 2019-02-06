@@ -3,6 +3,8 @@
     <v-card-title class="title font-weight-light charts white--text">
       <v-icon color="white" class="mr-3">insert_chart</v-icon>
       <span>Charts</span>
+      <v-spacer></v-spacer>
+      <v-icon color="white" @click="close">close</v-icon>
     </v-card-title>
     <v-layout row wrap>
       <v-flex xs12 sm6 md6 :key="chart.name" v-for="(chart, idx) in availableCharts">
@@ -24,7 +26,8 @@
 </template>
 
 <script>
-  import Chart from 'chart.js'
+  import Chart from 'chart.js';
+  import { EventBus } from '../plugins/event-bus.js';
 
   export default {
     mounted() {
@@ -87,6 +90,9 @@
         else if (this.createdCharts[idx].displayer == -1)
           this.createdCharts[idx].displayer = this.chartTypes.length -1;
         this.createChart(idx, this.chartTypes[this.createdCharts[idx].displayer]);
+      },
+      close() {
+        EventBus.$emit('close', 1);
       }
     }
   }

@@ -3,6 +3,8 @@
     <v-card-title class="title font-weight-light datatable white--text">
       <v-icon color="white" class="mr-3">table_chart</v-icon>
       <span>Data Table</span>
+      <v-spacer></v-spacer>
+      <v-icon color="white" @click="close">close</v-icon>
     </v-card-title>
     <v-data-table class="elevation-2" :headers="headers" :items="dataset" :rows-per-page-items="[5, 10, 25]">
       <template slot="items" slot-scope="props">
@@ -13,10 +15,9 @@
 </template>
 
 <script>
-  export default {
-    data:() => ({
+  import { EventBus } from '../plugins/event-bus.js';
 
-    }),
+  export default {
     props: {
       columns: Array,
       dataset: Array
@@ -35,7 +36,9 @@
       }
     },
     methods: {
-
+      close() {
+        EventBus.$emit('close', 0);
+      }
     }
   }
 </script>

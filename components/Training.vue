@@ -167,24 +167,26 @@
             </v-stepper>
         </v-card>
       </v-flex>
+
       <v-flex xs12 sm6 md6 v-if="allInfos.valid">
-        <v-card flat color="datatable" @click.stop="dialogDataTable = true" style="cursor: pointer">
+        <v-card flat color="datatable" @click.stop="dialogs[0].show = true" style="cursor: pointer">
           <v-card-title class="title font-weight-light white--text">
             <v-icon color="white" class="mr-3">table_chart</v-icon>
             <span>Data Table</span>
           </v-card-title>
-          <v-dialog v-model="dialogDataTable" max-width="1250px">
+          <v-dialog v-model="dialogs[0].show" max-width="1250px">
             <datatable :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
           </v-dialog>
         </v-card>
       </v-flex>
+
       <v-flex xs12 sm6 md6 v-if="allInfos.valid">
-        <v-card flat color="charts" @click.stop="dialogChart = true" style="cursor: pointer">
+        <v-card flat color="charts" @click.stop="dialogs[1].show = true" style="cursor: pointer">
           <v-card-title class="title font-weight-light white--text">
             <v-icon color="white" class="mr-3">insert_chart</v-icon>
             <span>Charts</span>
           </v-card-title>
-          <v-dialog v-model="dialogChart" max-width="1250px">
+          <v-dialog v-model="dialogs[1].show" max-width="1250px">
             <charts :colInfos="allInfos.colInfos"></charts>
           </v-dialog>
         </v-card>
@@ -197,6 +199,7 @@
   import DataTable from './DataTable'
   import Charts from './Charts'
   import UploadButton from 'vuetify-upload-button';
+  import { EventBus } from "../plugins/event-bus.js";
 
   export default {
     components: {
@@ -210,8 +213,7 @@
         v => !!v || 'Model name is required',
         v => v != null && v.length <= 20 && v.length >= 3 || 'Model name must be between than 3 and 20 characters'
       ],
-      dialogDataTable: false,
-      dialogChart: false,
+      dialogs: [{ show: false }, { show: false }],
       sendError: { msg: 'This model name already exists. Please enter another name.', show: false },
       loaders: {
         upload: false,
@@ -232,6 +234,9 @@
       modelName: '',
       sent: false
     }),
+    created() {
+      EventBus.$on('close', val => { this.dialogs[val].show = false; });
+    },
     computed: {
       targetableCols() {
         let columns = [];

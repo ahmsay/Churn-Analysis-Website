@@ -59,24 +59,24 @@
               </v-flex>
 
               <v-flex xs12 sm12 md12 v-if="allInfos.valid || allInfos.dataset.length != 0">
-                <v-card flat color="datatable" @click.stop="dialogDataTable = true" style="cursor: pointer">
+                <v-card flat color="datatable" @click.stop="dialogs[0].show = true" style="cursor: pointer">
                   <v-card-title class="title font-weight-light white--text">
                     <v-icon color="white" class="mr-3">table_chart</v-icon>
                     <span>Data Table</span>
                   </v-card-title>
-                  <v-dialog v-model="dialogDataTable" max-width="1250px">
+                  <v-dialog v-model="dialogs[0].show" max-width="1250px">
                     <datatable :dataset="allInfos.dataset" :columns="allInfos.columns"></datatable>
                   </v-dialog>
                 </v-card>
               </v-flex>
 
               <v-flex xs12 sm12 md12 v-if="allInfos.valid || allInfos.dataset.length != 0">
-                <v-card flat color="charts" @click.stop="dialogChart = true" style="cursor: pointer">
+                <v-card flat color="charts" @click.stop="dialogs[1].show = true" style="cursor: pointer">
                   <v-card-title class="title font-weight-light white--text">
                     <v-icon color="white" class="mr-3">insert_chart</v-icon>
                     <span>Charts</span>
                   </v-card-title>
-                  <v-dialog v-model="dialogChart" max-width="1250px">
+                  <v-dialog v-model="dialogs[1].show" max-width="1250px">
                     <charts :colInfos="allInfos.colInfos"></charts>
                   </v-dialog>
                 </v-card>
@@ -107,13 +107,13 @@
     },
     created() {
       this.selectedModel = this.passedModel;
+      EventBus.$on('close', val => { this.dialogs[val].show = false; });
     },
     destroyed() {
       EventBus.$emit('reset', {});
     },
     data:() => ({
-      dialogDataTable: false,
-      dialogChart: false,
+      dialogs: [{ show: false }, { show: false }],
       loaders: {
         single: false,
         multi: false,
@@ -263,14 +263,14 @@
               this.allInfos.columns = columns;
               this.allInfos.dataset = dataset;
               this.predicted = true;
-              this.dialogDataTable = true;
+              this.dialogs[0].show = true;
             } else if (data.info == -1) {
               this.allInfos.error = this.allInfos.fileName + " doesn't match with " + this.selectedModel.modelname + ". Please try another dataset.";
               this.allInfos.valid = false;
             }
           });
         } else {
-          this.dialogDataTable = true;
+          this.dialogs[0].show = true;
         }
       }
     }
