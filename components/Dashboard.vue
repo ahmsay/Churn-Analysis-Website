@@ -21,10 +21,10 @@
                   </v-list-tile-sub-title>
                   <v-list-tile-sub-title>
                     <span class="font-weight-medium">Accuracy: </span>
-                    <span>{{ model.accuracy }}</span>
+                    <span>%{{ (model.accuracy * 100).toFixed(2) }}</span>
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-btn v-if="showDeleteBtn == idx" @click="deleteModel(model)" icon flat>
+                <v-btn v-if="showDeleteBtn == idx || ($vuetify.breakpoint.name == 'xs' || $vuetify.breakpoint.name == 'sm')" @click="deleteModel(model)" icon flat>
                   <v-icon color="yourmodels">close</v-icon>
                 </v-btn>
               </v-list-tile>
@@ -32,19 +32,40 @@
           </v-card-text>
         </v-card>
       </v-flex>
+      <v-flex v-if="false">
+        <charts :colInfos="modelCharts" :title="'Model Stats'"></charts>
+      </v-flex>
     </v-layout>
+    
   </v-container>
 </template>
 
 <script>
   import { EventBus } from "../plugins/event-bus.js";
+  import Charts from './Charts'
 
   export default {
+    components: {
+      'charts': Charts
+    },
     data:() => ({
       showDeleteBtn: -1,
     }),
     props: {
       models: Array
+    },
+    computed: {
+      modelCharts() {
+        let values = [];
+        let counts = [];
+        this.models.forEach(val => {
+          values.push(val.modelname);
+        });
+        this.models.forEach(val => {
+          counts.push((val.accuracy * 100).toFixed(2));
+        });
+        return [{ name: 'Accuracy', values: values, counts: counts }];
+      }
     },
     methods: {
       test() {

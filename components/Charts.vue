@@ -1,13 +1,13 @@
 <template>
-  <v-card>
+  <v-card flat>
     <v-card-title class="title font-weight-light charts white--text">
       <v-icon color="white" class="mr-3">insert_chart</v-icon>
-      <span>Charts</span>
+      <span>{{ title }}</span>
       <v-spacer></v-spacer>
       <v-icon color="white" @click="close">close</v-icon>
     </v-card-title>
     <v-layout row wrap>
-      <v-flex xs12 sm6 md6 :key="chart.name" v-for="(chart, idx) in availableCharts">
+      <v-flex xs12 sm6 md12 :key="chart.name" v-for="(chart, idx) in availableCharts">
         <v-card flat>
           <v-card-title class="title font-weight-light justify-center">{{ chart.name }}</v-card-title>
           <v-card-text>
@@ -44,7 +44,8 @@
     }),
     props: {
       colInfos: Array,
-      color: String
+      color: String,
+      title: String
     },
     computed: {
       availableCharts() {

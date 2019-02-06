@@ -77,7 +77,7 @@
                     <span>Charts</span>
                   </v-card-title>
                   <v-dialog v-model="dialogs[1].show" max-width="1250px">
-                    <charts :colInfos="allInfos.colInfos"></charts>
+                    <charts :colInfos="allInfos.colInfos" :title="'Charts'"></charts>
                   </v-dialog>
                 </v-card>
               </v-flex>

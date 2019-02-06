@@ -8,6 +8,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="this.$session.has('uname')">
+        <span v-if="statuslist.length != 0">{{ statuslist.length }}</span>
         <v-menu left offset-y max-height="230">
           <v-btn icon flat dark slot="activator">
             <v-icon>notifications</v-icon>

@@ -187,7 +187,7 @@
             <span>Charts</span>
           </v-card-title>
           <v-dialog v-model="dialogs[1].show" max-width="1250px">
-            <charts :colInfos="allInfos.colInfos"></charts>
+            <charts :colInfos="allInfos.colInfos" :title="'Charts'"></charts>
           </v-dialog>
         </v-card>
       </v-flex>
@@ -294,7 +294,7 @@
         this.catList.forEach(val => { cats.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         this.numList.forEach(val => { nums.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         let targetCol = this.allInfos.columns.indexOf(this.targetCol);
-        this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw'), isCustomized: false }).then(data => {
+        this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw'), isCustomized: 0 }).then(data => {
           this.loaders.send = false;
           if(data.info == 1) {
             this.step = 6;
