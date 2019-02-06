@@ -57,11 +57,11 @@
                     </v-card-title>
                     <v-card-text>
                       <v-select v-model="targetCol" :items="targetableCols" label="Target column"></v-select>
-                      <span class="error--text" v-if="targetableCols.length == 0">There is no proper target column in your dataset. Please upload another one.</span>
+                      <span class="error--text" v-if="targetableCols.length == 0 && step == 2">There is no proper target column in your dataset. Please upload another one.</span>
                     </v-card-text>
                   </v-card>
+                  <v-btn class="trainamodel white--text ml-0" @click="backTo(1)">Previous</v-btn>
                   <v-btn class="trainamodel white--text ml-0" :disabled="targetableCols.length==0" @click="step++">Next</v-btn>
-                  <v-btn flat @click="cancel">Cancel</v-btn>
                 </v-stepper-content>
 
                 <v-stepper-content step="3">
@@ -81,8 +81,8 @@
                       <v-btn class="trainamodel white--text ml-0" @click="selectAll">Select All</v-btn>
                     </v-card-text>
                   </v-card>
+                  <v-btn class="trainamodel white--text ml-0" @click="backTo(2)">Previous</v-btn>
                   <v-btn class="trainamodel white--text ml-0" :disabled="!colsSelected" @click="step++">Next</v-btn>
-                  <v-btn flat @click="cancel">Cancel</v-btn>
                 </v-stepper-content>
 
                 <v-stepper-content step="4">
@@ -111,8 +111,8 @@
                       <v-select v-if="catable.length != 0" v-model="moreCatCols" :items="catable" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
                     </v-card-text>
                   </v-card>
+                  <v-btn class="trainamodel white--text ml-0" @click="backTo(3)">Previous</v-btn>
                   <v-btn class="trainamodel white--text ml-0" @click="step++">Next</v-btn>
-                  <v-btn flat @click="cancel">Cancel</v-btn>
                 </v-stepper-content>
 
                 <v-stepper-content step="5">
@@ -150,8 +150,8 @@
                       <span class="error--text" v-if="sendError.show">{{ sendError.msg }}</span>
                     </v-card-text>
                   </v-card>
+                  <v-btn class="trainamodel white--text ml-0" @click="backTo(4)">Previous</v-btn>
                   <v-btn class="trainamodel white--text ml-0" :loading="loaders.send" :disabled="loaders.send || !modelNameValid" @click="sendUserPrefs">Send</v-btn>
-                  <v-btn flat @click="cancel">Cancel</v-btn>
                 </v-stepper-content>
 
                 <v-stepper-content step="6">
@@ -161,7 +161,7 @@
                       <p class="mb-0 subheading">Your model is being trained.</p>
                     </v-card-text>
                   </v-card>
-                  <v-btn class="ml-0 trainamodel white--text" @click="cancel">Train another model</v-btn>
+                  <v-btn class="ml-0 trainamodel white--text" @click="backTo(1)">Train another model</v-btn>
                 </v-stepper-content>
               </v-stepper-items>
             </v-stepper>
@@ -289,7 +289,8 @@
         this.catList.forEach(val => { cats.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         this.numList.forEach(val => { nums.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         let targetCol = this.allInfos.columns.indexOf(this.targetCol);
-        this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw')}).then(data => {
+        console.log({ modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw') });
+        this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
           this.loaders.send = false;
           if(data.info == 1) {
             this.step = 6;
@@ -302,23 +303,37 @@
           }
         });
       },
-      cancel() {
-        this.allInfos = {
-          error: '',
-          valid: false,
-          fileName: '',
-          columns: [],
-          dataset: [],
-          colInfos: [],
-          chartInfos: []
-        },
-        this.step = 1;
-        this.selectedTrainCols = [];
-        this.modelName = '';
-        this.sent = false;
-        this.moreCatCols = [];
-        this.modelNameValid = false;
-        this.$refs.form.reset();
+      backTo(step) {
+        this.step = step;
+        switch(step) {
+          case 1:
+            this.allInfos = {
+              error: '',
+              valid: false,
+              fileName: '',
+              columns: [],
+              dataset: [],
+              colInfos: [],
+              chartInfos: []
+            };
+            this.selectedTrainCols = [];
+            this.moreCatCols = [];
+            this.modelName = '';
+            this.modelNameValid = false;
+            this.$refs.form.reset();
+            this.sent = false;
+            break;
+          case 2:
+            this.selectedTrainCols = [];
+            break;
+          case 3:
+            this.moreCatCols = [];
+            break;
+          case 4:
+            this.modelName = '';
+            this.modelNameValid = false;
+            this.$refs.form.reset();
+        }
       }
     }
   }
