@@ -36,8 +36,7 @@ export default {
             fileName: '',
             columns: [],
             dataset: [],
-            colInfos: [],
-            chartInfos: []
+            colInfos: []
           };
           if (file != undefined) {
             fileResult.fileName = file.name;
@@ -61,7 +60,6 @@ export default {
                   fileResult.dataset = dataset;
                   if (action == 'feedback') {
                     this.$post('/columnsInfos', { columns: columns, dataset: dataset, username: uname, password: passw }).then(data => {
-                      console.log(data);
                       if (data.info == 1) {
                         fileResult.colInfos = data.colInfos;
                         fileResult.valid = true;
@@ -71,17 +69,12 @@ export default {
                         resolve(fileResult);
                       }
                     });
-                    let chartInfos = [
-                      { name: 'Geography', labels: ['France', 'Germany', 'Spain'], data: [5014, 2509, 2477] },
-                      { name: 'NumOfProducts', labels: ['1', '2', '3', '4'], data: [5084, 4590, 266, 60] }
-                    ]
-                    fileResult.chartInfos = chartInfos;
                   } else if (action == 'predict') {
-                    let chartInfos = [
-                      { name: 'Geography', labels: ['France', 'Germany', 'Spain'], data: [5014, 2509, 2477] },
-                      { name: 'NumOfProducts', labels: ['1', '2', '3', '4'], data: [5084, 4590, 266, 60] }
+                    let colInfos = [
+                      { name: 'Geography', values: ['France', 'Germany', 'Spain'], counts: [5014, 2509, 2477] },
+                      { name: 'NumOfProducts', values: ['1', '2', '3', '4'], counts: [5084, 4590, 266, 60] }
                     ]
-                    fileResult.chartInfos = chartInfos;
+                    fileResult.colInfos = colInfos;
                     fileResult.valid = true;
                     resolve(fileResult);
                   }

@@ -185,7 +185,7 @@
             <span>Charts</span>
           </v-card-title>
           <v-dialog v-model="dialogChart" max-width="1250px">
-            <charts :chartInfos="allInfos.chartInfos"></charts>
+            <charts :colInfos="allInfos.colInfos"></charts>
           </v-dialog>
         </v-card>
       </v-flex>
@@ -223,8 +223,7 @@
         fileName: '',
         columns: [],
         dataset: [],
-        colInfos: [],
-        chartInfos: []
+        colInfos: []
       },
       targetCol: '',
       step: 0,
@@ -237,7 +236,7 @@
       targetableCols() {
         let columns = [];
         this.allInfos.colInfos.forEach(val => {
-          if (val.number == 2)
+          if (val.values.length == 2)
             columns.push(val.name);
         });
         if (columns.length != 0) {
@@ -249,7 +248,7 @@
       allTrainCols() {
         let col = this.targetCol;
         return this.allInfos.colInfos.filter(c => {
-          return c.name != col && (c.cat == 0 || c.number <= 30)
+          return c.name != col && (c.cat == 0 || c.values.length <= 30)
         })
       },
       colsSelected() {
@@ -262,12 +261,13 @@
         return this.selectedTrainCols.filter(c => { return c.cat == 0 })
       },
       catable() {
-        return this.numList.filter(c => { return c.number <= 30 })
+        return this.numList.filter(c => { return c.values.length <= 30 })
       }
     },
     methods: {
       upload(file) {
         this.loaders.upload = true;
+        this.allInfos.valid = false;
         this.$parse(file, 'feedback', this.$session.get('uname'), this.$session.get('passw')).then(result => {
           this.loaders.upload = false;
           this.allInfos = result;
@@ -289,8 +289,7 @@
         this.catList.forEach(val => { cats.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         this.numList.forEach(val => { nums.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         let targetCol = this.allInfos.columns.indexOf(this.targetCol);
-        console.log({ modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw') });
-        this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+        this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw'), isCustomized: false }).then(data => {
           this.loaders.send = false;
           if(data.info == 1) {
             this.step = 6;
@@ -313,8 +312,7 @@
               fileName: '',
               columns: [],
               dataset: [],
-              colInfos: [],
-              chartInfos: []
+              colInfos: []
             };
             this.selectedTrainCols = [];
             this.moreCatCols = [];

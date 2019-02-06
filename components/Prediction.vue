@@ -50,7 +50,7 @@
                 <upload-btn v-if="!loaders.upload" block class="px-0 white--text" color="multipred" :ripple="false" :fileChangedCallback="upload"></upload-btn>
                 <v-btn v-if="loaders.upload" block :disabled="true" :loading="true">Upload</v-btn>
               </v-flex>
-              <v-flex xs6 sm12 md6 v-if="allInfos.valid || allInfos.dataset.length != 0">
+              <v-flex xs6 sm12 md6 v-if="allInfos.valid">
                 <v-btn block class="multipred white--text mb-1" :loading="loaders.multi" :disabled="loaders.multi" @click="predictMulti">Predict</v-btn>
               </v-flex>
 
@@ -58,8 +58,8 @@
                 <p class="mb-0 error--text">{{ allInfos.error }}</p>
               </v-flex>
 
-              <v-flex xs12 sm12 md12>
-                <v-card v-if="allInfos.valid || allInfos.dataset.length != 0" flat color="datatable" @click.stop="dialogDataTable = true" style="cursor: pointer">
+              <v-flex xs12 sm12 md12 v-if="allInfos.valid || allInfos.dataset.length != 0">
+                <v-card flat color="datatable" @click.stop="dialogDataTable = true" style="cursor: pointer">
                   <v-card-title class="title font-weight-light white--text">
                     <v-icon color="white" class="mr-3">table_chart</v-icon>
                     <span>Data Table</span>
@@ -70,19 +70,19 @@
                 </v-card>
               </v-flex>
 
-              <v-flex xs12 sm12 md12>
-                <v-card v-if="allInfos.valid || allInfos.dataset.length != 0" flat color="charts" @click.stop="dialogChart = true" style="cursor: pointer">
+              <v-flex xs12 sm12 md12 v-if="allInfos.valid || allInfos.dataset.length != 0">
+                <v-card flat color="charts" @click.stop="dialogChart = true" style="cursor: pointer">
                   <v-card-title class="title font-weight-light white--text">
                     <v-icon color="white" class="mr-3">insert_chart</v-icon>
                     <span>Charts</span>
                   </v-card-title>
                   <v-dialog v-model="dialogChart" max-width="1250px">
-                    <charts :chartInfos="allInfos.chartInfos"></charts>
+                    <charts :colInfos="allInfos.colInfos"></charts>
                   </v-dialog>
                 </v-card>
               </v-flex>
 
-              <v-flex xs12 sm12 md12 v-if="predicted">
+              <v-flex xs12 sm12 md12 v-if="false">
                 <v-btn class="multipred white--text" block>Save</v-btn>
               </v-flex>
             </v-layout>
@@ -126,8 +126,7 @@
         fileName: '',
         columns: [],
         dataset: [],
-        colInfos: [],
-        chartInfos: []
+        colInfos: []
       },
       filled: true,
       predicted: false,
@@ -171,10 +170,10 @@
           fileName: '',
           columns: [],
           dataset: [],
-          colInfos: [],
-          chartInfos: []
+          colInfos: []
         }
         this.filled = true;
+        this.predicted = false;
       },
       encode(row, idx, len) {
         if (len < 3) {
