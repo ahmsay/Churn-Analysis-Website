@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dashboard :models="models" v-if="bottomNav == 0"></dashboard>
+    <dashboard :models.sync="models" v-if="bottomNav == 0"></dashboard>
     <training v-if="bottomNav == 1"></training>
     <prediction :models="models" :passedModel="passedModel" v-if="bottomNav == 2"></prediction>
     <!--<v-btn @click="test">test</v-btn>-->
@@ -40,8 +40,6 @@
         this.$post('/modelList', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
           if (data.info == 1) {
             this.models = data.models;
-          } else if (data.info == 0) {
-            console.log(data);
           } else if (data.info == -1) {
             console.log(data);
           }

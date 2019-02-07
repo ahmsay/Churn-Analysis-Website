@@ -24,12 +24,31 @@
                     <span>%{{ (model.accuracy * 100).toFixed(2) }}</span>
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-btn v-if="showDeleteBtn == idx || ($vuetify.breakpoint.name == 'xs' || $vuetify.breakpoint.name == 'sm')" @click="deleteModel(model)" icon flat>
+                <v-btn v-if="showDeleteBtn == idx || ($vuetify.breakpoint.name == 'xs' || $vuetify.breakpoint.name == 'sm')" :loading="loaders.remove && beingRemoved.modelname == model.modelname" :disabled="loaders.remove && beingRemoved.modelname == model.modelname" @click.stop="showDialog(model)" icon flat>
                   <v-icon color="yourmodels">close</v-icon>
                 </v-btn>
               </v-list-tile>
             </v-list>
           </v-card-text>
+          <v-dialog v-model="dialog" max-width="400px">
+            <v-card>
+              <v-card-title class="error white--text">
+                <v-icon color="white" class="mr-3">delete</v-icon>
+                <span class="title font-weight-light">Delete Model</span>
+              </v-card-title>
+              <v-card-text>
+                <span>Delete {{ beingRemoved.modelname }} ?</span>
+              </v-card-text>
+              <v-layout justify-end class="pr-2 pb-2">
+                <v-btn class="mr-0" flat @click="dialog = false">Cancel</v-btn>
+                <v-btn class="error white--text" @click="removeModel">Delete</v-btn>
+              </v-layout>
+            </v-card>
+          </v-dialog>
+          <v-snackbar v-model="snackbar" top :timeout="3000">
+            <span>Model deleted.</span>
+            <v-btn color="pink" flat @click="snackbar = false">Close</v-btn>
+          </v-snackbar>
         </v-card>
       </v-flex>
       <v-flex v-if="false">
@@ -49,7 +68,13 @@
       'charts': Charts
     },
     data:() => ({
+      dialog: false,
+      snackbar: false,
       showDeleteBtn: -1,
+      beingRemoved: { modelname: '' },
+      loaders: {
+        remove: false
+      }
     }),
     props: {
       models: Array
@@ -71,14 +96,28 @@
       test() {
 
       },
+      showDialog(model) {
+        this.dialog = true;
+        this.beingRemoved = model;
+      },
       train() {
         EventBus.$emit('train', 1);
       },
       predict(model) {
         EventBus.$emit('predict', model);
       },
-      deleteModel(model) {
-        console.log(model);
+      removeModel() {
+        this.loaders.remove = true;
+        this.dialog = false;
+        let model = this.beingRemoved;
+        this.$post('/removeModel', { username: this.$session.get('uname'), password: this.$session.get('passw'), modelname: model.modelname }).then(data => {
+          this.loaders.remove = false;
+          this.beingRemoved = { modelname: '' };
+          if (data.info == 1) {
+            this.snackbar = true;
+            this.models.splice(this.models.indexOf(model), 1);
+          }
+        });
       }
     }
   }

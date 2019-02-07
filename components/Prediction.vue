@@ -32,7 +32,7 @@
               <v-btn class="singlepred white--text ml-1" :loading="loaders.single" :disabled="loaders.single" @click="predictSingle">Predict</v-btn>
               <span class="subheading font-weight-medium">{{ targetCol }}: </span>
               <v-chip v-if="result != ''" disabled class="singlepred white--text">{{ result }}</v-chip>
-              <span class="ml-2 error--text" v-if="!filled">Please fill all values.</span>
+              <span class="ml-2 error--text" v-if="!filled.value">{{ filled.msg }}</span>
             </v-layout>
           </v-card-text>
         </v-card>
@@ -50,6 +50,7 @@
                 <upload-btn v-if="!loaders.upload" block class="px-0 white--text" color="multipred" :ripple="false" :fileChangedCallback="upload"></upload-btn>
                 <v-btn v-if="loaders.upload" block :disabled="true" :loading="true">Upload</v-btn>
               </v-flex>
+
               <v-flex xs6 sm12 md6 v-if="allInfos.valid">
                 <v-btn block class="multipred white--text mb-1" :loading="loaders.multi" :disabled="loaders.multi" @click="predictMulti">Predict</v-btn>
               </v-flex>
@@ -128,7 +129,7 @@
         dataset: [],
         colInfos: []
       },
-      filled: true,
+      filled: { msg: '', value: true },
       predicted: false,
       result : ''
     }),
@@ -172,7 +173,7 @@
           dataset: [],
           colInfos: []
         }
-        this.filled = true;
+        this.filled.value = true;
         this.predicted = false;
       },
       encode(row, idx, len) {
@@ -199,8 +200,9 @@
           if (this.catCols[i].selected == null)
             filled = false;
         }
-        this.filled = filled;
-        if (this.filled) {
+        this.filled.msg = 'Please fill all values.';
+        this.filled.value = filled;
+        if (this.filled.value) {
           let row = [];
           this.catCols.forEach(val => {
             let idx = val.options.values.indexOf(val.selected);
@@ -212,8 +214,12 @@
             this.loaders.single = false;
             if (data.info == 1) {
               this.result = this.selectedModel.targetCol.values[data.prediction[0]];
+            } else if (data.info == 0) {
+              this.filled.msg = 'You have reached your limit.';
+              this.filled.value = true;
             } else if (data.info == -1) {
-              console.log(data);
+              this.filled.msg = 'Server error.';
+              this.filled.value = true;
             }
           });
         } else {
@@ -264,6 +270,9 @@
               this.allInfos.dataset = dataset;
               this.predicted = true;
               this.dialogs[0].show = true;
+            } else if (data.info == 0) {
+              this.allInfos.error = 'You have reached your limit.';
+              this.allInfos.valid = false;
             } else if (data.info == -1) {
               this.allInfos.error = this.allInfos.fileName + " doesn't match with " + this.selectedModel.modelname + ". Please try another dataset.";
               this.allInfos.valid = false;

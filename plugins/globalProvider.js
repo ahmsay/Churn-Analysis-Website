@@ -66,6 +66,9 @@ export default {
                         fileResult.colInfos = data.colInfos;
                         fileResult.valid = true;
                         resolve(fileResult);
+                      } else if (data.info == 0) {
+                        fileResult.error = 'You have reached your limit.';
+                        resolve(fileResult);
                       } else if (data.info == -1) {
                         fileResult.error = 'There is something wrong with your dataset. Please check it or try another one.';
                         resolve(fileResult);
@@ -90,9 +93,12 @@ export default {
                   fileResult.dataset = dataset;
                   if (action == 'feedback') {
                   this.$post('/columnsInfos', { columns: columns, dataset: dataset, username: uname, password: passw }).then(data => {
-                      if (data.info == 1) {
+                    if (data.info == 1) {
                         fileResult.colInfos = data.colInfos;
                         fileResult.valid = true;
+                        resolve(fileResult);
+                      } else if (data.info == 0) {
+                        fileResult.error = 'You have reached your limit.';
                         resolve(fileResult);
                       } else if (data.info == -1) {
                         fileResult.error = 'There is something wrong with your dataset. Please check it or try another one.';
@@ -110,7 +116,7 @@ export default {
                   }
                 });
               } else {
-                fileResult.error = 'This file type is not supported.';
+                fileResult.error = "File type '." + ext[1] + "' is not supported.";
                 resolve(fileResult);
               }
             } else {

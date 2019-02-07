@@ -129,7 +129,7 @@
                     </v-card-title>
                     <v-card-text>
                       <v-form ref="form" v-model="modelNameValid">
-                        <v-text-field v-model="modelName" label="Enter your models name" required :rules="modelNameRules"></v-text-field>
+                        <v-text-field v-model="modelName" @keydown.enter="sendUserPrefs" label="Enter your models name" required :rules="modelNameRules"></v-text-field>
                       </v-form>
                       <p class="mb-0">
                         <span class="subheading font-weight-medium">Dataset: </span>
@@ -214,7 +214,7 @@
         v => v != null && v.length <= 20 && v.length >= 3 || 'Model name must be between than 3 and 20 characters'
       ],
       dialogs: [{ show: false }, { show: false }],
-      sendError: { msg: 'This model name already exists. Please enter another name.', show: false },
+      sendError: { msg: '', show: false },
       loaders: {
         upload: false,
         send: false
@@ -301,9 +301,11 @@
             this.sent = true;
             this.sendError.show = false;
           } else if (data.info == 0) {
+            this.sendError.msg = data.details;
             this.sendError.show = true;
           } else if (data.info == -1) {
-            console.log(data);
+            this.sendError.msg = 'Server error.';
+            this.sendError.show = true;
           }
         });
       },
@@ -335,6 +337,7 @@
           case 4:
             this.modelName = '';
             this.modelNameValid = false;
+            this.sendError.show = false;
             this.$refs.form.reset();
         }
       }
