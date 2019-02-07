@@ -7,7 +7,7 @@
       <v-icon color="white" @click="close">close</v-icon>
     </v-card-title>
     <v-layout row wrap>
-      <v-flex xs12 sm6 md12 :key="chart.name" v-for="(chart, idx) in availableCharts">
+      <v-flex xs12 sm6 md6 :key="chart.name" v-for="(chart, idx) in availableCharts">
         <v-card flat>
           <v-card-title class="title font-weight-light justify-center">{{ chart.name }}</v-card-title>
           <v-card-text>
