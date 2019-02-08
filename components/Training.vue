@@ -147,6 +147,10 @@
                         <span class="subheading font-weight-medium">Target column: </span>
                         <v-chip small disabled class="trainamodel white--text">{{ targetCol }}</v-chip>
                       </p>
+                      <v-checkbox v-model="isCustomized" @change="isCustomized ? dialogs[2].show = true : dialogs[2].show = false" label="Train with custom parameters" :height="0" color="trainamodel"></v-checkbox>
+                      <v-dialog v-model="dialogs[2].show" max-width="600px" persistent>
+                        <custom-model v-if="step == 5"></custom-model>
+                      </v-dialog>
                       <span class="error--text" v-if="sendError.show">{{ sendError.msg }}</span>
                     </v-card-text>
                   </v-card>
@@ -200,12 +204,14 @@
   import Charts from './Charts'
   import UploadButton from 'vuetify-upload-button';
   import { EventBus } from "../plugins/event-bus.js";
+  import CustomModel from './CustomModel';
 
   export default {
     components: {
       'datatable': DataTable,
       'charts': Charts,
-      'upload-btn': UploadButton
+      'upload-btn': UploadButton,
+      'custom-model': CustomModel
     },
     data:() => ({
       modelNameValid: false,
@@ -213,7 +219,7 @@
         v => !!v || 'Model name is required',
         v => v != null && v.length <= 20 && v.length >= 3 || 'Model name must be between than 3 and 20 characters'
       ],
-      dialogs: [{ show: false }, { show: false }],
+      dialogs: [{ name: 'datatable', show: false }, { name:'charts', show: false }, { name:'custommodel', show: false }],
       sendError: { msg: '', show: false },
       loaders: {
         upload: false,
@@ -232,10 +238,20 @@
       selectedTrainCols: [],
       moreCatCols: [],
       modelName: '',
-      sent: false
+      sent: false,
+      isCustomized: false,
+      selectedParams: {}
     }),
     created() {
       EventBus.$on('close', val => { this.dialogs[val].show = false; });
+      EventBus.$on('canceled', val => {
+        this.selectedParams = val;
+        this.isCustomized = false;
+      });
+      EventBus.$on('applied', val => {
+        this.selectedParams = val;
+        this.isCustomized = true;
+      });
     },
     computed: {
       targetableCols() {
@@ -294,7 +310,11 @@
         this.catList.forEach(val => { cats.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         this.numList.forEach(val => { nums.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         let targetCol = this.allInfos.columns.indexOf(this.targetCol);
-        this.$post('/train', { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw'), isCustomized: 0 }).then(data => {
+        let trainParams = { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw'), isCustomized: this.isCustomized ? 1 : 0 };
+        Object.keys(this.selectedParams).forEach(key => {
+          trainParams[key] = this.selectedParams[key];
+        });
+        this.$post('/train', trainParams).then(data => {
           this.loaders.send = false;
           if(data.info == 1) {
             this.step = 6;
@@ -327,6 +347,8 @@
             this.modelNameValid = false;
             this.$refs.form.reset();
             this.sent = false;
+            this.isCustomized = false;
+            this.selectedParams = {};
             break;
           case 2:
             this.selectedTrainCols = [];
@@ -339,6 +361,8 @@
             this.modelNameValid = false;
             this.sendError.show = false;
             this.$refs.form.reset();
+            this.isCustomized = false;
+            this.selectedParams = {};
         }
       }
     }
