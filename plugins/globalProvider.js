@@ -30,7 +30,7 @@ export default {
       	});
       }
 
-      Vue.prototype.$parse = function(file, action, uname, passw) {
+      Vue.prototype.$parse = function(file, uname, passw) {
         return new Promise(resolve => {
           let fileResult = {
             error: '',
@@ -60,29 +60,19 @@ export default {
                   }
                   fileResult.columns = columns;
                   fileResult.dataset = dataset;
-                  if (action == 'feedback') {
-                    this.$post('/columnsInfos', { columns: columns, dataset: dataset, username: uname, password: passw }).then(data => {
-                      if (data.info == 1) {
-                        fileResult.colInfos = data.colInfos;
-                        fileResult.valid = true;
-                        resolve(fileResult);
-                      } else if (data.info == 0) {
-                        fileResult.error = 'You have reached your limit.';
-                        resolve(fileResult);
-                      } else if (data.info == -1) {
-                        fileResult.error = 'There is something wrong with your dataset. Please check it or try another one.';
-                        resolve(fileResult);
-                      }
-                    });
-                  } else if (action == 'predict') {
-                    let colInfos = [
-                      { name: 'Geography', values: ['France', 'Germany', 'Spain'], counts: [5014, 2509, 2477] },
-                      { name: 'NumOfProducts', values: ['1', '2', '3', '4'], counts: [5084, 4590, 266, 60] }
-                    ]
-                    fileResult.colInfos = colInfos;
-                    fileResult.valid = true;
-                    resolve(fileResult);
-                  }
+                  this.$post('/columnsInfos', { columns: columns, dataset: dataset, username: uname, password: passw }).then(data => {
+                    if (data.info == 1) {
+                      fileResult.colInfos = data.colInfos;
+                      fileResult.valid = true;
+                      resolve(fileResult);
+                    } else if (data.info == 0) {
+                      fileResult.error = 'You have reached your limit.';
+                      resolve(fileResult);
+                    } else if (data.info == -1) {
+                      fileResult.error = 'There is something wrong with your dataset. Please check it or try another one.';
+                      resolve(fileResult);
+                    }
+                  });
                 }.bind(this), false);
                 reader.readAsText(file);
               } else if (ext[1] == 'xlsx') {
@@ -91,29 +81,19 @@ export default {
                   let dataset = rows;
                   fileResult.columns = columns;
                   fileResult.dataset = dataset;
-                  if (action == 'feedback') {
                   this.$post('/columnsInfos', { columns: columns, dataset: dataset, username: uname, password: passw }).then(data => {
                     if (data.info == 1) {
-                        fileResult.colInfos = data.colInfos;
-                        fileResult.valid = true;
-                        resolve(fileResult);
-                      } else if (data.info == 0) {
-                        fileResult.error = 'You have reached your limit.';
-                        resolve(fileResult);
-                      } else if (data.info == -1) {
-                        fileResult.error = 'There is something wrong with your dataset. Please check it or try another one.';
-                        resolve(fileResult);
-                      }
-                    });
-                  } else if (action == 'predict') {
-                    let colInfos = [
-                      { name: 'Geography', values: ['France', 'Germany', 'Spain'], counts: [5014, 2509, 2477] },
-                      { name: 'NumOfProducts', values: ['1', '2', '3', '4'], counts: [5084, 4590, 266, 60] }
-                    ]
-                    fileResult.colInfos = colInfos;
-                    fileResult.valid = true;
-                    resolve(fileResult);
-                  }
+                      fileResult.colInfos = data.colInfos;
+                      fileResult.valid = true;
+                      resolve(fileResult);
+                    } else if (data.info == 0) {
+                      fileResult.error = 'You have reached your limit.';
+                      resolve(fileResult);
+                    } else if (data.info == -1) {
+                      fileResult.error = 'There is something wrong with your dataset. Please check it or try another one.';
+                      resolve(fileResult);
+                    }
+                  });
                 });
               } else {
                 fileResult.error = "File type '." + ext[1] + "' is not supported.";

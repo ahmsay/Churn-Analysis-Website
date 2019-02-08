@@ -273,7 +273,7 @@
       upload(file) {
         this.loaders.upload = true;
         this.allInfos.valid = false;
-        this.$parse(file, 'feedback', this.$session.get('uname'), this.$session.get('passw')).then(result => {
+        this.$parse(file, this.$session.get('uname'), this.$session.get('passw')).then(result => {
           this.loaders.upload = false;
           this.allInfos = result;
         });

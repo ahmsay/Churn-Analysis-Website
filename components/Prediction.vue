@@ -231,7 +231,7 @@
       },
       upload(file) {
         this.loaders.upload = true;
-        this.$parse(file, 'predict').then(result => {
+        this.$parse(file, this.$session.get('uname'), this.$session.get('passw')).then(result => {
           this.loaders.upload = false;
           this.allInfos = result;
         });
