@@ -83,8 +83,8 @@
                 </v-card>
               </v-flex>
 
-              <v-flex xs12 sm12 md12 v-if="false">
-                <v-btn class="multipred white--text" block>Save</v-btn>
+              <v-flex xs12 sm12 md12 v-if="predicted">
+                <v-btn class="multipred white--text" block @click="save" :loading="loaders.save" :disabled="loaders.save">Save</v-btn>
               </v-flex>
             </v-layout>
           </v-card-text>
@@ -99,6 +99,8 @@
   import DataTable from './DataTable';
   import Charts from './Charts';
   import UploadButton from 'vuetify-upload-button';
+  import XLSX from 'xlsx';
+  import saveAs from 'file-saver';
 
   export default {
     components: {
@@ -118,7 +120,8 @@
       loaders: {
         single: false,
         multi: false,
-        upload: false
+        upload: false,
+        save: false
       },
       selectedModel: {},
       allInfos: {
@@ -281,6 +284,22 @@
         } else {
           this.dialogs[0].show = true;
         }
+      },
+      save() {
+        let wb = XLSX.utils.book_new();
+        wb.SheetNames.push('results');
+        let results = this.allInfos.dataset;
+        results.unshift(this.allInfos.columns);
+        let ws = XLSX.utils.aoa_to_sheet(results);
+        wb.Sheets['results'] = ws;
+        var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary', compression: true });
+        saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), this.selectedModel.modelname + '_results' + '.xlsx');
+      },
+      s2ab(s) {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (let i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+        return buf;
       }
     }
   }
