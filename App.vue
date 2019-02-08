@@ -9,7 +9,7 @@
       <v-spacer></v-spacer>
       <div v-if="this.$session.has('uname')">
         <span v-if="notifications.length != 0">{{ notifications.length }}</span>
-        <v-menu left offset-y max-height="230" :close-on-content-click="false">
+        <v-menu left offset-y max-height="232" :close-on-content-click="false">
           <v-btn icon flat dark slot="activator">
             <v-icon>notifications</v-icon>
           </v-btn>

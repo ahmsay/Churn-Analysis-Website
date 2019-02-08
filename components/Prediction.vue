@@ -60,7 +60,7 @@
               </v-flex>
 
               <v-flex xs12 sm12 md12 v-if="allInfos.valid || allInfos.dataset.length != 0">
-                <v-card flat color="datatable" @click.stop="dialogs[0].show = true" style="cursor: pointer">
+                <v-card flat ripple color="datatable" @click.stop="dialogs[0].show = true" style="cursor: pointer">
                   <v-card-title class="title font-weight-light white--text">
                     <v-icon color="white" class="mr-3">table_chart</v-icon>
                     <span>Data Table</span>
@@ -72,7 +72,7 @@
               </v-flex>
 
               <v-flex xs12 sm12 md12 v-if="allInfos.valid || allInfos.dataset.length != 0">
-                <v-card flat color="charts" @click.stop="dialogs[1].show = true" style="cursor: pointer">
+                <v-card flat ripple color="charts" @click.stop="dialogs[1].show = true" style="cursor: pointer">
                   <v-card-title class="title font-weight-light white--text">
                     <v-icon color="white" class="mr-3">insert_chart</v-icon>
                     <span>Charts</span>

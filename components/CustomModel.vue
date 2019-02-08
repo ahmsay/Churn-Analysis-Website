@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="trainamodel white--text">
-      <v-icon color="white" class="mr-3">gps_fixed</v-icon>
+      <v-icon color="white" class="mr-3">tune</v-icon>
       <span class="title font-weight-light">Custom Model</span>
     </v-card-title>
     <v-card-text>

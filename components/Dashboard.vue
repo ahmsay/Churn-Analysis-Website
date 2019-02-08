@@ -4,7 +4,7 @@
       <v-flex xs12 sm6 md6>
         <v-card flat>
           <v-card-title class="title font-weight-light yourmodels white--text mb-0">
-            <v-icon color="white" class="mr-3">cloud</v-icon>
+            <v-icon color="white" class="mr-3">library_books</v-icon>
             <span>Your Models</span>
             <v-spacer></v-spacer>
             <v-icon color="white" @click="train">add_circle</v-icon>

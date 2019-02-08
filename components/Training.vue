@@ -35,8 +35,11 @@
                       </v-tooltip>
                     </v-card-title>
                     <v-card-text>
-                      <upload-btn v-if="!loaders.upload" class="px-0 white--text" color="trainamodel" :ripple="false" :fileChangedCallback="upload"></upload-btn>
-                      <v-btn v-if="loaders.upload" :disabled="true" :loading="true">Upload</v-btn>
+                      <v-layout align-center>
+                        <upload-btn v-if="!loaders.upload" class="px-0 white--text" color="trainamodel" :ripple="false" :fileChangedCallback="upload"></upload-btn>
+                        <v-btn v-if="loaders.upload" :disabled="true" :loading="true">Upload</v-btn>
+                        <span>{{ allInfos.fileName }}</span>
+                      </v-layout>
                       <p class="mb-0 mt-2 error--text" v-if="allInfos.error != ''">{{ allInfos.error }}</p>
                     </v-card-text>
                   </v-card>
@@ -61,7 +64,7 @@
                     </v-card-text>
                   </v-card>
                   <v-btn class="trainamodel white--text ml-0" @click="backTo(1)">Previous</v-btn>
-                  <v-btn class="trainamodel white--text ml-0" :disabled="targetableCols.length==0" @click="step++">Next</v-btn>
+                  <v-btn class="trainamodel white--text ml-0" :disabled="targetableCols.length==0" @click="step3">Next</v-btn>
                 </v-stepper-content>
 
                 <v-stepper-content step="3">
@@ -78,7 +81,6 @@
                     </v-card-title>
                     <v-card-text>
                       <v-select v-model="selectedTrainCols" :items="allTrainCols" item-text="name" label="Select" :menu-props="{ maxHeight: '400' }" return-object multiple></v-select>
-                      <v-btn class="trainamodel white--text ml-0" @click="selectAll">Select All</v-btn>
                     </v-card-text>
                   </v-card>
                   <v-btn class="trainamodel white--text ml-0" @click="backTo(2)">Previous</v-btn>
@@ -129,7 +131,7 @@
                     </v-card-title>
                     <v-card-text>
                       <v-form ref="form" v-model="modelNameValid">
-                        <v-text-field v-model="modelName" @keydown.enter="sendUserPrefs" label="Enter your models name" required :rules="modelNameRules"></v-text-field>
+                        <v-text-field v-model="modelName" label="Enter your models name" required :rules="modelNameRules"></v-text-field>
                       </v-form>
                       <p class="mb-0">
                         <span class="subheading font-weight-medium">Dataset: </span>
@@ -173,7 +175,7 @@
       </v-flex>
 
       <v-flex xs12 sm6 md6 v-if="allInfos.valid">
-        <v-card flat color="datatable" @click.stop="dialogs[0].show = true" style="cursor: pointer">
+        <v-card flat ripple color="datatable" @click.stop="dialogs[0].show = true" style="cursor: pointer">
           <v-card-title class="title font-weight-light white--text">
             <v-icon color="white" class="mr-3">table_chart</v-icon>
             <span>Data Table</span>
@@ -185,7 +187,7 @@
       </v-flex>
 
       <v-flex xs12 sm6 md6 v-if="allInfos.valid">
-        <v-card flat color="charts" @click.stop="dialogs[1].show = true" style="cursor: pointer">
+        <v-card flat ripple color="charts" @click.stop="dialogs[1].show = true" style="cursor: pointer">
           <v-card-title class="title font-weight-light white--text">
             <v-icon color="white" class="mr-3">insert_chart</v-icon>
             <span>Charts</span>
@@ -294,11 +296,12 @@
           this.allInfos = result;
         });
       },
-      selectAll() {
+      step3() {
         this.allTrainCols.forEach(val => {
           if (!this.selectedTrainCols.includes(val))
             this.selectedTrainCols.push(val);
         });
+        this.step++;
       },
       sendUserPrefs() {
         this.loaders.send = true;
