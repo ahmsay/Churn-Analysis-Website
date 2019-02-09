@@ -31,7 +31,7 @@
             <v-layout align-center>
               <v-btn class="singlepred white--text ml-1" :loading="loaders.single" :disabled="loaders.single" @click="predictSingle">Predict</v-btn>
               <span class="subheading font-weight-medium">{{ targetCol }}: </span>
-              <v-chip v-if="result != ''" disabled class="singlepred white--text">{{ result }}</v-chip>
+              <v-chip v-if="result !== ''" disabled class="singlepred white--text">{{ result }}</v-chip>
               <span class="ml-2 error--text" v-if="!filled.value">{{ filled.msg }}</span>
             </v-layout>
           </v-card-text>
@@ -178,6 +178,7 @@
         }
         this.filled.value = true;
         this.predicted = false;
+        this.result = '';
       },
       encode(row, idx, len) {
         if (len < 3) {
@@ -214,6 +215,7 @@
           });
           this.numCols.forEach(val => { row.push(val.value); });
           this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: [row], username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+            console.log(data);
             this.loaders.single = false;
             if (data.info == 1) {
               this.result = this.selectedModel.targetCol.values[data.prediction[0]];
