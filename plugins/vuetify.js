@@ -14,6 +14,8 @@ Vue.use(Vuetify, {
     signin: colors.pink.darken4,
     register: colors.orange.darken1,
     loremipsum: colors.lightBlue.darken1,
+    settings: colors.blueGrey.darken1,
+    help: colors.deepOrange.lighten1,
     yourmodels: colors.lightGreen.darken1,
     trainamodel: colors.blue.darken3,
     datatable: colors.green.darken1,

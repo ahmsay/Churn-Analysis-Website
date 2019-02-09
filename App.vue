@@ -37,8 +37,48 @@
               <span class="font-weight-bold">{{ this.$session.get('uname') }}</span>
             </v-list-tile>
             <v-divider></v-divider>
-            <v-list-tile @click="showHelp">Help</v-list-tile>
+            <v-list-tile @click="dialogs[0].show = true">Help</v-list-tile>
+            <v-dialog v-model="dialogs[0].show" max-width="600px">
+              <v-card>
+                <v-card-title class="help white--text">
+                  <v-icon color="white" class="mr-3">help</v-icon>
+                  <span class="title font-weight-light">Help</span>
+                </v-card-title>
+                <v-card-text>
+                  <div class="mb-3" v-for="content in helpContent" :key="content.title">
+                    <span class="subheading font-weight-medium">{{ content.title }}</span>
+                    <v-divider></v-divider>
+                    <span>{{ content.text }}</span>
+                  </div>
+                  <span></span>
+                </v-card-text>
+                <v-layout justify-end class="pr-2 pb-2">
+                  <v-btn class="help white--text" @click="dialogs[0].show = false">Close</v-btn>
+                </v-layout>
+              </v-card>
+            </v-dialog>
             <v-list-tile @click="showSettings">Settings</v-list-tile>
+            <v-dialog v-model="dialogs[1].show" max-width="600px" persistent>
+              <v-card>
+                <v-card-title class="settings white--text">
+                  <v-icon color="white" class="mr-3">settings</v-icon>
+                  <span class="title font-weight-light">Settings</span>
+                </v-card-title>
+                <v-card-text>
+                  <span class="subheading font-weight-medium">User Plan</span>
+                  <v-divider></v-divider>
+                  <v-radio-group v-model="uplan">
+                    <v-radio label="Beginner" value="beginner" color="settings"></v-radio>
+                    <v-radio label="Hobbyist" value="hobbyist" color="settings"></v-radio>
+                    <v-radio label="Professional" value="professional" color="settings"></v-radio>
+                  </v-radio-group>
+                </v-card-text>
+                <v-layout justify-end class="pr-2 pb-2">
+                  <v-btn class="mr-0" flat @click="cancelUserPlan">Cancel</v-btn>
+                  <v-btn class="settings white--text" @click="saveUserPlan">Save</v-btn>
+                </v-layout>
+              </v-card>
+            </v-dialog>
             <v-list-tile @click="logout">Logout</v-list-tile>
           </v-list>
         </v-menu>
@@ -64,6 +104,9 @@
       // eslint-disable-next-line
       EventBus.$once('refreshStatus', num => {
         this.checkStatus();
+        this.$post('/getUserPlan', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+          console.log(data);
+        });
       });
     },
     data:() => ({
@@ -72,8 +115,16 @@
         remove: false
       },
       email: null,
-      dialog: false,
-      notifications: []
+      notifications: [],
+      dialogs: [{ name: 'help', show: false }, { name: 'settings', show: false }],
+      uplan: 'beginner',
+      uplanCurrent: 'beginner',
+      helpContent: [
+        { title: 'Lorem Ipsum', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+        { title: 'Cheese Ipsum', text: 'When the cheese comes out everybody is happy swiss queso. Fondue chalk and cheese stilton taleggio queso dolcelatte fromage hard cheese.' },
+        { title: 'Bacon Ipsum', text: 'Bacon ipsum dolor sit amet salami jowl corned beef, andouille flank tongue ball tip kielbasa pastrami tri-tip meatloaf short loin beef biltong.' },
+        { title: 'Zombie Ipsum', text: 'Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering animata corpora quaeritis.' }
+      ]
     }),
     methods: {
       checkStatus() {
@@ -95,11 +146,16 @@
           }
         });
       },
-      showHelp() {
-
-      },
       showSettings() {
-
+        this.dialogs[1].show = true;
+      },
+      cancelUserPlan() {
+        this.dialogs[1].show = false;
+        this.uplan = this.uplanCurrent;
+      },
+      saveUserPlan() {
+        this.dialogs[1].show = false;
+        this.uplanCurrent = this.uplan;
       },
       logout() {
         this.email = null;

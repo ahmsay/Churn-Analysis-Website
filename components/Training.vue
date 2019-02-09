@@ -313,7 +313,13 @@
         this.catList.forEach(val => { cats.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         this.numList.forEach(val => { nums.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
         let targetCol = this.allInfos.columns.indexOf(this.targetCol);
-        let trainParams = { modelname: this.modelName, dataset: this.allInfos.dataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw'), isCustomized: this.isCustomized ? 1 : 0 };
+        let class1 = this.allInfos.dataset.filter(c => { return c[targetCol] == this.allInfos.colInfos[targetCol].values[0] });
+        let class2 = this.allInfos.dataset.filter(c => { return c[targetCol] == this.allInfos.colInfos[targetCol].values[1] });
+        let minority = Math.min(this.allInfos.colInfos[targetCol].counts[0], this.allInfos.colInfos[targetCol].counts[1]);
+        class1.length = minority;
+        class2.length = minority;
+        let newDataset = class1.concat(class2);
+        let trainParams = { modelname: this.modelName, dataset: newDataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw') };
         Object.keys(this.selectedParams).forEach(key => {
           trainParams[key] = this.selectedParams[key];
         });

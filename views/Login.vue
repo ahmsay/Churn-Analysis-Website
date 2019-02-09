@@ -23,7 +23,7 @@
                     </v-flex>
                   </v-layout>
                   <v-dialog v-model="dialog" persistent max-width="600px">
-                    <v-card class="pa-0">
+                    <v-card>
                       <v-card-title class="register white--text">
                         <v-icon color="white" class="mr-3">person_add</v-icon>
                         <span class="title font-weight-light">Register</span>
