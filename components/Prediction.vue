@@ -220,10 +220,10 @@
               this.result = this.selectedModel.targetCol.values[data.prediction[0]];
             } else if (data.info == 0) {
               this.filled.msg = 'You have reached your limit.';
-              this.filled.value = true;
+              this.filled.value = false;
             } else if (data.info == -1) {
               this.filled.msg = 'Server error.';
-              this.filled.value = true;
+              this.filled.value = false;
             }
           });
         } else {
