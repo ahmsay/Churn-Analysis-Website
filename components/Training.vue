@@ -246,13 +246,9 @@
     }),
     created() {
       EventBus.$on('close', val => { this.dialogs[val].show = false; });
-      EventBus.$on('canceled', val => {
-        this.selectedParams = val;
-        this.isCustomized = false;
-      });
-      EventBus.$on('applied', val => {
-        this.selectedParams = val;
-        this.isCustomized = true;
+      EventBus.$on('changed', (params, isCustomized) => {
+        this.selectedParams = params;
+        this.isCustomized = isCustomized;
       });
     },
     computed: {
@@ -262,10 +258,8 @@
           if (val.values.length == 2)
             columns.push(val.name);
         });
-        if (columns.length != 0) {
-          // eslint-disable-next-line
-          this.targetCol = columns[columns.length-1];
-        }
+        // eslint-disable-next-line
+        if (columns.length != 0) this.targetCol = columns[columns.length-1];
         return columns
       },
       allTrainCols() {
@@ -350,12 +344,12 @@
               dataset: [],
               colInfos: []
             };
+            this.sent = false;
             this.selectedTrainCols = [];
             this.moreCatCols = [];
             this.modelName = '';
             this.modelNameValid = false;
             this.$refs.form.reset();
-            this.sent = false;
             this.isCustomized = false;
             this.selectedParams = {};
             break;
@@ -368,10 +362,10 @@
           case 4:
             this.modelName = '';
             this.modelNameValid = false;
-            this.sendError.show = false;
             this.$refs.form.reset();
             this.isCustomized = false;
             this.selectedParams = {};
+            this.sendError.show = false;
         }
       }
     }

@@ -43,7 +43,7 @@
     methods: {
       cancel() {
         EventBus.$emit('close', 2);
-        EventBus.$emit('canceled', {});
+        EventBus.$emit('changed', {}, false);
       },
       apply() {
         let params = {};
@@ -63,7 +63,7 @@
           this.filled.value = false;
           this.filled.msg = '';
           EventBus.$emit('close', 2);
-          EventBus.$emit('applied', params);
+          EventBus.$emit('changed', params, true);
         }
       }
     }

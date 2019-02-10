@@ -7,7 +7,6 @@ Vue.use(Vuetify, {
   iconfont: 'md',
   theme: {
   	background: '#ededed',
-  	foreground: '#404040',
   	primary: colors.cyan.darken4,
   	chiptrue: '#ffaa2c',
   	chipfalse: '#29ada0',

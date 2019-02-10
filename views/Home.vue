@@ -29,19 +29,24 @@
   //import db from '../plugins/fb';
 
   export default {
+    components: {
+      'dashboard': Dashboard,
+      'training': Training,
+      'prediction': Prediction
+    },
     created() {
       if (this.$session.has("uname")) {
         EventBus.$on('train', num => { this.bottomNav = num; });
-        EventBus.$on('reset', val => { this.passedModel = val; });
-        EventBus.$on('predict', model => {
-          this.bottomNav = 2;
+        EventBus.$on('reset', model => { this.passedModel = model; });
+        EventBus.$on('predict', (model, num) => {
+          this.bottomNav = num;
           this.passedModel = model;
         });
         this.$post('/modelList', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
           if (data.info == 1) {
             this.models = data.models;
           } else if (data.info == -1) {
-            console.log(data);
+            this.models = [];
           }
         });
       } else {
@@ -64,11 +69,6 @@
           console.log('added');
         });*/
       }
-  	},
-    components: {
-      'dashboard': Dashboard,
-      'training': Training,
-      'prediction': Prediction
-    }
+  	}
   }
 </script>

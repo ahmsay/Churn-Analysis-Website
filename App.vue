@@ -82,11 +82,9 @@
         </v-menu>
       </div>
     </v-toolbar>
-
     <v-content class="background">
       <router-view></router-view>
     </v-content>
-
   </v-app>
 </template>
 

@@ -168,6 +168,7 @@
       ],
       emailRules: [
         v => !!v || 'E-mail is required',
+        // eslint-disable-next-line
         v => v != null && v.length <= 50 && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
       ],
       contents: [
@@ -228,8 +229,10 @@
         });
       },
       closeform() {
-        this.$refs.form.reset();
         this.dialog = false;
+        this.$refs.form.reset();
+        this.errors.register.show = false;
+        this.errors.register.msg = '';
       }
     }
   }

@@ -80,7 +80,7 @@ export default {
               reader.addEventListener("load", function() {
                 let rawData = reader.result;
                 let wb = XLSX.read(rawData, { type: 'binary' });
-                let rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1});
+                let rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header:1 });
                 let columns = rows.splice(rows[0], 1)[0];
                 let dataset = rows;
                 fileResult.columns = columns;
