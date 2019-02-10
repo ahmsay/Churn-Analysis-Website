@@ -29,7 +29,7 @@
                       <v-tooltip left color="trainamodel">
                         <v-icon slot="activator" color="#9d9d9d">help</v-icon>
                         <ul style="padding-left: 1.2em">
-                          <li>.csv and .xlsx files are supported.</li>
+                          <li>.csv, .xlsx and .xls files are supported.</li>
                           <li>Missing values will be automatically filled later.</li>
                         </ul>
                       </v-tooltip>
