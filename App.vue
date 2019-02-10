@@ -14,9 +14,7 @@
             <v-icon>notifications</v-icon>
           </v-btn>
           <v-list two-line>
-            <v-list-tile v-if="notifications.length == 0">
-              <span>You don't have any notification.</span>
-            </v-list-tile>
+            <span class="px-3 py-2" v-if="notifications.length == 0">You don't have any notification.</span>
             <v-list-tile v-for="(notification, idx) in notifications" :key="notification.modelname" @mouseover="showDeleteBtn = idx" @mouseout="showDeleteBtn = -1">
               <v-list-tile-content>
                 <v-list-tile-title class="font-weight-medium">{{ notification.modelname }}</v-list-tile-title>
@@ -104,9 +102,9 @@
       // eslint-disable-next-line
       EventBus.$once('refreshStatus', num => {
         this.checkStatus();
-        this.$post('/getUserPlan', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+        /*this.$post('/getUserPlan', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
           console.log(data);
-        });
+        });*/
       });
     },
     data:() => ({

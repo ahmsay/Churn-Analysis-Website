@@ -59,7 +59,7 @@
                 <p class="mb-0 error--text">{{ allInfos.error }}</p>
               </v-flex>
 
-              <v-flex xs12 sm12 md12 v-if="allInfos.valid || allInfos.dataset.length != 0">
+              <v-flex xs12 sm12 md12 v-if="allInfos.valid">
                 <v-card flat ripple color="datatable" @click.stop="dialogs[0].show = true" style="cursor: pointer">
                   <v-card-title class="title font-weight-light white--text">
                     <v-icon color="white" class="mr-3">table_chart</v-icon>
@@ -71,7 +71,7 @@
                 </v-card>
               </v-flex>
 
-              <v-flex xs12 sm12 md12 v-if="allInfos.valid || allInfos.dataset.length != 0">
+              <v-flex xs12 sm12 md12 v-if="allInfos.valid">
                 <v-card flat ripple color="charts" @click.stop="dialogs[1].show = true" style="cursor: pointer">
                   <v-card-title class="title font-weight-light white--text">
                     <v-icon color="white" class="mr-3">insert_chart</v-icon>
@@ -204,7 +204,7 @@
           if (this.catCols[i].selected == null)
             filled = false;
         }
-        this.filled.msg = 'Please fill all values.';
+        this.filled.msg = 'Please fill all values properly.';
         this.filled.value = filled;
         if (this.filled.value) {
           let row = [];
@@ -215,7 +215,6 @@
           });
           this.numCols.forEach(val => { row.push(val.value); });
           this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: [row], username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
-            console.log(data);
             this.loaders.single = false;
             if (data.info == 1) {
               this.result = this.selectedModel.targetCol.values[data.prediction[0]];
@@ -233,6 +232,7 @@
       },
       upload(file) {
         this.loaders.upload = true;
+        this.allInfos.valid = false;
         this.$parse(file, this.$session.get('uname'), this.$session.get('passw')).then(result => {
           this.loaders.upload = false;
           this.allInfos = result;

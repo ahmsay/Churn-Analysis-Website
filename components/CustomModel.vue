@@ -57,7 +57,7 @@
             filled = false;
           params[val.value] = val.selected;
         });
-        this.filled.msg = 'Please fill all values.';
+        this.filled.msg = 'Please fill all values properly.';
         this.filled.value = filled;
         if (this.filled.value) {
           this.filled.value = false;
