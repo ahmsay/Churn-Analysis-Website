@@ -29,15 +29,16 @@
   export default {
     data:() => ({
       customModels: [
-        { type: 'Logistic Regression', optionsCat: [], optionsNum: [], value: 'LogisticRegression' },
-        { type: 'KNN', optionsCat: [{ name: 'Metric', values: ['minkowski'], selected: 'minkowski', value: 'metric' }, ], optionsNum: [{ name: 'Neighbours', selected: 3, value: 'numofneighbour' }, { name: 'P', selected: 1, value: 'p' }], value: 'KNN' },
-        { type: 'Naive Bayes', optionsCat: [], optionsNum: [], value: 'NaiveBayes' },
-        { type: 'Kernel SVM', optionsCat: [{ name: 'Kernel', values: ['linear', 'poly', 'rbf', 'sigmoid'], selected: 'linear', value: 'kernel' }], optionsNum: [], value: 'KernelSVM' },
-        { type: 'Decision Tree', optionsCat: [{ name: 'Criterion', values: ['gini', 'entropy'], selected: 'gini', value: 'criterion' }], optionsNum: [], value: 'DecisionTree' },
-        { type: 'Random Forest', optionsCat: [{ name: 'Criterion', values: ['gini', 'entropy'], selected: 'gini', value: 'criterion' }], optionsNum: [{ name: 'Estimators', selected: 10, value: 'estimators' }], value: 'RandomForest' },
-        { type: 'Neural Network', optionsCat: [], optionsNum: [], value: 'ArtificialNeuralNetwork' }
+        { type: 'Logistic Regression', optionsCat: [], optionsNum: [] },
+        { type: 'KNN', optionsCat: [{ name: 'Metric', values: ['minkowski'], selected: 'minkowski', value: 'metric' }, ], optionsNum: [{ name: 'Neighbours', selected: 3, value: 'numofneighbour' }, { name: 'P', selected: 1, value: 'p' }] },
+        { type: 'Naive Bayes', optionsCat: [], optionsNum: [] },
+        { type: 'Kernel SVM', optionsCat: [{ name: 'Kernel', values: ['linear', 'poly', 'rbf', 'sigmoid'], selected: 'linear', value: 'kernel' }], optionsNum: [] },
+        { type: 'Decision Tree', optionsCat: [{ name: 'Criterion', values: ['gini', 'entropy'], selected: 'gini', value: 'criterion' }], optionsNum: [] },
+        { type: 'Random Forest', optionsCat: [{ name: 'Criterion', values: ['gini', 'entropy'], selected: 'gini', value: 'criterion' }], optionsNum: [{ name: 'Estimators', selected: 10, value: 'estimators' }] },
+        { type: 'Neural Network', optionsCat: [], optionsNum: [] },
+        { type: 'XGBoost', optionsCat: [], optionsNum: [] }
       ],
-      selectedModel: { type: 'Logistic Regression', optionsCat: [], optionsNum: [], value: 'LogisticRegression' },
+      selectedModel: { type: 'Logistic Regression', optionsCat: [], optionsNum: [] },
       filled: { msg: '', value: true }
     }),
     methods: {
@@ -48,7 +49,7 @@
       apply() {
         let params = {};
         let filled = true;
-        params['modelType'] = this.selectedModel.value;
+        params['modelType'] = this.selectedModel.type;
         this.selectedModel.optionsCat.forEach(val => {
           params[val.value] = val.selected;
         });

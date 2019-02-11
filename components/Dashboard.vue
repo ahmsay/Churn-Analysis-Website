@@ -11,7 +11,7 @@
           </v-card-title>
           <v-card-text v-if="models.length == 0">You don't have any model.</v-card-text>
           <v-card-text class="pa-0">
-            <v-list three-line style="max-height: 441px; overflow-y: auto;" class="py-0">
+            <v-list three-line style="max-height: 440px; overflow-y: auto;" class="py-0">
               <v-list-tile @mouseover="showDeleteBtn = idx" @mouseout="showDeleteBtn = -1" @click="nothing" :key="model.modelname" v-for="(model, idx) in models">
                 <v-list-tile-content @click="predict(model)">
                   <v-list-tile-title class="font-weight-medium">{{ model.modelname }}</v-list-tile-title>
