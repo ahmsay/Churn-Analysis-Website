@@ -4,6 +4,14 @@
       <v-layout>
         <v-container grid-list-md>
           <v-layout row wrap>
+            <v-flex d-flex xs12 sm6 md8 order-md1 order-sm1>
+              <v-card class="transparent" flat>
+                <v-card-title class="display-2 font-weight-medium transparent white--text">Churnify</v-card-title>
+                <v-card-text>
+                  <span class="title font-weight-light white--text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span>
+                </v-card-text>
+              </v-card>
+            </v-flex>
             <v-flex d-flex xs12 sm6 md4 order-md2 order-sm2>
               <v-card>
                 <v-card-title class="title font-weight-light signin white--text">
@@ -15,10 +23,10 @@
                   <v-text-field @keydown.enter="login(unameL, passwL)" prepend-icon="lock" v-model="passwL" placeholder="Password" type="password"></v-text-field>
                   <span class="error--text" v-if="errors.login.show">{{ errors.login.msg }}</span>
                   <v-layout row wrap>
-                    <v-flex xs12 sm6 md6 class="pb-0">
+                    <v-flex xs6 sm6 md6 class="pb-0">
                       <v-btn class="mb-0 signin white--text" :loading="loaders.login" :disabled="loaders.login" block @click="login(unameL, passwL)">Sign In</v-btn>
                     </v-flex>
-                    <v-flex xs12 sm6 md6 class="pb-0">
+                    <v-flex xs6 sm6 md6 class="pb-0">
                       <v-btn class="mb-0 signin white--text" block @click.stop="dialog = true">Register</v-btn>
                     </v-flex>
                   </v-layout>
@@ -42,14 +50,6 @@
                       </v-layout>
                     </v-card>
                   </v-dialog>
-                </v-card-text>
-              </v-card>
-            </v-flex>
-            <v-flex d-flex xs12 sm6 md8 order-md1 order-sm1>
-              <v-card class="transparent" flat>
-                <v-card-title class="display-2 font-weight-medium transparent white--text">Churnify</v-card-title>
-                <v-card-text>
-                  <span class="title font-weight-light white--text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span>
                 </v-card-text>
               </v-card>
             </v-flex>

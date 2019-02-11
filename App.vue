@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar v-if="!this.$session.has('uname')" flat></v-toolbar>
+    <v-toolbar v-if="!this.$session.has('uname') && !($vuetify.breakpoint.name == 'xs' || $vuetify.breakpoint.name == 'sm')" flat></v-toolbar>
     <v-toolbar v-if="this.$session.has('uname')" class="darky" app dark flat>
       <v-icon>album</v-icon>
       <v-toolbar-title>
@@ -55,7 +55,7 @@
                 </v-layout>
               </v-card>
             </v-dialog>
-            <v-list-tile @click="showSettings">Settings</v-list-tile>
+            <v-list-tile @click="dialogs[1].show = true;">Settings</v-list-tile>
             <v-dialog v-model="dialogs[1].show" max-width="600px" persistent>
               <v-card>
                 <v-card-title class="settings white--text">
@@ -65,10 +65,10 @@
                 <v-card-text>
                   <span class="subheading font-weight-medium">User Plan</span>
                   <v-divider></v-divider>
-                  <v-radio-group v-model="uplan">
-                    <v-radio label="Beginner" value="beginner" color="settings"></v-radio>
-                    <v-radio label="Hobbyist" value="hobbyist" color="settings"></v-radio>
-                    <v-radio label="Professional" value="professional" color="settings"></v-radio>
+                  <v-radio-group v-model="uplan.choosed">
+                    <v-radio label="Beginner" value="Beginner" color="settings"></v-radio>
+                    <v-radio label="Hobbyist" value="Hobbyist" color="settings"></v-radio>
+                    <v-radio label="Professional" value="Professional" color="settings"></v-radio>
                   </v-radio-group>
                 </v-card-text>
                 <v-layout justify-end class="pr-2 pb-2">
@@ -98,11 +98,14 @@
         this.checkStatus();
       }
       // eslint-disable-next-line
-      EventBus.$once('refreshStatus', num => {
+      EventBus.$on('refreshStatus', num => {
         this.checkStatus();
-        /*this.$post('/getUserPlan', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
-          console.log(data);
-        });*/
+        this.$post('/getUserPlan', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+          if (data.info == 1) {
+            this.uplan.saved = data.user.usertype;
+            this.uplan.choosed = data.user.usertype;
+          }
+        });
       });
     },
     data:() => ({
@@ -113,8 +116,7 @@
       email: null,
       notifications: [],
       dialogs: [{ name: 'help', show: false }, { name: 'settings', show: false }],
-      uplan: 'beginner',
-      uplanCurrent: 'beginner',
+      uplan: { choosed: 'Beginner', saved: 'Beginner' },
       helpContent: [
         { title: 'Lorem Ipsum', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
         { title: 'Cheese Ipsum', text: 'When the cheese comes out everybody is happy swiss queso. Fondue chalk and cheese stilton taleggio queso dolcelatte fromage hard cheese.' },
@@ -142,16 +144,13 @@
           }
         });
       },
-      showSettings() {
-        this.dialogs[1].show = true;
-      },
       cancelUserPlan() {
         this.dialogs[1].show = false;
-        this.uplan = this.uplanCurrent;
+        this.uplan.choosed = this.uplan.saved;
       },
       saveUserPlan() {
         this.dialogs[1].show = false;
-        this.uplanCurrent = this.uplan;
+        this.uplan.saved = this.uplan.choosed;
       },
       logout() {
         this.email = null;
