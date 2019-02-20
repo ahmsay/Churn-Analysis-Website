@@ -18,6 +18,10 @@ Churn Analysis Website for given project: https://github.com/aliihsank/Churn-Ana
 <p>
   <img src="https://github.com/ahmsay/Churn-Analysis-Website/blob/master/screenshots/ss6.PNG" width="430">
   <img src="https://github.com/ahmsay/Churn-Analysis-Website/blob/master/screenshots/ss7.PNG" width="430">
+  <img src="https://github.com/ahmsay/Churn-Analysis-Website/blob/master/screenshots/ss8.PNG" width="430">
+</p>
+<p>
+  <img src="https://github.com/ahmsay/Churn-Analysis-Website/blob/master/screenshots/ss9.PNG" width="430">
 </p>
 <p>
   <img src="https://github.com/ahmsay/Churn-Analysis-Website/blob/master/screenshots/ss8.PNG" width="430">
