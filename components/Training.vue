@@ -153,6 +153,10 @@
                       <v-dialog v-model="dialogs[2].show" max-width="600px" persistent>
                         <custom-model v-if="step == 5"></custom-model>
                       </v-dialog>
+                      <p class="mb-0" v-if="isCustomized && !dialogs[2].show && selectedParams.modelType != undefined">
+                        <span class="subheading font-weight-medium">Selected Parameters: </span>
+                        <span>{{ selectedParams.modelType }}</span>
+                      </p>
                       <span class="error--text" v-if="sendError.show">{{ sendError.msg }}</span>
                     </v-card-text>
                   </v-card>
