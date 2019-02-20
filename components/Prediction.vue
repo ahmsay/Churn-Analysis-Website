@@ -279,7 +279,7 @@
               this.allInfos.error = 'You have reached your limit.';
               this.allInfos.valid = false;
             } else if (data.info == -1) {
-              this.allInfos.error = this.allInfos.fileName + " doesn't match with " + this.selectedModel.modelname + ". Please try another dataset.";
+              this.allInfos.error = 'Server error.';
               this.allInfos.valid = false;
             }
           });

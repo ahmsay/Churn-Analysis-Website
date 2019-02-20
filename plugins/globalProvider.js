@@ -2,7 +2,7 @@ import XLSX from 'xlsx';
 
 export default {
   install (Vue) {
-    Vue.prototype.$URL = 'http://churnapi.us-east-1.elasticbeanstalk.com'
+    Vue.prototype.$URL = 'https://my-churn-api.herokuapp.com';
     
     Vue.prototype.$get = function(path) {
       return new Promise(resolve => {
