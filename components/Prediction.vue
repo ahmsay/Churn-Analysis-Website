@@ -23,7 +23,7 @@
                 <v-select v-model="catCols[idx].selected" :items="col.options.values" :label="col.options.name"></v-select>
               </v-flex>
               <v-flex class="px-2" :key="col.name" v-for="(col, idx) in numCols" xs12 sm6 md4>
-                <v-text-field type="number" :label="col.name" v-model.number="numCols[idx].value"></v-text-field>
+                <v-text-field type="number" :label="col.name" v-model.number="numCols[idx].value" @keydown.enter="predictSingle"></v-text-field>
               </v-flex>
             </v-layout>
           </v-card-text>
@@ -194,40 +194,42 @@
         return row;
       },
       predictSingle() {
-        this.loaders.single = true;
-        let filled = true;
-        for (let i=0; i<this.numCols.length; i++) {
-          if (this.numCols[i].value == null || this.numCols[i].value === '')
-            filled = false;
-        }
-        for (let i=0; i<this.catCols.length; i++) {
-          if (this.catCols[i].selected == null)
-            filled = false;
-        }
-        this.filled.msg = 'Please fill all values properly.';
-        this.filled.value = filled;
-        if (this.filled.value) {
-          let row = [];
-          this.catCols.forEach(val => {
-            let idx = val.options.values.indexOf(val.selected);
-            let len = val.options.values.length;
-            row = this.encode(row, idx, len);
-          });
-          this.numCols.forEach(val => { row.push(val.value); });
-          this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: [row], username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+        if (!this.loaders.single) {
+          this.loaders.single = true;
+          let filled = true;
+          for (let i=0; i<this.numCols.length; i++) {
+            if (this.numCols[i].value == null || this.numCols[i].value === '')
+              filled = false;
+          }
+          for (let i=0; i<this.catCols.length; i++) {
+            if (this.catCols[i].selected == null)
+              filled = false;
+          }
+          this.filled.msg = 'Please fill all values properly.';
+          this.filled.value = filled;
+          if (this.filled.value) {
+            let row = [];
+            this.catCols.forEach(val => {
+              let idx = val.options.values.indexOf(val.selected);
+              let len = val.options.values.length;
+              row = this.encode(row, idx, len);
+            });
+            this.numCols.forEach(val => { row.push(val.value); });
+            this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: [row], username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+              this.loaders.single = false;
+              if (data.info == 1) {
+                this.result = this.selectedModel.targetCol.values[data.prediction[0]];
+              } else if (data.info == 0) {
+                this.filled.msg = 'You have reached your limit.';
+                this.filled.value = false;
+              } else if (data.info == -1) {
+                this.filled.msg = 'Server error.';
+                this.filled.value = false;
+              }
+            });
+          } else {
             this.loaders.single = false;
-            if (data.info == 1) {
-              this.result = this.selectedModel.targetCol.values[data.prediction[0]];
-            } else if (data.info == 0) {
-              this.filled.msg = 'You have reached your limit.';
-              this.filled.value = false;
-            } else if (data.info == -1) {
-              this.filled.msg = 'Server error.';
-              this.filled.value = false;
-            }
-          });
-        } else {
-          this.loaders.single = false;
+          }
         }
       },
       upload(file) {

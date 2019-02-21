@@ -130,8 +130,8 @@
                       </v-tooltip>
                     </v-card-title>
                     <v-card-text>
-                      <v-form ref="form" v-model="modelNameValid">
-                        <v-text-field v-model="modelName" label="Enter your models name" required :rules="modelNameRules"></v-text-field>
+                      <v-form ref="form" v-model="modelNameValid" onSubmit="return false;">
+                        <v-text-field v-model="modelName" label="Enter your models name" required :rules="modelNameRules" @keydown.enter="sendUserPrefs"></v-text-field>
                       </v-form>
                       <p class="mb-0">
                         <span class="subheading font-weight-medium">Dataset: </span>
@@ -302,39 +302,41 @@
         this.step++;
       },
       sendUserPrefs() {
-        this.loaders.send = true;
-        let cats = [];
-        let nums = [];
-        let col = {};
-        while ((col = this.moreCatCols.pop()) != null)
-          col.cat = 1;
-        this.catList.forEach(val => { cats.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
-        this.numList.forEach(val => { nums.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
-        let targetCol = this.allInfos.columns.indexOf(this.targetCol);
-        let class1 = this.allInfos.dataset.filter(c => { return c[targetCol] == this.allInfos.colInfos[targetCol].values[0] });
-        let class2 = this.allInfos.dataset.filter(c => { return c[targetCol] == this.allInfos.colInfos[targetCol].values[1] });
-        let minority = Math.min(this.allInfos.colInfos[targetCol].counts[0], this.allInfos.colInfos[targetCol].counts[1]);
-        class1.length = minority;
-        class2.length = minority;
-        let newDataset = class1.concat(class2);
-        let trainParams = { modelname: this.modelName, dataset: newDataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw') };
-        Object.keys(this.selectedParams).forEach(key => {
-          trainParams[key] = this.selectedParams[key];
-        });
-        this.$post('/train', trainParams).then(data => {
-          this.loaders.send = false;
-          if(data.info == 1) {
-            this.step = 6;
-            this.sent = true;
-            this.sendError.show = false;
-          } else if (data.info == 0) {
-            this.sendError.msg = data.details;
-            this.sendError.show = true;
-          } else if (data.info == -1) {
-            this.sendError.msg = 'Server error.';
-            this.sendError.show = true;
-          }
-        });
+        if (this.modelNameValid && !this.loaders.send) {
+          this.loaders.send = true;
+          let cats = [];
+          let nums = [];
+          let col = {};
+          while ((col = this.moreCatCols.pop()) != null)
+            col.cat = 1;
+          this.catList.forEach(val => { cats.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
+          this.numList.forEach(val => { nums.push(this.allInfos.colInfos.map(c => { return c.name; }).indexOf(val.name)); });
+          let targetCol = this.allInfos.columns.indexOf(this.targetCol);
+          let class1 = this.allInfos.dataset.filter(c => { return c[targetCol] == this.allInfos.colInfos[targetCol].values[0] });
+          let class2 = this.allInfos.dataset.filter(c => { return c[targetCol] == this.allInfos.colInfos[targetCol].values[1] });
+          let minority = Math.min(this.allInfos.colInfos[targetCol].counts[0], this.allInfos.colInfos[targetCol].counts[1]);
+          class1.length = minority;
+          class2.length = minority;
+          let newDataset = class1.concat(class2);
+          let trainParams = { modelname: this.modelName, dataset: newDataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw') };
+          Object.keys(this.selectedParams).forEach(key => {
+            trainParams[key] = this.selectedParams[key];
+          });
+          this.$post('/train', trainParams).then(data => {
+            this.loaders.send = false;
+            if(data.info == 1) {
+              this.step = 6;
+              this.sent = true;
+              this.sendError.show = false;
+            } else if (data.info == 0) {
+              this.sendError.msg = data.details;
+              this.sendError.show = true;
+            } else if (data.info == -1) {
+              this.sendError.msg = 'Server error.';
+              this.sendError.show = true;
+            }
+          });
+        }
       },
       backTo(step) {
         this.step = step;
