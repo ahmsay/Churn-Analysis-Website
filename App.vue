@@ -90,6 +90,7 @@
 
 <script>
   import { EventBus } from "./plugins/event-bus.js";
+  import { auth } from './plugins/fb';
 
   export default {
     name: 'App',
@@ -113,7 +114,6 @@
       loaders: {
         remove: false
       },
-      email: null,
       notifications: [],
       dialogs: [{ name: 'help', show: false }, { name: 'settings', show: false }],
       uplan: { choosed: 'Beginner', saved: 'Beginner' },
@@ -153,10 +153,11 @@
         this.uplan.saved = this.uplan.choosed;
       },
       logout() {
-        this.email = null;
-        this.$session.remove("uname");
-        this.$session.remove("passw");
-        this.$router.push('/');
+        auth.signOut().then(() => {
+          this.$router.push('/');
+          this.$session.remove("uname");
+          this.$session.remove("passw");
+        });
       }
     }
   }

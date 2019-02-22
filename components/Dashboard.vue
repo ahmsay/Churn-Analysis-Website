@@ -83,9 +83,11 @@
           if (change.type == 'added') {
             this.userList.push({ id: change.doc.id, data: change.doc.data() });
           } else if (change.type == 'removed') {
-            this.userList.splice(this.userList.findIndex(e => e.id === change.doc.id),1);
+            this.userList.splice(this.userList.findIndex(e => e.id === change.doc.id), 1);
           }
         });
+      }, error => {
+        console.log(error);
       });
     },
     data:() => ({

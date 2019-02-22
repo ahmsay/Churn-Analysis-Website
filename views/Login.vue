@@ -128,7 +128,8 @@
 
 <script>
   import { EventBus } from "../plugins/event-bus.js";
-
+  import { auth } from '../plugins/fb';
+  
   export default {
     created() {
       if (this.$session.has("uname"))
@@ -189,12 +190,15 @@
           this.$post('/login', { username: uname, password: passw }).then(data => {
             this.loaders.login = false;
             if (data.info == 1) {
-              this.errors.login.show = false;
-              this.errors.login.msg = '';
-              this.$session.set("uname", uname);
-              this.$session.set("passw", passw);
-              EventBus.$emit('refreshStatus', 0);
-              this.$router.push('/home');
+              auth.signInWithEmailAndPassword('testuser@gmail.com', 'testpassword').then(creds => {
+                console.log(creds);
+                this.errors.login.show = false;
+                this.errors.login.msg = '';
+                this.$session.set("uname", uname);
+                this.$session.set("passw", passw);
+                EventBus.$emit('refreshStatus', 0);
+                this.$router.push('/home');
+              });
             } else if (data.info == 0) {
               this.errors.login.msg = 'Username and password do not match.';
               this.errors.login.show = true;
@@ -210,15 +214,18 @@
         this.$post('/register', { username: uname, password: passw, email: email }).then(data => {
           this.loaders.register = false;
           if (data.info == 1) {
-            this.errors.register.show = false;
-            this.errors.register.msg = '';
-            this.closeform();
-            this.uname = '';
-            this.passw = '';
-            this.email = '';
-            this.$session.set("uname", uname);
-            this.$session.set("passw", passw);
-            this.$router.push('/home');
+            auth.createUserWithEmailAndPassword(email, passw).then(creds => {
+              console.log(creds);
+              this.errors.register.show = false;
+              this.errors.register.msg = '';
+              this.closeform();
+              this.uname = '';
+              this.passw = '';
+              this.email = '';
+              this.$session.set("uname", uname);
+              this.$session.set("passw", passw);
+              this.$router.push('/home');
+            });
           } else if (data.info == 0) {
             this.errors.register.msg = 'Username "' + uname + '" already exists.';
             this.errors.register.show = true;
