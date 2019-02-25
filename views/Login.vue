@@ -19,12 +19,12 @@
                   <span>Sign in to Churnify</span>
                 </v-card-title>
                 <v-card-text>
-                  <v-text-field @keydown.enter="login(unameL, passwL)" prepend-icon="person" v-model="unameL" placeholder="Username"></v-text-field>
-                  <v-text-field @keydown.enter="login(unameL, passwL)" prepend-icon="lock" v-model="passwL" placeholder="Password" type="password"></v-text-field>
+                  <v-text-field @keydown.enter="login(emailL, passwL)" prepend-icon="person" v-model="emailL" placeholder="Email"></v-text-field>
+                  <v-text-field @keydown.enter="login(emailL, passwL)" prepend-icon="lock" v-model="passwL" placeholder="Password" type="password"></v-text-field>
                   <span class="error--text" v-if="errors.login.show">{{ errors.login.msg }}</span>
                   <v-layout row wrap>
                     <v-flex xs6 sm6 md6 class="pb-0">
-                      <v-btn class="mb-0 signin white--text" :loading="loaders.login" :disabled="loaders.login" block @click="login(unameL, passwL)">Sign In</v-btn>
+                      <v-btn class="mb-0 signin white--text" :loading="loaders.login" :disabled="loaders.login" block @click="login(emailL, passwL)">Sign In</v-btn>
                     </v-flex>
                     <v-flex xs6 sm6 md6 class="pb-0">
                       <v-btn class="mb-0 signin white--text" block @click.stop="dialog = true">Register</v-btn>
@@ -38,15 +38,14 @@
                       </v-card-title>
                       <v-card-text>
                         <v-form ref="form" v-model="valid">
-                          <v-text-field prepend-icon="person" v-model="uname" :rules="unameRules" label="Username" required></v-text-field>
-                          <v-text-field prepend-icon="lock" v-model="passw" :rules="passwRules" label="Password" required type="password"></v-text-field>
                           <v-text-field prepend-icon="email" v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
+                          <v-text-field prepend-icon="lock" v-model="passw" :rules="passwRules" label="Password" required type="password"></v-text-field>
                         </v-form>
                         <span class="error--text" v-if="errors.register.show">{{ errors.register.msg }}</span>
                       </v-card-text>
                       <v-layout justify-end class="pr-2 pb-2">
                         <v-btn class="register white--text mr-0" @click.native="closeform">Close</v-btn>
-                        <v-btn class="register white--text" :loading="loaders.register" :disabled="!valid || loaders.register" @click="register(uname, passw, email)">Sign Up</v-btn>
+                        <v-btn class="register white--text" :loading="loaders.register" :disabled="!valid || loaders.register" @click="register(email, passw)">Sign Up</v-btn>
                       </v-layout>
                     </v-card>
                   </v-dialog>
@@ -153,16 +152,11 @@
         login: false
       },
       dialog: false,
-      unameL: '',
+      emailL: '',
       passwL: '',
       valid: false,
-      uname: '',
       passw: '',
       email: '',
-      unameRules: [
-        v => !!v || 'Username is required',
-        v => v != null && v.length <= 25 && v.length >= 4 || 'Username must be between than 4 and 25 characters'
-      ],
       passwRules: [
         v => !!v || 'Password is required',
         v => v != null && v.length <= 30 && v.length >= 6 || 'Password must be between than 6 and 30 characters'
@@ -184,55 +178,41 @@
       ]
     }),
     methods: {
-      login (uname, passw) {
-        if (uname != '' && passw != '') {
+      login (email, passw) {
+        if (email != '' && passw != '') {
           this.loaders.login = true;
-          this.$post('/login', { username: uname, password: passw }).then(data => {
+          auth.signInWithEmailAndPassword(email, passw).then(() => {
             this.loaders.login = false;
-            if (data.info == 1) {
-              auth.signInWithEmailAndPassword('testuser@gmail.com', 'testpassword').then(creds => {
-                console.log(creds);
-                this.errors.login.show = false;
-                this.errors.login.msg = '';
-                this.$session.set("uname", uname);
-                this.$session.set("passw", passw);
-                EventBus.$emit('refreshStatus', 0);
-                this.$router.push('/home');
-              });
-            } else if (data.info == 0) {
-              this.errors.login.msg = 'Username and password do not match.';
-              this.errors.login.show = true;
-            } else if (data.info == -1) {
-              this.errors.login.msg = 'Server error.';
-              this.errors.login.show = true;
-            }
+            this.errors.login.show = false;
+            this.errors.login.msg = '';
+            this.$session.set("uname", email.split('@')[0]);
+            this.$session.set("passw", passw);
+            EventBus.$emit('refreshStatus', 0);
+            this.$router.push('/home');
+          }).catch(error => {
+            this.loaders.login = false;
+            this.loaders.register = false;
+            this.errors.login.msg = error.message;
+            this.errors.login.show = true;
           });
         }
       },
-      register(uname, passw, email) {
+      register(email, passw) {
         this.loaders.register = true;
-        this.$post('/register', { username: uname, password: passw, email: email }).then(data => {
+        auth.createUserWithEmailAndPassword(email, passw).then(() => {
           this.loaders.register = false;
-          if (data.info == 1) {
-            auth.createUserWithEmailAndPassword(email, passw).then(creds => {
-              console.log(creds);
-              this.errors.register.show = false;
-              this.errors.register.msg = '';
-              this.closeform();
-              this.uname = '';
-              this.passw = '';
-              this.email = '';
-              this.$session.set("uname", uname);
-              this.$session.set("passw", passw);
-              this.$router.push('/home');
-            });
-          } else if (data.info == 0) {
-            this.errors.register.msg = 'Username "' + uname + '" already exists.';
-            this.errors.register.show = true;
-          } else if (data.info == -1) {
-            this.errors.register.msg = 'Server error.';
-            this.errors.register.show = true;
-          }
+          this.errors.register.show = false;
+          this.errors.register.msg = '';
+          this.closeform();
+          this.email = '';
+          this.passw = '';
+          this.$session.set("uname", email.split('@')[0]);
+          this.$session.set("passw", passw);
+          this.$router.push('/home');
+        }).catch(error => {
+          this.loaders.register = false;
+          this.errors.register.msg = error.message;
+          this.errors.register.show = true;
         });
       },
       closeform() {
