@@ -287,12 +287,13 @@
     },
     methods: {
       upload(file) {
-        this.loaders.upload = true;
+        console.log(file);
+        /*this.loaders.upload = true;
         this.allInfos.valid = false;
         this.$parse(file, this.$session.get('uname'), this.$session.get('passw')).then(result => {
           this.loaders.upload = false;
           this.allInfos = result;
-        });
+        });*/
       },
       step3() {
         this.allTrainCols.forEach(val => {

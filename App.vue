@@ -101,12 +101,12 @@
       // eslint-disable-next-line
       EventBus.$on('refreshStatus', num => {
         this.checkStatus();
-        this.$post('/getUserPlan', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+        /*this.$post('/getUserPlan', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
           if (data.info == 1) {
             this.uplan.saved = data.user.usertype;
             this.uplan.choosed = data.user.usertype;
           }
-        });
+        });*/
       });
     },
     data:() => ({
@@ -126,12 +126,12 @@
     }),
     methods: {
       checkStatus() {
-        this.$post('/checkStatus', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+        /*this.$post('/checkStatus', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
           if (data.info == 0)
             this.notifications = [];
           else if (data.info == 1)
             this.notifications = data.statuslist;
-        });
+        });*/
       },
       removeNotification(notification) {
         this.loaders.remove = true;
