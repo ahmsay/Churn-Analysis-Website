@@ -77,7 +77,7 @@
 
   export default {
     created() {
-      db.collection('userList').onSnapshot(snapshot => {
+      db.collection('userList').where('userId', '==', this.$session.get('uid')).onSnapshot(snapshot => {
         let changes = snapshot.docChanges();
         changes.forEach(change => {
           if (change.type == 'added') {
@@ -135,6 +135,7 @@
       },
       addItem() {
         const user = {
+          userId: this.$session.get('uid'),
           firstname: this.firstname,
           lastname: this.lastname,
           email: this.email

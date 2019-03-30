@@ -202,10 +202,10 @@
       register(email, passw) {
         this.loaders.register = true;
         auth.createUserWithEmailAndPassword(email, passw).then(cred => {
+          this.$session.set("uid", cred.user.uid);
           return db.collection('users').doc(cred.user.uid).set({
             userPlan: 'Beginner'
           });
-          this.$session.set("uid", cred.user.uid);
         }).then(() => {
           this.loaders.register = false;
           this.errors.register.show = false;
