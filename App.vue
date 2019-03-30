@@ -157,6 +157,7 @@
           this.$router.push('/');
           this.$session.remove("uname");
           this.$session.remove("passw");
+          this.$session.remove("uid");
         });
       }
     }

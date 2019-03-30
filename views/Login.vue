@@ -128,6 +128,7 @@
 <script>
   import { EventBus } from "../plugins/event-bus.js";
   import { auth } from '../plugins/fb';
+  import db from '../plugins/fb';
   
   export default {
     created() {
@@ -181,10 +182,11 @@
       login (email, passw) {
         if (email != '' && passw != '') {
           this.loaders.login = true;
-          auth.signInWithEmailAndPassword(email, passw).then(() => {
+          auth.signInWithEmailAndPassword(email, passw).then(cred => {
             this.loaders.login = false;
             this.errors.login.show = false;
             this.errors.login.msg = '';
+            this.$session.set("uid", cred.user.uid);
             this.$session.set("uname", email.split('@')[0]);
             this.$session.set("passw", passw);
             EventBus.$emit('refreshStatus', 0);
@@ -199,7 +201,12 @@
       },
       register(email, passw) {
         this.loaders.register = true;
-        auth.createUserWithEmailAndPassword(email, passw).then(() => {
+        auth.createUserWithEmailAndPassword(email, passw).then(cred => {
+          return db.collection('users').doc(cred.user.uid).set({
+            userPlan: 'Beginner'
+          });
+          this.$session.set("uid", cred.user.uid);
+        }).then(() => {
           this.loaders.register = false;
           this.errors.register.show = false;
           this.errors.register.msg = '';
