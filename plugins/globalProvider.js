@@ -30,7 +30,7 @@ export default {
       });
     }
 
-    Vue.prototype.$parse = function(file, uname, passw) {
+    Vue.prototype.$parse = function(file, uid) {
       return new Promise(resolve => {
         let fileResult = {
           error: '',
@@ -59,7 +59,7 @@ export default {
                 }
                 fileResult.columns = columns;
                 fileResult.dataset = dataset;
-                this.$post('/columnsInfos', { columns: columns, dataset: dataset, username: uname, password: passw }).then(data => {
+                this.$post('/columnsInfos', { columns: columns, dataset: dataset, uid: uid }).then(data => {
                   if (data.info == 1) {
                     fileResult.colInfos = data.colInfos;
                     fileResult.valid = true;
@@ -84,7 +84,7 @@ export default {
                 let dataset = rows;
                 fileResult.columns = columns;
                 fileResult.dataset = dataset;
-                this.$post('/columnsInfos', { columns: columns, dataset: dataset, username: uname, password: passw }).then(data => {
+                this.$post('/columnsInfos', { columns: columns, dataset: dataset, uid: uid }).then(data => {
                   if (data.info == 1) {
                     fileResult.colInfos = data.colInfos;
                     fileResult.valid = true;

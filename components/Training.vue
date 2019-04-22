@@ -289,7 +289,7 @@
       upload(file) {
         this.loaders.upload = true;
         this.allInfos.valid = false;
-        this.$parse(file, this.$session.get('uname'), this.$session.get('passw')).then(result => {
+        this.$parse(file, this.$session.get('uid')).then(result => {
           this.loaders.upload = false;
           this.allInfos = result;
         });
@@ -318,7 +318,7 @@
           class1.length = minority;
           class2.length = minority;
           let newDataset = class1.concat(class2);
-          let trainParams = { modelname: this.modelName, dataset: newDataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, username: this.$session.get('uname'), password: this.$session.get('passw') };
+          let trainParams = { modelname: this.modelName, dataset: newDataset, columns: this.allInfos.columns, target: targetCol, categoricalcolumns: cats, numericalcolumns: nums, uid: this.$session.get('uid') };
           Object.keys(this.selectedParams).forEach(key => {
             trainParams[key] = this.selectedParams[key];
           });

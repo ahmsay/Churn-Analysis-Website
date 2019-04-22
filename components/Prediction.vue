@@ -215,7 +215,7 @@
               row = this.encode(row, idx, len);
             });
             this.numCols.forEach(val => { row.push(val.value); });
-            this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: [row], username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+            this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: [row], uid: this.$session.get('uid') }).then(data => {
               this.loaders.single = false;
               if (data.info == 1) {
                 this.result = this.selectedModel.targetCol.values[data.prediction[0]];
@@ -235,7 +235,7 @@
       upload(file) {
         this.loaders.upload = true;
         this.allInfos.valid = false;
-        this.$parse(file, this.$session.get('uname'), this.$session.get('passw')).then(result => {
+        this.$parse(file, this.$session.get('uid')).then(result => {
           this.loaders.upload = false;
           this.allInfos = result;
         });
@@ -262,7 +262,7 @@
               row.push(v);
             }
           });
-          this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: rows, username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+          this.$post('/predict', { modelname: this.selectedModel.modelname, predictset: rows, uid: this.$session.get('uid') }).then(data => {
             this.loaders.multi = false;
             if(data.info == 1) {
               let results = data.prediction;

@@ -1,13 +1,13 @@
 <template>
   <v-app>
-    <v-toolbar v-if="!this.$session.has('uname') && !($vuetify.breakpoint.name == 'xs' || $vuetify.breakpoint.name == 'sm')" flat></v-toolbar>
-    <v-toolbar v-if="this.$session.has('uname')" class="darky" app dark flat>
+    <v-toolbar v-if="!this.$session.has('uid') && !($vuetify.breakpoint.name == 'xs' || $vuetify.breakpoint.name == 'sm')" flat></v-toolbar>
+    <v-toolbar v-if="this.$session.has('uid')" class="darky" app dark flat>
       <v-icon>album</v-icon>
       <v-toolbar-title>
         <span class="headline">Churnify</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <div v-if="this.$session.has('uname')">
+      <div v-if="this.$session.has('uid')">
         <span v-if="notifications.length != 0">{{ notifications.length }}</span>
         <v-menu left offset-y max-height="232" :close-on-content-click="false">
           <v-btn icon flat dark slot="activator">
@@ -95,13 +95,13 @@
   export default {
     name: 'App',
     created() {
-      if (this.$session.has("uname")) {
+      if (this.$session.has("uid")) {
         this.checkStatus();
       }
       // eslint-disable-next-line
       EventBus.$on('refreshStatus', num => {
         this.checkStatus();
-        this.$post('/getUserPlan', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+        this.$post('/getUserPlan', { uid: this.$session.get('uid') }).then(data => {
           if (data.info == 1) {
             this.uplan.saved = data.user.usertype;
             this.uplan.choosed = data.user.usertype;
@@ -126,7 +126,7 @@
     }),
     methods: {
       checkStatus() {
-        this.$post('/checkStatus', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+        this.$post('/checkStatus', { uid: this.$session.get('uid') }).then(data => {
           if (data.info == 0)
             this.notifications = [];
           else if (data.info == 1)
@@ -136,7 +136,7 @@
       removeNotification(notification) {
         this.loaders.remove = true;
         this.beingRemoved = notification.modelname;
-        this.$post('/removeModel', { username: this.$session.get('uname'), password: this.$session.get('passw'), modelname: notification.modelname }).then(data => {
+        this.$post('/removeModel', { uid: this.$session.get('uid'), modelname: notification.modelname }).then(data => {
           this.loaders.remove = false;
           this.beingRemoved = '';
           if (data.info == 1) {

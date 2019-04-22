@@ -40,7 +40,7 @@
           this.bottomNav = num;
           this.passedModel = model;
         });
-        this.$post('/modelList', { username: this.$session.get('uname'), password: this.$session.get('passw') }).then(data => {
+        this.$post('/modelList', { uid: this.$session.get('uid') }).then(data => {
           if (data.info == 1) {
             this.models = data.models;
           } else if (data.info == -1) {

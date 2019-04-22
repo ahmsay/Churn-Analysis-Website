@@ -132,7 +132,7 @@
   
   export default {
     created() {
-      if (this.$session.has("uname"))
+      if (this.$session.has("uid"))
         this.$router.push('/home');
     },
     computed: {

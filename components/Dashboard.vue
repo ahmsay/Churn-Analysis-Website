@@ -124,7 +124,7 @@
         this.loaders.remove = true;
         this.dialog = false;
         let model = this.beingRemoved;
-        this.$post('/removeModel', { username: this.$session.get('uname'), password: this.$session.get('passw'), modelname: model.modelname }).then(data => {
+        this.$post('/removeModel', { uid: this.$session.get('uid'), modelname: model.modelname }).then(data => {
           this.loaders.remove = false;
           this.beingRemoved = { modelname: '' };
           if (data.info == 1) {
