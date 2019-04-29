@@ -25,6 +25,7 @@
   import Training from '../components/Training';
   import Prediction from '../components/Prediction';
   import { EventBus } from "../plugins/event-bus.js";
+  import db from '../plugins/fb';
 
   export default {
     components: {
@@ -40,13 +41,20 @@
           this.bottomNav = num;
           this.passedModel = model;
         });
-        /*this.$post('/modelList', { uid: this.$session.get('uid') }).then(data => {
-          if (data.info == 1) {
-            this.models = data.models;
-          } else if (data.info == -1) {
-            this.models = [];
-          }
-        });*/
+        db.collection('models').onSnapshot(snapshot => {
+          let changes = snapshot.docChanges();
+          changes.forEach(change => {
+            if (change.doc.id == this.$session.get('uid')) {
+              if (change.type == 'added') {
+                this.models = change.doc.data().models;
+              } else if (change.type == 'removed') {
+                console.log(change.doc.data());
+              }
+            }
+          });
+        }, error => {
+          console.log(error);
+        });
       } else {
         this.$router.push('/');
       }

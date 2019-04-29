@@ -91,6 +91,7 @@
           console.log(error);
         });
       }
+      console.log(this.models);
     },
     data:() => ({
       dialog: false,
