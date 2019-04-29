@@ -187,16 +187,20 @@
     methods: {
       login (email, passw) {
         if (email != '' && passw != '') {
-          let uname = '';
           this.loaders.login = true;
           auth.signInWithEmailAndPassword(email, passw).then(cred => {
             this.loaders.login = false;
             this.errors.login.show = false;
             this.errors.login.msg = '';
             this.$session.set('uid', cred.user.uid);
-            this.$session.set('uname', 'ME'); // TODO
-            EventBus.$emit('refreshStatus', 0);
-            this.$router.push('/home');
+            var docRef = db.collection("users").doc(cred.user.uid);
+            docRef.get().then(function(doc) {
+              if (doc.exists){
+                this.$session.set('uname', doc.data().username);
+                EventBus.$emit('refreshStatus', 0);
+                this.$router.push('/home');
+              }
+            }.bind(this), false);
           }).catch(error => {
             this.loaders.login = false;
             this.loaders.register = false;

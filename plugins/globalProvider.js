@@ -65,7 +65,7 @@ export default {
                     fileResult.valid = true;
                     resolve(fileResult);
                   } else if (data.info == 0) {
-                    fileResult.error = 'You have reached your limit.';
+                    fileResult.error = 'User validation error.';
                     resolve(fileResult);
                   } else if (data.info == -1) {
                     fileResult.error = 'There is something wrong with your dataset. Please check it or try another one.';
@@ -90,7 +90,7 @@ export default {
                     fileResult.valid = true;
                     resolve(fileResult);
                   } else if (data.info == 0) {
-                    fileResult.error = 'You have reached your limit.';
+                    fileResult.error = 'User validation error.';
                     resolve(fileResult);
                   } else if (data.info == -1) {
                     fileResult.error = 'There is something wrong with your dataset. Please check it or try another one.';
