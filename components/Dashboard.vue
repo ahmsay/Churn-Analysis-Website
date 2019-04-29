@@ -77,18 +77,20 @@
 
   export default {
     created() {
-      db.collection('userList').where('userId', '==', this.$session.get('uid')).onSnapshot(snapshot => {
-        let changes = snapshot.docChanges();
-        changes.forEach(change => {
-          if (change.type == 'added') {
-            this.userList.push({ id: change.doc.id, data: change.doc.data() });
-          } else if (change.type == 'removed') {
-            this.userList.splice(this.userList.findIndex(e => e.id === change.doc.id), 1);
-          }
+      if (this.$session.has('uid')){
+        db.collection('userList').where('userId', '==', this.$session.get('uid')).onSnapshot(snapshot => {
+          let changes = snapshot.docChanges();
+          changes.forEach(change => {
+            if (change.type == 'added') {
+              this.userList.push({ id: change.doc.id, data: change.doc.data() });
+            } else if (change.type == 'removed') {
+              this.userList.splice(this.userList.findIndex(e => e.id === change.doc.id), 1);
+            }
+          });
+        }, error => {
+          console.log(error);
         });
-      }, error => {
-        console.log(error);
-      });
+      }
     },
     data:() => ({
       dialog: false,

@@ -38,6 +38,7 @@
                       </v-card-title>
                       <v-card-text>
                         <v-form ref="form" v-model="valid">
+                          <v-text-field prepend-icon="account_box" v-model="uname" :rules="unameRules" label="Username" required></v-text-field>
                           <v-text-field prepend-icon="email" v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
                           <v-text-field prepend-icon="lock" v-model="passw" :rules="passwRules" label="Password" required type="password"></v-text-field>
                         </v-form>
@@ -45,7 +46,7 @@
                       </v-card-text>
                       <v-layout justify-end class="pr-2 pb-2">
                         <v-btn class="register white--text mr-0" @click.native="closeform">Close</v-btn>
-                        <v-btn class="register white--text" :loading="loaders.register" :disabled="!valid || loaders.register" @click="register(email, passw)">Sign Up</v-btn>
+                        <v-btn class="register white--text" :loading="loaders.register" :disabled="!valid || loaders.register" @click="register(uname, email, passw)">Sign Up</v-btn>
                       </v-layout>
                     </v-card>
                   </v-dialog>
@@ -156,16 +157,21 @@
       emailL: '',
       passwL: '',
       valid: false,
-      passw: '',
+      uname: '',
       email: '',
-      passwRules: [
-        v => !!v || 'Password is required',
-        v => v != null && v.length <= 30 && v.length >= 6 || 'Password must be between than 6 and 30 characters'
-      ],
+      passw: '',
       emailRules: [
         v => !!v || 'E-mail is required',
         // eslint-disable-next-line
         v => v != null && v.length <= 50 && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+      ],
+      unameRules: [
+        v => !!v || 'Username is required',
+        v => v != null && v.length <= 20 && v.length >= 3 || 'Username must be between 3 and 20 characters'
+      ],
+      passwRules: [
+        v => !!v || 'Password is required',
+        v => v != null && v.length <= 30 && v.length >= 6 || 'Password must be between 6 and 30 characters'
       ],
       contents: [
         { icon: 'color_lens', title: 'What do we do ?', text: 'Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.' },
@@ -181,14 +187,14 @@
     methods: {
       login (email, passw) {
         if (email != '' && passw != '') {
+          let uname = '';
           this.loaders.login = true;
           auth.signInWithEmailAndPassword(email, passw).then(cred => {
             this.loaders.login = false;
             this.errors.login.show = false;
             this.errors.login.msg = '';
-            this.$session.set("uid", cred.user.uid);
-            this.$session.set("uname", email.split('@')[0]);
-            this.$session.set("passw", passw);
+            this.$session.set('uid', cred.user.uid);
+            this.$session.set('uname', 'ME'); // TODO
             EventBus.$emit('refreshStatus', 0);
             this.$router.push('/home');
           }).catch(error => {
@@ -199,22 +205,31 @@
           });
         }
       },
-      register(email, passw) {
+      register(uname, email, passw) {
         this.loaders.register = true;
         auth.createUserWithEmailAndPassword(email, passw).then(cred => {
           this.$session.set("uid", cred.user.uid);
+          this.$session.set("uname", uname);
+          let dt = new Date();
+          dt.setFullYear(dt.getFullYear() + 1);
           return db.collection('users').doc(cred.user.uid).set({
-            userPlan: 'Beginner'
+            columnsInfos: 5000,
+            email: email,
+            endDate: dt,
+            password: passw,
+            predict: 5000,
+            train: 5000,
+            username: uname,
+            usertype: 'Beginner'
           });
         }).then(() => {
           this.loaders.register = false;
           this.errors.register.show = false;
           this.errors.register.msg = '';
           this.closeform();
+          this.uname = '';
           this.email = '';
           this.passw = '';
-          this.$session.set("uname", email.split('@')[0]);
-          this.$session.set("passw", passw);
           this.$router.push('/home');
         }).catch(error => {
           this.loaders.register = false;
