@@ -51,22 +51,6 @@
           </v-snackbar>
         </v-card>
       </v-flex>
-      <v-flex xs12 sm6 md6>
-        <v-card>
-          <v-card-title>Firestore</v-card-title>
-          <v-card-text>
-            <v-form>
-              <v-text-field v-model="firstname" label="First name"></v-text-field>
-              <v-text-field v-model="lastname" label="Last name"></v-text-field>
-              <v-text-field v-model="email" label="E-mail"></v-text-field>
-            </v-form>
-            <p v-for="user in userList" :key="user.id" @click="deleteItem(user.id)">
-              {{ user.data.firstname }}
-            </p>
-          </v-card-text>
-          <v-btn @click="addItem">test</v-btn>
-        </v-card>
-      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -77,22 +61,6 @@
   import { storageRef } from '../plugins/fb';
 
   export default {
-    created() {
-      if (this.$session.has('uid')){
-        db.collection('userList').where('userId', '==', this.$session.get('uid')).onSnapshot(snapshot => {
-          let changes = snapshot.docChanges();
-          changes.forEach(change => {
-            if (change.type == 'added') {
-              this.userList.push({ id: change.doc.id, data: change.doc.data() });
-            } else if (change.type == 'removed') {
-              this.userList.splice(this.userList.findIndex(e => e.id === change.doc.id), 1);
-            }
-          });
-        }, error => {
-          console.log(error);
-        });
-      }
-    },
     data:() => ({
       dialog: false,
       snackbar: false,
@@ -103,8 +71,7 @@
       },
       firstname: '',
       lastname: '',
-      email: '',
-      userList: []
+      email: ''
     }),
     props: {
       models: Array
@@ -135,18 +102,6 @@
         deletingModel.delete();
         var deletingScaler = storageRef.child(model.uid + model.modelname + 'scaler' + '.txt');
         deletingScaler.delete();
-      },
-      addItem() {
-        const user = {
-          userId: this.$session.get('uid'),
-          firstname: this.firstname,
-          lastname: this.lastname,
-          email: this.email
-        }
-        db.collection('userList').add(user);
-      },
-      deleteItem(id) {
-        db.collection('userList').doc(id).delete();
       }
     }
   }
