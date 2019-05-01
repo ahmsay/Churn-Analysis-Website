@@ -41,7 +41,7 @@
               </v-card-text>
               <v-layout justify-end class="pr-2 pb-2">
                 <v-btn class="mr-0" flat @click="dialog = false">Cancel</v-btn>
-                <v-btn class="error white--text" @click="removeModel">Delete</v-btn>
+                <v-btn class="error white--text" @click="removeModel(beingRemoved)">Delete</v-btn>
               </v-layout>
             </v-card>
           </v-dialog>
@@ -72,8 +72,9 @@
 </template>
 
 <script>
-  import { EventBus } from "../plugins/event-bus.js";
+  import { EventBus } from '../plugins/event-bus.js';
   import db from '../plugins/fb';
+  import { storageRef } from '../plugins/fb';
 
   export default {
     created() {
@@ -91,13 +92,12 @@
           console.log(error);
         });
       }
-      console.log(this.models);
     },
     data:() => ({
       dialog: false,
       snackbar: false,
       showDeleteBtn: -1,
-      beingRemoved: { modelname: '' },
+      beingRemoved: { modelname: '', id: '' },
       loaders: {
         remove: false
       },
@@ -123,18 +123,18 @@
       predict(model) {
         EventBus.$emit('predict', model, 2);
       },
-      removeModel() {
+      removeModel(model) {
         this.loaders.remove = true;
         this.dialog = false;
-        let model = this.beingRemoved;
-        this.$post('/removeModel', { uid: this.$session.get('uid'), modelname: model.modelname }).then(data => {
+        db.collection('models').doc(model.id).delete().then(() => {
           this.loaders.remove = false;
-          this.beingRemoved = { modelname: '' };
-          if (data.info == 1) {
-            this.snackbar = true;
-            this.models.splice(this.models.indexOf(model), 1);
-          }
+          this.beingRemoved = { modelname: '', id: '' };
+          this.snackbar = true;
         });
+        var deletingModel = storageRef.child(model.uid + model.modelname + '.txt');
+        deletingModel.delete();
+        var deletingScaler = storageRef.child(model.uid + model.modelname + 'scaler' + '.txt');
+        deletingScaler.delete();
       },
       addItem() {
         const user = {

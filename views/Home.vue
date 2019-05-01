@@ -41,15 +41,15 @@
           this.bottomNav = num;
           this.passedModel = model;
         });
-        db.collection('models').onSnapshot(snapshot => {
+        db.collection('models').where('uid', '==', this.$session.get('uid')).onSnapshot(snapshot => {
           let changes = snapshot.docChanges();
           changes.forEach(change => {
-            if (change.doc.id == this.$session.get('uid')) {
-              if (change.type == 'added') {
-                this.models = change.doc.data().models;
-              } else if (change.type == 'removed') {
-                console.log(change.doc.data());
-              }
+            if (change.type == 'added') {
+              let m = change.doc.data();
+              m.id = change.doc.id;
+              this.models.push(m);
+            } else if (change.type == 'removed') {
+              this.models.splice(this.models.findIndex(e => e.id === change.doc.id), 1);
             }
           });
         }, error => {
