@@ -127,7 +127,7 @@
 </template>
 
 <script>
-  import { EventBus } from "../plugins/event-bus.js";
+  import { EventBus } from '../plugins/event-bus';
   import { auth } from '../plugins/fb';
   import db from '../plugins/fb';
   
@@ -189,7 +189,6 @@
         if (email != '' && passw != '') {
           this.loaders.login = true;
           auth.signInWithEmailAndPassword(email, passw).then(cred => {
-            this.loaders.login = false;
             this.errors.login.show = false;
             this.errors.login.msg = '';
             this.$session.set('uid', cred.user.uid);
@@ -198,6 +197,7 @@
               if (doc.exists){
                 this.$session.set('uname', doc.data().username);
                 EventBus.$emit('refreshStatus', 0);
+                this.loaders.login = false;
                 this.$router.push('/home');
               }
             }.bind(this), false);
@@ -227,13 +227,13 @@
             usertype: 'Beginner'
           });
         }).then(() => {
-          this.loaders.register = false;
           this.errors.register.show = false;
           this.errors.register.msg = '';
           this.closeform();
           this.uname = '';
           this.email = '';
           this.passw = '';
+          this.loaders.register = false;
           this.$router.push('/home');
         }).catch(error => {
           this.loaders.register = false;
