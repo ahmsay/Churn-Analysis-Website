@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-parallax :src="require('@/assets/hero1.jpeg')" :height="parallaxHeight">
+    <v-parallax :src="require('@/assets/top.jpg')" :height="parallaxHeight">
       <v-layout>
         <v-container grid-list-md>
           <v-layout row wrap>
@@ -84,7 +84,7 @@
       </v-flex>
     </v-layout>
 
-    <v-parallax :src="require('@/assets/section1.jpg')" height="380">
+    <v-parallax :src="require('@/assets/bottom.jpg')" height="380">
       <v-layout column align-center justify-center>
         <div class="headline white--text mb-3 text-xs-center">Churn analysis has never been easier</div>
         <v-btn class="loremipsum mt-5" dark @click.stop="dialog = true">Get Started</v-btn>
