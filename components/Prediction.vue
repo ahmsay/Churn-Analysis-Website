@@ -17,7 +17,7 @@
             <v-icon color="white" class="mr-3">person</v-icon>
             <span>Single Prediction</span>
           </v-card-title>
-          <v-card-text style="max-height: 295px; overflow-y: auto;">
+          <v-card-text style="max-height: 293px; overflow-y: auto;">
             <v-layout row wrap>
               <v-flex class="px-2" :key="col.options.name" v-for="(col, idx) in catCols" xs12 sm6 md4>
                 <v-select v-model="catCols[idx].selected" :items="col.options.values" :label="col.options.name"></v-select>
