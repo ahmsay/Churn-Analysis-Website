@@ -19,7 +19,7 @@
                   <span>Sign in to Churnify</span>
                 </v-card-title>
                 <v-card-text>
-                  <v-text-field @keydown.enter="login(emailL, passwL)" prepend-icon="person" v-model="emailL" placeholder="Email"></v-text-field>
+                  <v-text-field @keydown.enter="login(emailL, passwL)" prepend-icon="email" v-model="emailL" placeholder="Email"></v-text-field>
                   <v-text-field @keydown.enter="login(emailL, passwL)" prepend-icon="lock" v-model="passwL" placeholder="Password" type="password"></v-text-field>
                   <span class="error--text" v-if="errors.login.show">{{ errors.login.msg }}</span>
                   <v-layout row wrap>
