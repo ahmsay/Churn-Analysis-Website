@@ -55,7 +55,7 @@
                 </v-layout>
               </v-card>
             </v-dialog>
-            <v-list-tile @click="dialogs[1].show = true;">Settings</v-list-tile>
+            <v-list-tile @click="getUserInfo">Settings</v-list-tile>
             <v-dialog v-model="dialogs[1].show" max-width="600px" persistent>
               <v-card>
                 <v-card-title class="settings white--text">
@@ -65,7 +65,9 @@
                 <v-card-text>
                   <span class="subheading font-weight-medium">User Plan</span>
                   <v-divider></v-divider>
-                  <v-radio-group v-model="uplan.choosed">
+                  <p class="mt-3">You can upload <b>{{ userInfo.columnsInfos }}</b> more datasets, send <b>{{ userInfo.train }}</b> more requests for training and make <b>{{ userInfo.predict }}</b> prediction requests.</p>
+                  <span>You can change your user plan here.</span>
+                  <v-radio-group v-model="userInfo.usertype">
                     <v-radio label="Beginner" value="Beginner" color="settings"></v-radio>
                     <v-radio label="Hobbyist" value="Hobbyist" color="settings"></v-radio>
                     <v-radio label="Professional" value="Professional" color="settings"></v-radio>
@@ -91,6 +93,7 @@
 <script>
   import { EventBus } from "./plugins/event-bus.js";
   import { auth } from './plugins/fb';
+  import db from './plugins/fb';
 
   export default {
     name: 'App',
@@ -101,56 +104,63 @@
       // eslint-disable-next-line
       EventBus.$on('refreshStatus', num => {
         this.checkStatus();
-        /*this.$post('/getUserPlan', { uid: this.$session.get('uid') }).then(data => {
-          if (data.info == 1) {
-            this.uplan.saved = data.user.usertype;
-            this.uplan.choosed = data.user.usertype;
-          }
-        });*/
       });
     },
     data:() => ({
+      userInfo: {
+        usertype: 'Beginner',
+        columnsInfos: 0,
+        train: 0,
+        predict: 0
+      },
       beingRemoved: '',
       loaders: {
         remove: false
       },
       notifications: [],
       dialogs: [{ name: 'help', show: false }, { name: 'settings', show: false }],
-      uplan: { choosed: 'Beginner', saved: 'Beginner' },
       helpContent: [
-        { title: 'Lorem Ipsum', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
-        { title: 'Cheese Ipsum', text: 'When the cheese comes out everybody is happy swiss queso. Fondue chalk and cheese stilton taleggio queso dolcelatte fromage hard cheese.' },
-        { title: 'Bacon Ipsum', text: 'Bacon ipsum dolor sit amet salami jowl corned beef, andouille flank tongue ball tip kielbasa pastrami tri-tip meatloaf short loin beef biltong.' },
-        { title: 'Zombie Ipsum', text: 'Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering animata corpora quaeritis.' }
+        { title: 'Why am I waiting too much sometimes after sending a request ?', text: "That's because our server goes to sleep if it's not used in the last 30 minutes. It will be wake up 10-15 seconds after your request is received." },
+        { title: 'Can I use Churnify from a mobile device or tablet ?', text: 'We have a responsive interface. As long as you have a dataset in your device, you can even use it from a 4K TV.' }
       ]
     }),
     methods: {
       checkStatus() {
-        /*this.$post('/checkStatus', { uid: this.$session.get('uid') }).then(data => {
-          if (data.info == 0)
-            this.notifications = [];
-          else if (data.info == 1)
-            this.notifications = data.statuslist;
-        });*/
+        db.collection('trainstatus').where('uid', '==', this.$session.get('uid')).onSnapshot(snapshot => {
+          let changes = snapshot.docChanges();
+          changes.forEach(change => {
+            if (change.type == 'added') {
+              let n = change.doc.data();
+              n.id = change.doc.id;
+              this.notifications.push(n);
+            } else if (change.type == 'removed') {
+              this.notifications.splice(this.notifications.findIndex(e => e.id === change.doc.id), 1);
+            }
+          });
+        }, error => {
+          console.log(error);
+        });
+      },
+      getUserInfo() {
+        this.dialogs[1].show = true;
+        let userRef = db.collection('users').doc(this.$session.get('uid'));
+        userRef.get().then(doc => {
+          this.userInfo = doc.data();
+        });
       },
       removeNotification(notification) {
         this.loaders.remove = true;
         this.beingRemoved = notification.modelname;
-        this.$post('/removeModel', { uid: this.$session.get('uid'), modelname: notification.modelname }).then(data => {
+        db.collection('trainstatus').doc(notification.id).delete().then(() => {
           this.loaders.remove = false;
           this.beingRemoved = '';
-          if (data.info == 1) {
-            this.notifications.splice(this.notifications.indexOf(notification), 1);
-          }
         });
       },
       cancelUserPlan() {
         this.dialogs[1].show = false;
-        this.uplan.choosed = this.uplan.saved;
       },
       saveUserPlan() {
         this.dialogs[1].show = false;
-        this.uplan.saved = this.uplan.choosed;
       },
       logout() {
         auth.signOut().then(() => {

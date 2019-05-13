@@ -23,5 +23,7 @@ Vue.use(Vuetify, {
     singlepred: colors.purple.darken1,
     multipred: colors.purple.darken1,
     darky: colors.cyan.darken4,
+    welcome: colors.orange.darken2,
+    statistics: colors.indigo.lighten1
   }
 })

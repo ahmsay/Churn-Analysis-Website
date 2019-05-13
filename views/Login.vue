@@ -8,7 +8,7 @@
               <v-card class="transparent" flat>
                 <v-card-title class="display-2 font-weight-medium transparent white--text">Churnify</v-card-title>
                 <v-card-text>
-                  <span class="title font-weight-light white--text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span>
+                  <span class="title font-weight-light white--text">Churnify can learn from any type of customer dataset and lets you make single or multiple prediction at a time. Also it presents cool graphical interface with results to help you understand better.</span>
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -61,7 +61,7 @@
     <v-layout column wrap class="my-5" align-center>
       <v-flex xs12 sm4 class="my-3">
         <div class="text-xs-center">
-          <h2 class="headline">The best way to make churn analysis</h2>
+          <h2 class="headline">The easiest way to make churn analysis</h2>
           <span class="subheading">With generative model selector</span>
         </div>
       </v-flex>
@@ -86,7 +86,7 @@
 
     <v-parallax :src="require('@/assets/bottom.jpg')" height="380">
       <v-layout column align-center justify-center>
-        <div class="headline white--text mb-3 text-xs-center">Churn analysis has never been easier</div>
+        <div class="headline white--text mb-3 text-xs-center">Lets train your first model !</div>
         <v-btn class="loremipsum mt-5" dark @click.stop="dialog = true">Get Started</v-btn>
       </v-layout>
     </v-parallax>
@@ -98,7 +98,7 @@
             <v-card-title primary-title class="layout justify-center">
               <div class="headline">About us</div>
             </v-card-title>
-            <v-card-text class="text-xs-center">Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.</v-card-text>
+            <v-card-text class="text-xs-center">We are 2 very passionate student and have experience with data science, mobile development, system administration and web app development. We made Churnify to help companies to analyse and understand their customers better.</v-card-text>
           </v-card>
         </v-flex>
         <v-flex xs12 sm4 offset-sm1>
@@ -107,7 +107,7 @@
               <div class="headline">Contact us</div>
             </v-card-title>
             <v-card-text class="text-xs-center">
-              Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
+              Please contact us to get more information.
             </v-card-text>
             <v-list class="transparent">
               <v-list-tile v-for="contact in contacts" :key="contact.icon">
@@ -174,14 +174,14 @@
         v => v != null && v.length <= 30 && v.length >= 6 || 'Password must be between 6 and 30 characters'
       ],
       contents: [
-        { icon: 'color_lens', title: 'What do we do ?', text: 'Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.' },
-        { icon: 'flash_on', title: 'How do we do it ?', text: 'Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.' },
-        { icon: 'build', title: 'What makes us better ?', text: 'Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.' }
+        { icon: 'gps_fixed', title: 'What do we do ?', text: 'We help companies to analyse and better understand their customers by making churn analysis easier.' },
+        { icon: 'flash_on', title: 'How do we do it ?', text: 'We developed Generative Model Selector module to make analysis.' },
+        { icon: 'grade', title: 'What makes us better ?', text: 'Churnify can analyse and visualise every customer dataset regardless from business area.' }
       ],
       contacts: [
-        { icon: 'phone', text: '777-867-5309' },
-        { icon: 'place', text: 'Chicago, US' },
-        { icon: 'email', text: 'john@vuetifyjs.com' }
+        { icon: 'phone', text: '+90 543 425 0147' },
+        { icon: 'place', text: 'Eskisehir, TR' },
+        { icon: 'email', text: 'aliihsankarabal@eskisehir.edu.tr' }
       ]
     }),
     methods: {
@@ -214,15 +214,12 @@
         auth.createUserWithEmailAndPassword(email, passw).then(cred => {
           this.$session.set("uid", cred.user.uid);
           this.$session.set("uname", uname);
-          let dt = new Date();
-          dt.setFullYear(dt.getFullYear() + 1);
           return db.collection('users').doc(cred.user.uid).set({
-            columnsInfos: 5000,
+            columnsInfos: 1000,
             email: email,
-            endDate: dt,
             password: passw,
-            predict: 5000,
-            train: 5000,
+            predict: 1000,
+            train: 1000,
             username: uname,
             usertype: 'Beginner'
           });
