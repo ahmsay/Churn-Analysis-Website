@@ -4,7 +4,7 @@ This project is about churn analysis. Churn, in general, refers to customer’s 
 Our motivation is to automatize this process. A generative model selector generates and evaluates the most successful machine learning model according to given dataset. We also present an analysis with visualisations that gives a better understanding of results. 
 In brief, we are able to analyse various datasets automatically.
 
-The website of the project: https://churn-2537f.firebaseapp.com/
+The website of the project: https://churn-2537f.firebaseapp.com/ </br>
 The API of the project: https://github.com/aliihsank/Churn-Analysis-API
 
 # ScreenShots
