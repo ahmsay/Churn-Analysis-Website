@@ -7,7 +7,7 @@ In brief, we are able to analyse various datasets automatically.
 The website of the project: https://churn-2537f.firebaseapp.com/ </br>
 The API of the project: https://github.com/aliihsank/Churn-Analysis-API
 
-# ScreenShots
+## ScreenShots
 <p style="display: table-cell; float: none; vertical-align: middle;">
   <img src="https://user-images.githubusercontent.com/22731894/79567796-7d71b680-80bd-11ea-8f84-a17cfa629a2e.png" width="430">
   <img src="https://user-images.githubusercontent.com/22731894/79567823-89f60f00-80bd-11ea-95dd-038950e93ab3.png" width="430">
